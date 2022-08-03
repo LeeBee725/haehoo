@@ -102,10 +102,10 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
-.venv
+haehoo_dev.env
+haehoo_prod.env
 env/
-venv/
+*venv/
 ENV/
 env.bak/
 venv.bak/
@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# custom ignore
+.DS_Store
