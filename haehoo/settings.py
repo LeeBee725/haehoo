@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "main.apps.MainConfig",
     "account.apps.AccountConfig",
+    "bucket_list.apps.BucketListConfig"
 ]
 
 MIDDLEWARE = [
