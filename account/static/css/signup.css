@@ -8,6 +8,8 @@
     font-family: "MapoFlowerIsland";
 }
 
+input:focus {outline: none;}
+
 .signup-form {
     padding: 20px;
     margin: 100px auto;
