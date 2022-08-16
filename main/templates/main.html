@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
-{% block content %}
 {% load static %}
+{% block links %}
+<link rel="stylesheet" href="{% static 'css/main.css' %}" type="text/css">
+<link href="http://fonts.cdnfonts.com/css/sansita-one" rel="stylesheet">
+{% endblock links %}
+{% block content %}
 <div class="container">
     <div class="intro">
         <p class="intro-contents">편지를 통해 어쩌구 해보세요.
