@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load static %}
 <div class="container">
     <div class="intro">
         <p class="intro-contents">편지를 통해 어쩌구 해보세요.
@@ -13,7 +14,7 @@
     <br><br><br><br>
     <div class="wrap">
         <div class="wrapimage">
-            <img id="image" src="../static/image/mainimage.png" >
+            <img id="image" src="{% static 'image/mainimage.png' %}" >
         </div>
         <div class="imagetext">
             <p class="letter">Letter</p>
@@ -21,7 +22,7 @@
             <p class="bucketlist">Bucket<br>List</p>
             <p class="bucketlist2">버킷리스트<br>작성하기</p>
             <a href="" class="letter-link"></a>
-            <a href="" class="bucket-link"></a>
+            <a href="{% url 'total' %}" class="bucket-link"></a>
 
         </div>
     </div>
