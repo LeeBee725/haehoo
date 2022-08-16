@@ -1,0 +1,58 @@
+@font-face{
+	src: url("../fonts/MapoFlowerIsland.ttf");
+    font-family: "MapoFlowerIsland"; 
+ }
+
+ *{
+     box-sizing: border-box;
+     font-family: "MapoFlowerIsland";
+ }
+
+ body {
+     margin: 0;
+ }
+
+
+ .login-form {
+     width: 600px;
+     border: 0;
+     border-radius: 5px;
+     padding: 20px;
+     margin: 100px auto;
+     text-align: center;
+ }
+
+ .title {
+     color: #444444;
+     margin-bottom: 60px;
+
+ }
+
+ .h1 {
+    font-weight: lighter;
+ }
+ 
+.text-field {
+    width: 400px;
+    height: 30px;
+    font-size: 14px;
+    margin-bottom: 25px;
+    padding: 10px;
+    border-style: none;
+    border-bottom-style: solid;
+    border-radius: 5px;
+    border-color: #959595;
+    text-align: center;
+}
+
+
+
+
+.submit-btn {
+    width: 400px;
+    font-size: 14px;
+    margin-bottom: 30px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
