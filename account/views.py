@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import auth
 
 def signup(request):
-  return render(request, 'signup.html')
+  return render(request, 'signup.test.html')
 
 def login(request):
   if request.method == 'POST':
@@ -13,12 +13,11 @@ def login(request):
       auth.login(request, user)
       return redirect('home')
     else:
-      return render(request, 'login.html')
+      return render(request, 'login.test.html')
   else:
-    return render(request, 'login.html')
+    return render(request, 'login.test.html')
     
     
 def logout(request):
   auth.logout(request)
   return redirect('home')
-
