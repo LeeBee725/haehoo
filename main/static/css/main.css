@@ -1,0 +1,119 @@
+/*배경*/
+
+body {
+    background: linear-gradient(#FFFFFF, #e8e8e8);
+}
+
+.container {
+	width: 1180px;
+	padding: 0 30px;
+	padding-top: 40px;
+	margin: 0 auto;
+	background: transparent;
+}
+
+/*메인 멘트*/
+
+.intro {
+    text-align: center;
+    margin-top: 80px;
+}
+
+.intro-contents {
+    font-size: 26px;
+    font-family: 'MapoFlowerIsland';
+}
+
+/*read more*/
+
+.intro-page {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.intro-link {
+    font-family: 'MapoFlowerIsland';
+    font-size: 14px;
+    color: #867D7D;
+}
+
+.intro-page > a:hover{
+
+    border-bottom:1px solid #867D7D; 
+    padding-bottom:1px;
+}
+
+/*메인 이미지*/
+
+.wrap img {
+    width: 87%;
+    display: block;
+    margin: auto;
+}
+
+.wrap {
+    width: 100%;
+    position: relative;
+    margin: 0 auto;
+}
+
+
+.letter {
+    position: absolute;
+    top:20%;
+    left:15%;
+    width: 30%;
+    font-size: 72px;
+    font-family: 'Sansita One';
+    text-align: left;
+}
+
+.letter2 {
+    position: absolute;
+    top: 70%;
+    left: 15%;
+    width: 30%;
+    font-size: 20px;
+    font-family: 'MapoFlowerIsland';
+    text-align: left;
+}
+
+
+.bucketlist {
+    position: absolute;
+    top: 20%;
+    right:15%;
+    width: 70%;
+    font-size: 72px;
+    font-family: 'Sansita One';
+    text-align: right;
+}
+
+.bucketlist2 {
+    position: absolute;
+    top: 70%;
+    right: 15%;
+    width: 70%;
+    font-size: 20px;
+    font-family: 'MapoFlowerIsland';
+    text-align: right;
+}
+
+.letter-link {
+    background: transparent;
+    width: 470px;
+    height: 490px;
+    position: absolute;
+    top:0%;
+    left:10%; 
+}
+
+.bucket-link {
+    background: transparent;
+    width: 470px;
+    height: 490px;
+    position: absolute;
+    top: 0%;
+    right:10%;
+}
+
