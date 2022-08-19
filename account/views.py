@@ -11,7 +11,7 @@ def login(request):
     user = auth.authenticate(request, username=username, password=password)
     if user is not None:
       auth.login(request, user)
-      return redirect('home')
+      return redirect('main')
     else:
       return render(request, 'login.html')
   else:
@@ -20,4 +20,4 @@ def login(request):
     
 def logout(request):
   auth.logout(request)
-  return redirect('home')
+  return redirect('main')
