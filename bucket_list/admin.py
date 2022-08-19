@@ -1,7 +1,6 @@
 from django.contrib import admin
+from bucket_list.models import Bucket
 
 from .models import Bucket
-# from .models import CommentBucket
-# from .models import Process
 
-# Register your models here.
+admin.site.register(Bucket)
