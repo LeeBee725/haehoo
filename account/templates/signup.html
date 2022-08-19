@@ -1,15 +1,10 @@
+{% extends 'base.html' %}
 {% load static %}
+{% block links %}
+<link rel="stylesheet" href="{% static 'css/signup.css' %}" />
+{% endblock links %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
-    <title>signup</title>
-</head>
-<body>
+{% block content %}
     <div class="signup-form">
         <h1 class="title">회원가입</h1> <!--div안에 넣어주기? -->
         <div class="already">이미 해후 회원이신가요? <a href="{% url 'login' %}">로그인</a></div>
@@ -25,6 +20,5 @@
                 <input type="submit" value="가입하기" class="signup confirm btn">
         </form>
     </div>
-    
-</body>
-</html>
+
+{% endblock %}

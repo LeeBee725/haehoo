@@ -11,16 +11,15 @@
 input:focus {outline: none;}
 
 .signup-form {
-    padding: 20px;
-    margin: 100px auto;
+    padding: 100px;
+    margin: 0 auto;
     text-align: center;
 } 
 
-.title {
-    font-weight: lighter;
-}
+
 
 .already {
+    margin-top: 10px;
     margin-bottom: 30px;
 }
 

@@ -20,6 +20,15 @@ ul {
 	margin: 0;
 }
 
+input:focus {
+    outline: none;
+    background-color: white;
+}
+
+input:-webkit-autofill {
+	-webkit-box-shadow: 0 0 0 1000px white inset;
+	box-shadow: 0 0 0 1000px white inset;
+}
 
 /*nav바*/
 
