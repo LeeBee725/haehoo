@@ -5,4 +5,4 @@ from django.contrib.auth.models import AbstractUser
 class HaehooUser(AbstractUser):
     #ID : AbstractUSer의 내장 property(username)
     #비밀번호 : AbstractUSer의 내장 property(password)
-    nickname = models.CharField(max_length = 10)
+    nickname = models.CharField(max_length = 10, unique = True, null = False)
