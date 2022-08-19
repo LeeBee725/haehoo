@@ -1,3 +1,4 @@
 from django.contrib import admin
+from bucket_list.models import Bucket
 
-# Register your models here.
+admin.site.register(Bucket)
