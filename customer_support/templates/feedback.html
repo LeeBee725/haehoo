@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block links %}
+<link rel="stylesheet" href="{% static 'css/feedback.css' %}" />
+{% endblock links %}
+
+
+{% block content %}
+<body>
+    <div class="feedback-form">
+        <div class="title"><h1>피드백 남기기</h1></div>
+        <form action="{% url 'feedback' %}" method="POST">
+            {% csrf_token %}
+            <div class="content-container">
+                <textarea class="feedback-content" cols="30" rows="10" wrap="physical" placeholder="소중한 의견을 남겨주세요..."></textarea>
+                
+            </div>   
+            <div class="submit-container">
+                <input type="submit" class="submit-btn" value="제출하기">
+            </div>
+            
+        </form>
+        
+        
+    </div>
+</body>
+{% endblock content %}
+
