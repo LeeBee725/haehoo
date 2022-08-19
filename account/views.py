@@ -14,7 +14,7 @@ def signup(request):
     if User.objects.filter(first_name = first_name).exists():
       return render(request, 'signup.html', {'error' : "이미 존재하는 닉네임입니다."})
 
-    if request.POST['password'] == request.POST['repeat']:
+    if request.POST['password'] == request.POST['passwordCheck']:
         user = User.objects.create_user(
           username=request.POST['id'],
           password=request.POST['password'],
@@ -33,7 +33,7 @@ def login(request):
       auth.login(request, user)
       return redirect('main')
     else:
-      return render(request, 'login.test.html', {'error' : "올바르지 않은 정보입니다."})
+      return render(request, 'login.html', {'error' : "올바르지 않은 정보입니다."})
   else:
     return render(request, 'login.html')
     
