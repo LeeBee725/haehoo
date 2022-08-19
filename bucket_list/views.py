@@ -5,3 +5,6 @@ def total(request):
 
 def private(request, nickname):
     return render(request, "private.test.html", {"nickname" : nickname})
+
+def create(request, nickname):
+    return render(request, "create.test.html", {"nickname" : nickname})
