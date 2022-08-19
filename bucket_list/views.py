@@ -1,7 +1,4 @@
-from django.shortcuts import render, redirect
-from account.models import HaehooUser
-from bucket_list.models import Bucket
-
+from django.shortcuts import render, redirect, get_object_or_404
 from account.models import HaehooUser
 from bucket_list.models import Bucket
 
@@ -28,3 +25,9 @@ def create(request, nickname):
         return redirect('private', nickname=nickname)
     else:
         return render(request, "create.html", {"nickname" : nickname})
+
+def delete(request, nickname, bucket_id):
+    bucket = get_object_or_404(Bucket, pk = bucket_id)
+    bucket.delete()
+
+    return redirect('private', nickname=nickname)
