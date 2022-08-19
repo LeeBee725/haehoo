@@ -1,4 +1,14 @@
-<h1>{{nickname}}'s Bucket List page</h1>
-<p><a href="{% url 'total' %}">go to total bucket list page</a></p>
-<p><a href="{% url 'create' nickname %}">go to create bucket list page</a></p>
-<p><a href="{% url 'main' %}">go to home page</a></p>
+
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <h1>my bucketlist</h1>
+        {% for bucket in buckets %}
+                <h4>{{bucket.title}}</h4>
+                <h4>{{bucket.category}}</h4>
+                <h4>{{bucket.createdAt}}</h4>
+        {% endfor %}
+
+    </div>
+    
+{% endblock %} 
