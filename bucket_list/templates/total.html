@@ -5,22 +5,39 @@
 <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 {% endblock links %}
 {% block content %}
-  
-
-<section id="top-space"></section>
+<section id="top-space">
+  <div class="top-container container">
+    <div class="search-container container">
+      <img id="bucket-image" src="{% static 'image/bucket.png' %}" alt="bucket.png">
+      <div class="search-group">
+        <form class="search-bar" action="#" method="GET">
+          <button class="search-btn">
+            <i class="fa-solid fa-magnifying-glass first-icon fa-2xs"></i>
+          </button>
+          <input class="search-text" type="text" id="searchWord" name="searchWord" placeholder="검색어를 입력하세요" maxlength="60" size="60">
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
 <section id="main-space">
-  <div id="contents">
+  <div class="contents">
     <div id="contents-container" class="container">
       <div id="title-container" class="container">
         <p id="content-title">Our bucket</p>
-        <div class="search-group">
-          <form class="search-bar" action="#" method="GET">
-            <button class="search-btn">
-              <i class="fa-solid fa-magnifying-glass first-icon fa-2xs"></i>
-            </button>
-            <input class="search-text" type="text" id="searchWord" name="searchWord" placeholder="검색어를 입력하세요" maxlength="30" size="30">
+        <div class="category-container container">
+          <form action="" method="get">
+            <div class="filter-btn-container container">
+              <button class="filter-btn red-btn" type="submit" name="category" id="want-to-do" value="1">하고 싶은 것</button>
+              <button class="filter-btn orange-btn" type="submit" name="category" id="want-to-eat" value="2">먹고 싶은 것</button>
+              <button class="filter-btn yellow-btn" type="submit" name="category" id="want-to-have" value="3">갖고 싶은 것</button>
+              <button class="filter-btn green-btn" type="submit" name="category" id="want-to-go" value="4">가고 싶은 곳</button>
+              <button class="filter-btn blue-btn" type="submit" name="category" id="travel" value="3">여행</button>
+              <button class="filter-btn navy-btn" type="submit" name="category" id="hobby" value="4">취미</button>
+            </div>
           </form>
         </div>
+        
       </div>
       <div class="container bucket-contatiner">
         <a class="bucket" href="#">
