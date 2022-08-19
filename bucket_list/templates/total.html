@@ -40,150 +40,18 @@
         
       </div>
       <div class="container bucket-contatiner">
+        {% for total_bucket in total_bucket.all %}
         <a class="bucket" href="#">
           <div class="img-container">
             <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
           </div>
           <div class="description">
-            <h3 class="description-title">버킷리스트 Title</h4>
-              <p class="description-username">김골무</p>
-            </div>
-          </a>
-          <a class="bucket" href="#">
-            <div class="img-container">
-              <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
-            </div>
-            <div class="description">
-              <h3 class="description-title">버킷리스트 Title</h4>
-            <p class="description-username">김골무</p>
+            <h3 class="description-title">{{ total_bucket.title }}</h4>
+            <p class="description-username">{{ total_bucket.userID }}</p>
+            <p class="description-username">{{ total_bucket.category }}</p>
           </div>
         </a>
-        <a class="bucket" href="#">
-          <div class="img-container">
-            <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
-          </div>
-          <div class="description">
-            <h3 class="description-title">버킷리스트 Title</h4>
-              <p class="description-username">김골무</p>
-          </div>
-        </a>
-        <a class="bucket" href="#">
-          <div class="img-container">
-            <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
-          </div>
-          <div class="description">
-            <h3 class="description-title">버킷리스트 Title</h4>
-              <p class="description-username">김골무</p>
-            </div>
-        </a>
-        <a class="bucket" href="#">
-          <div class="img-container">
-            <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
-          </div>
-          <div class="description">
-            <h3 class="description-title">버킷리스트 Title</h4>
-            <p class="description-username">김골무</p>
-          </div>
-        </a>
-        <a class="bucket" href="#">
-          <div class="img-container">
-            <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
-          </div>
-          <div class="description">
-            <h3 class="description-title">버킷리스트 Title</h4>
-              <p class="description-username">김골무</p>
-          </div>
-        </a>
-        <a class="bucket" href="#">
-          <div class="img-container">
-            <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
-          </div>
-          <div class="description">
-            <h3 class="description-title">버킷리스트 Title</h4>
-            <p class="description-username">김골무</p>
-          </div>
-        </a>
-        <a class="bucket" href="#">
-          <div class="img-container">
-            <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
-          </div>
-          <div class="description">
-            <h3 class="description-title">버킷리스트 Title</h4>
-              <p class="description-username">김골무</p>
-            </div>
-        </a>
-        <a class="bucket" href="#">
-          <div class="img-container">
-            <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
-          </div>
-          <div class="description">
-            <h3 class="description-title">버킷리스트 Title</h4>
-            <p class="description-username">김골무</p>
-          </div>
-        </a>
-        <a class="bucket" href="#">
-          <div class="img-container">
-            <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
-          </div>
-          <div class="description">
-            <h3 class="description-title">버킷리스트 Title</h4>
-              <p class="description-username">김골무</p>
-          </div>
-        </a>
-        <a class="bucket" href="#">
-          <div class="img-container">
-            <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
-          </div>
-          <div class="description">
-            <h3 class="description-title">버킷리스트 Title</h4>
-              <p class="description-username">김골무</p>
-            </div>
-        </a>
-        <a class="bucket" href="#">
-          <div class="img-container">
-            <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
-          </div>
-          <div class="description">
-            <h3 class="description-title">버킷리스트 Title</h4>
-              <p class="description-username">김골무</p>
-          </div>
-        </a>
-        <a class="bucket" href="#">
-          <div class="img-container">
-            <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
-          </div>
-          <div class="description">
-            <h3 class="description-title">버킷리스트 Title</h4>
-            <p class="description-username">김골무</p>
-          </div>
-        </a>
-        <a class="bucket" href="#">
-          <div class="img-container">
-            <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
-          </div>
-          <div class="description">
-            <h3 class="description-title">버킷리스트 Title</h4>
-              <p class="description-username">김골무</p>
-            </div>
-        </a>
-        <a class="bucket" href="#">
-          <div class="img-container">
-            <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
-          </div>
-          <div class="description">
-            <h3 class="description-title">버킷리스트 Title</h4>
-              <p class="description-username">김골무</p>
-          </div>
-        </a>
-        <a class="bucket" href="#">
-          <div class="img-container">
-            <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
-          </div>
-          <div class="description">
-            <h3 class="description-title">버킷리스트 Title</h4>
-            <p class="description-username">김골무</p>
-          </div>
-        </a>
+        {% endfor %}
       </div>
     </div>
 </section>
