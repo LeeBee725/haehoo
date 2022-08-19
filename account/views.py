@@ -31,7 +31,7 @@ def login(request):
     user = auth.authenticate(request, username=username, password=password)
     if user is not None:
       auth.login(request, user)
-      return redirect('home')
+      return redirect('main')
     else:
       return render(request, 'login.test.html', {'error' : "올바르지 않은 정보입니다."})
   else:
@@ -40,4 +40,4 @@ def login(request):
     
 def logout(request):
   auth.logout(request)
-  return redirect('home')
+  return redirect('main')
