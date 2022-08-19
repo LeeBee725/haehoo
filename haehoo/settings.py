@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     "customer_support.apps.CustomerSupportConfig"
 ]
 
+AUTH_USER_MODEL = 'account.HaehooUser'
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
