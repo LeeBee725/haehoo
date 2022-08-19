@@ -1,19 +1,19 @@
+{% extends 'base.html' %}
 {% load static %}
+{% block links %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}" />
+{% endblock links %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
-    <title>login</title>
-</head>
-<body>
+{% block content %}
     <div class="login-form">
         <div class="title"><h1>로그인</h1></div>
         <form action="{% url 'login' %}" method="POST">
             {% csrf_token %}
+            {% if error %}
+            <p>{{error}}</p>
+            <br>
+            <br>
+            {% endif %}
             <input type="text" name="id" class="text-field" placeholder="아이디"><br>
             <input type="password" name="password" class="text-field" placeholder="비밀번호"><br>
             <input type="submit" value="로그인" class="submit-btn">
@@ -24,5 +24,4 @@
         </div>
     </div>    
     
-</body>
-</html>
+{% endblock %}
