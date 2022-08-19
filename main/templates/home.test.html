@@ -1,6 +1,6 @@
 <h1>Home Test Page</h1>
 {% if user.is_authenticated %}
-  {{user.username}}님 안녕하세요
+  {{user.first_name}}님 안녕하세요
   <a href = '{% url "logout" %}'>로그아웃</a>
 {% else %}
   <a href = '{% url "login" %}' >로그인</a>
