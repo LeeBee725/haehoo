@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     "bucket_list.apps.BucketListConfig"
 ]
 
+AUTH_USER_MODEL = 'account.HaehooUser'
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",

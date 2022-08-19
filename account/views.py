@@ -1,24 +1,25 @@
 from django.shortcuts import render, redirect
 from django.contrib import auth
-from django.contrib.auth.models import User
+from .models import HaehooUser
+
 
 def signup(request):
   if request.method == 'POST':
     username = request.POST['id']
     password = request.POST['password']
-    first_name = request.POST['nickname']
+    nickname = request.POST['nickname']
 
-    if User.objects.filter(username = username).exists():
+    if HaehooUser.objects.filter(username = username).exists():
       return render(request, 'signup.html', {'error' : "이미 존재하는 아이디입니다."})
 
-    if User.objects.filter(first_name = first_name).exists():
+    if HaehooUser.objects.filter(nickname = nickname).exists():
       return render(request, 'signup.html', {'error' : "이미 존재하는 닉네임입니다."})
 
     if request.POST['password'] == request.POST['passwordCheck']:
-        user = User.objects.create_user(
+        user = HaehooUser.objects.create_user(
           username=request.POST['id'],
           password=request.POST['password'],
-          first_name=request.POST['nickname'],)
+          nickname=request.POST['nickname'],)
         auth.login(request, user)
         return redirect('/')
     return render(request, 'signup.html', {'error' : "비밀번호 확인이 일치하지 않습니다."})
