@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "main.apps.MainConfig",
     "account.apps.AccountConfig",
-    "bucket_list.apps.BucketListConfig"
+    "bucket_list.apps.BucketListConfig",
 ]
 
 AUTH_USER_MODEL = 'account.HaehooUser'

@@ -4,7 +4,9 @@ from account.models import HaehooUser
 from bucket_list.models import Bucket
 
 def total(request):
-    return render(request, "total.html")
+    total_bucket = Bucket.objects
+    return render(request, 'total.test.html', {'total_bucket' : total_bucket})
+    # return render(request, "total.html")
 
 def private(request, nickname):
     return render(request, "private.test.html", {"nickname" : nickname})
