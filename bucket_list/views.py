@@ -1,10 +1,12 @@
 from django.shortcuts import render
 
-from .models import Bucket
-from .models import CommentBucket
-from .models import Process
+# from .models import Bucket
+# from .models import CommentBucket
+# from .models import Process
 
 def total(request):
+    # total_bucket = Bucket.objects
+    # return render(request, 'total.test.html', {'total_bucket' : total_bucket})
     return render(request, "total.html")
 
 def private(request, nickname):
@@ -12,10 +14,3 @@ def private(request, nickname):
 
 def create(request, nickname):
     return render(request, "create.test.html", {"nickname" : nickname})
-
-
-# models 담당
-
-def home(request):
-    home = home.objects
-    return render(request, 'total.test.html', {'home' : home})

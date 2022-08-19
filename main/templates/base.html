@@ -24,7 +24,7 @@
 				<nav class="header-contents">
 					<ul class="header-contents-list">
                         {% if user.is_authenticated %}
-                            <li><a class="header-contents-item" href="{% url 'private' 'golmu' %}">마이버킷</a></li>
+                            <li><a class="header-contents-item" href="{% url 'private' user.nickname %}">마이버킷</a></li>
                             <li><a class="header-contents-item" href="{% url 'logout' %}">로그아웃</a></li>
                         {% else %}
                             <li><a class="header-contents-item" href="{% url 'signup' %}">회원가입</a></li>
