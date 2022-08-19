@@ -9,10 +9,10 @@ def signup(request):
     first_name = request.POST['nickname']
 
     if User.objects.filter(username = username).exists():
-      return render(request, 'signup.test.html', {'error' : "이미 존재하는 아이디입니다."})
+      return render(request, 'signup.html', {'error' : "이미 존재하는 아이디입니다."})
 
     if User.objects.filter(first_name = first_name).exists():
-      return render(request, 'signup.test.html', {'error' : "이미 존재하는 닉네임입니다."})
+      return render(request, 'signup.html', {'error' : "이미 존재하는 닉네임입니다."})
 
     if request.POST['password'] == request.POST['repeat']:
         user = User.objects.create_user(
@@ -21,8 +21,8 @@ def signup(request):
           first_name=request.POST['nickname'],)
         auth.login(request, user)
         return redirect('/')
-    return render(request, 'signup.test.html', {'error' : "비밀번호 확인이 일치하지 않습니다."})
-  return render(request, 'signup.test.html')
+    return render(request, 'signup.html', {'error' : "비밀번호 확인이 일치하지 않습니다."})
+  return render(request, 'signup.html')
 
 def login(request):
   if request.method == 'POST':
