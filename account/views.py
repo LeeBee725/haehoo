@@ -35,7 +35,7 @@ def login(request):
     else:
       return render(request, 'login.test.html', {'error' : "올바르지 않은 정보입니다."})
   else:
-    return render(request, 'login.test.html')
+    return render(request, 'login.html')
     
     
 def logout(request):
