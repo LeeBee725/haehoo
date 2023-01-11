@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+from django.forms.models import model_to_dict
 from account.models import HaehooUser
 from bucket_list.models import Bucket
 
@@ -31,3 +33,13 @@ def delete(request, nickname, bucket_id):
     bucket.delete()
 
     return redirect('private', nickname=nickname)
+
+def click_like(request, nickname, bucket_id):
+    bucket = Bucket.objects.get(pk=bucket_id)
+    user = HaehooUser.objects.get(nickname=nickname)
+    if user in bucket.liked_users.all():
+        bucket.liked_users.remove(user)
+    else:
+        bucket.liked_users.add(user)
+    bucket.save()
+    return JsonResponse({"message":"OK", "is_contains":user in bucket.liked_users.all(), "like_cnt":bucket.liked_users.count()})

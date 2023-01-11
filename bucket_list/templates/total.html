@@ -2,6 +2,7 @@
 {% load static %}
 {% block links %}
 <script src="https://kit.fontawesome.com/f26e9103bc.js" crossorigin="anonymous"></script>
+<script src="{% static 'js/total.js' %}" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 {% endblock links %}
 {% block content %}
@@ -41,7 +42,7 @@
       </div>
       <div class="container bucket-contatiner">
         {% for total_bucket in total_bucket.all %}
-        <a class="bucket" href="#">
+        <div class="bucket">
           <div class="img-container">
             <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
           </div>
@@ -49,12 +50,16 @@
             <h3 class="description-title">{{ total_bucket.title }}</h4>
             <p class="description-username">{{ total_bucket.userID }}</p>
             <p class="description-username">{{ total_bucket.category }}</p>
-            <button>좋아요</button>
-            <p class="description-username">{{ total_bucket.liked_users.count }}</p>
+            {% if user in total_bucket.liked_users.all %}
+              <button id="btn_like{{total_bucket.id}}" onclick="click_like({{total_bucket.id}}, '{{user.nickname}}')">♥</button>
+            {% else %}
+              <button id="btn_like{{total_bucket.id}}" onclick="click_like({{total_bucket.id}}, '{{user.nickname}}')">♡</button>
+            {% endif %}
+            <p id="like_cnt{{total_bucket.id}}" class="description-username">{{ total_bucket.liked_users.count }}</p>
             <button>퍼가기</button>
             <p class="description-username">{{ total_bucket.referenced_users.count }}</p>
           </div>
-        </a>
+        </div>
         {% endfor %}
       </div>
     </div>
