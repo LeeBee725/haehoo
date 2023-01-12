@@ -34,6 +34,22 @@ def delete(request, nickname, bucket_id):
 
     return redirect('private', nickname=nickname)
 
+def edit(request, nickname, bucket_id):
+    edit_bucket = Bucket.objects.get(id = bucket_id)
+
+    return render(request, 'edit.html', {'bucket' : edit_bucket, 'nickname' : nickname})
+
+def update(request, nickname, bucket_id):
+    user = HaehooUser.objects.filter(nickname=nickname)
+    edit_bucket = Bucket.objects.get(id=bucket_id)
+    edit_bucket.title = request.POST.get('title')
+    edit_bucket.category = request.POST["category"]
+
+    edit_bucket.userID = user.get()
+    edit_bucket.save()
+
+    return redirect('private', nickname=nickname)
+
 def click_like(request, nickname, bucket_id):
     bucket = Bucket.objects.get(pk=bucket_id)
     user = HaehooUser.objects.get(nickname=nickname)
