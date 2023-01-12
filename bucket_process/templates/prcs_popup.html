@@ -1,0 +1,35 @@
+<h1>Bucket title : {{bucket.title}}'s process</h1>
+<div>
+    {% for process in total_process %}
+        <h4>{{process.title}}</h4>
+        {% if process.image %}
+            <image src="{{process.image.url}}" height = 100>
+        {%endif%}
+        <p>{{process.text}}</p>
+        <p>{{process.createdAt}}</p>
+        {% if user.id == process.bucketID.userID.id %}
+            <a href = "{% url 'processdelete' process.id %}">delete process</a>
+        {% endif %}
+        <br>
+    {% endfor %}
+    
+    {% if user.id == bucket.userID.id %}
+        <a href = "{% url 'processcreate' bucket.id %}">create process</a>
+    {% endif %}
+
+    <div>
+        <h4>Comments</h4>
+        {% for comment in total_comment %}
+            {{comment.userID}} : {{comment.comment}}
+        {%endfor%}
+    </div>
+    <form method = 'POST' action = "{% url 'createcomment'  userid=user.id bucketid=bucket.id %}">
+        {% csrf_token %} 
+        <table>
+            {{comment_form.as_table}}
+        </table>
+        <input type = 'submit' value = "댓글작성">     
+    </form>
+</div>
+
+
