@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block links %}
+  
+{% endblock links %}
+{% block content %}
+  <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+  {{nickname}}'s bucket update Form
+  <form action="{% url 'edit' bucket_id %}" method="POST">
+    {% csrf_token %}
+    <label for="title">제목</label>
+    <input type="text" name="title" id="title" value="{{update_bucket.title}}">
+    <br>
+    <!-- <label for="writer">작성자</label> -->
+    <!-- <input type="text" name="writer" id="writer" value="{{blog.writer}}"> -->
+    <br>
+    <!-- <label for="body">내용</label> -->
+    <!-- <textarea name="body" id="body" cols="30" rows="10">{{blog.body}}</textarea> -->
+    <button type="submit">완료</button>
+  </form>
+
+{% endblock content %}
