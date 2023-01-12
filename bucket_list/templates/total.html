@@ -42,7 +42,7 @@
       </div>
       <div class="container bucket-contatiner">
         {% for total_bucket in total_bucket.all %}
-        <div class="bucket">
+        <a class="bucket" href="{% url 'bucketprocess' total_bucket.id %}">
           <div class="img-container">
             <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
           </div>

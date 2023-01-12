@@ -1,0 +1,8 @@
+<h2>making process page</h2>
+<form action = "" method = "POST" enctype = "multipart/form-data">
+    {% csrf_token %} 
+    <table>
+        {{process_form.as_table}}
+    </table>
+    <input type = 'submit' value = "과정 추가하기">
+</form>

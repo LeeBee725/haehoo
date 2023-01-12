@@ -8,7 +8,7 @@
         </h1>
         <br><br>
         {% for bucket in buckets %}
-                <h4>{{bucket.title}}</h4>
+                <h4><a href="{% url 'bucketprocess' bucket.id %}">{{bucket.title}}</h4>
                 <h4>{{bucket.category}}</h4>
                 <h4>{{bucket.createdAt}}</h4>
                 <h4><a href="{% url 'delete' user.nickname bucket.id %}">DELETE</a></h4>

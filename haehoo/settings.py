@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     "main.apps.MainConfig",
     "account.apps.AccountConfig",
     "bucket_list.apps.BucketListConfig",
-    "customer_support.apps.CustomerSupportConfig"
+    "customer_support.apps.CustomerSupportConfig",
+    "bucket_process.apps.BucketProcessConfig"
 ]
 
 AUTH_USER_MODEL = 'account.HaehooUser'
@@ -129,9 +130,16 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'account', 'static'),
     os.path.join(BASE_DIR, 'main', 'static'),
     os.path.join(BASE_DIR, 'bucket_list', 'static'),
+    os.path.join(BASE_DIR, 'bucket_process', 'static'),
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+MEDIA_URL = 'media/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
