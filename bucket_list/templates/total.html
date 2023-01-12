@@ -29,12 +29,12 @@
         <div class="category-container container">
           <form action="" method="get">
             <div class="filter-btn-container container">
-              <button class="filter-btn red-btn" type="submit" name="category" id="want-to-do" value="1">하고 싶은 것</button>
-              <button class="filter-btn orange-btn" type="submit" name="category" id="want-to-eat" value="2">먹고 싶은 것</button>
-              <button class="filter-btn yellow-btn" type="submit" name="category" id="want-to-have" value="3">갖고 싶은 것</button>
-              <button class="filter-btn green-btn" type="submit" name="category" id="want-to-go" value="4">가고 싶은 곳</button>
-              <button class="filter-btn blue-btn" type="submit" name="category" id="travel" value="3">여행</button>
-              <button class="filter-btn navy-btn" type="submit" name="category" id="hobby" value="4">취미</button>
+              <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-do" value="1">하고 싶은 것</button>
+              <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-eat" value="2">먹고 싶은 것</button>
+              <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-have" value="3">갖고 싶은 것</button>
+              <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-go" value="4">가고 싶은 곳</button>
+              <button class="btn btn-primary m-2" type="submit" name="category" id="travel" value="3">여행</button>
+              <button class="btn btn-primary m-2" type="submit" name="category" id="hobby" value="4">취미</button>
             </div>
           </form>
         </div>
@@ -42,22 +42,26 @@
       </div>
       <div class="container bucket-contatiner">
         {% for total_bucket in total_bucket.all %}
-        <a class="bucket" href="{% url 'bucketprocess' total_bucket.id %}">
-          <div class="img-container">
-            <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
-          </div>
-          <div class="description">
-            <h3 class="description-title">{{ total_bucket.title }}</h4>
-            <p class="description-username">{{ total_bucket.userID }}</p>
-            <p class="description-username">{{ total_bucket.category }}</p>
-            {% if user in total_bucket.liked_users.all %}
-              <button id="btn_like{{total_bucket.id}}" onclick="click_like({{total_bucket.id}}, '{{user.nickname}}')">♥</button>
-            {% else %}
-              <button id="btn_like{{total_bucket.id}}" onclick="click_like({{total_bucket.id}}, '{{user.nickname}}')">♡</button>
-            {% endif %}
-            <p id="like_cnt{{total_bucket.id}}" class="description-username">{{ total_bucket.liked_users.count }}</p>
-            <button>퍼가기</button>
-            <p class="description-username">{{ total_bucket.referenced_users.count }}</p>
+        <div>
+          <a class="bucket" href="{% url 'bucketprocess' total_bucket.id %}">
+            <div class="img-container">
+              <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
+            </div>
+            <div class="description">
+              <h3 class="description-title">{{ total_bucket.title }}</h4>
+              <p class="description-username">{{ total_bucket.userID }}</p>
+              <p class="description-username">{{ total_bucket.category }}</p>
+            </div>
+          </a>
+          <div>
+          {% if user in total_bucket.liked_users.all %}
+            <button id="btn_like{{total_bucket.id}}" onclick="click_like({{total_bucket.id}}, '{{user.nickname}}')">♥</button>
+          {% else %}
+            <button id="btn_like{{total_bucket.id}}" onclick="click_like({{total_bucket.id}}, '{{user.nickname}}')">♡</button>
+          {% endif %}
+          <p id="like_cnt{{total_bucket.id}}" class="description-username">{{ total_bucket.liked_users.count }}</p>
+          <button>퍼가기</button>
+          <p class="description-username">{{ total_bucket.referenced_users.count }}</p>
           </div>
         </div>
         {% endfor %}
