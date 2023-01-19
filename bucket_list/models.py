@@ -10,3 +10,4 @@ class Bucket(models.Model):
     createdAt = models.DateTimeField(auto_now = True)
     liked_users = models.ManyToManyField(HaehooUser, blank = True, related_name="user-like-bucket+")
     referenced_users = models.ManyToManyField(HaehooUser, blank = True, related_name="user-reference-bucket+")
+    top_fixed = models.ManyToManyField(HaehooUser, blank = True, related_name="top_fixed-bucket+")

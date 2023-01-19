@@ -14,6 +14,15 @@
     <input type="radio" name="category" id="4" value="4"><label for="4">4</label>
     <input type="radio" name="category" id="5" value="5"><label for="5">5</label>
     <input type="radio" name="category" id="6" value="6"><label for="6">6</label>
+    <br>
+
+    <!-- {% if user in total_bucket.top_fixed.all %}
+      <button id="btn_like{{total_bucket.id}}" onclick="click_fix('{{total_bucket.id}}', '{{user.nickname}}')">★</button>
+    {% else %}
+      <button id="btn_like{{total_bucket.id}}" onclick="click_fix('{{total_bucket.id}}', '{{user.nickname}}')">☆</button>
+    {% endif %} -->
+
+    <br>
     <button type="submit">완료</button>
   </form>
 {% endblock content %}

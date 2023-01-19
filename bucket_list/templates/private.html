@@ -1,18 +1,52 @@
-
 {% extends 'base.html' %}
+{% load static %}
+{% block links %}
+<script src="{% static 'js/total.js' %}" crossorigin="anonymous"></script>
+{% endblock links %}
 {% block content %}
     <div class="container">
         <br><br><br>
         <h1>
             {{nickname}}'s bucket list
         </h1>
+
+        <!-- {% if bucket_fixed %}
+        {% for bucket in bucket_fixed %}
+        <h4><a href="{% url 'bucketprocess' bucket.id %}">{{bucket.title}}</h4>
+            <h4>{{bucket.category}}</h4>
+            <h4>{{bucket.createdAt}}</h4>
+            <p id="like_cnt{{bucket.id}}" class="description-username">좋아요 수 = {{ bucket.liked_users.count }}</p>
+            <p class="description-username">스크랩 수 = {{ bucket.referenced_users.count }}</p>
+            <h4><a href="{% url 'delete' user.nickname bucket.id %}">DELETE</a></h4>
+            <h4><a href="{% url 'edit' user.nickname bucket.id %}">EDIT</a></h4>
+            <br><br><br>
+        {% endfor %}
+        {% endif %} -->
         <br><br>
         {% for bucket in buckets %}
-                <h4><a href="{% url 'bucketprocess' bucket.id %}">{{bucket.title}}</h4>
-                <h4>{{bucket.category}}</h4>
-                <h4>{{bucket.createdAt}}</h4>
-                <h4><a href="{% url 'delete' user.nickname bucket.id %}">DELETE</a></h4>
-                <h4><a href="{% url 'edit' user.nickname bucket.id %}">EDIT</a></h4>
+            <h4><a href="{% url 'bucketprocess' bucket.id %}">{{bucket.title}}</a></h4>
+            <h4>{{bucket.category}}</h4>
+            <h4>{{bucket.createdAt}}</h4>
+
+            {% if user in bucket.liked_users.all %}
+                <button id="btn_like{{bucket.id}}" onclick="click_like('{{bucket.id}}', '{{user.nickname}}')">♥</button>
+            {% else %}
+                <button id="btn_like{{bucket.id}}" onclick="click_like('{{bucket.id}}', '{{user.nickname}}')">♡</button>
+            {% endif %}
+            <p id="like_cnt{{bucket.id}}" class="description-username">{{ bucket.liked_users.count }}</p>
+            <button>퍼가기</button>
+            <p class="description-username">{{ bucket.referenced_users.count }}</p>
+
+            <h4><a href="{% url 'delete' user.nickname bucket.id %}">DELETE</a></h4>
+            <h4><a href="{% url 'edit' user.nickname bucket.id %}">EDIT</a></h4>
+            
+            {% if user in bucket.top_fixed.all %}
+                <button id="btn_fix{{bucket.id}}" onclick="click_fix('{{bucket.id}}', '{{user.nickname}}')">★</button>
+            {% else %}
+                <button id="btn_fix{{bucket.id}}" onclick="click_fix('{{bucket.id}}', '{{user.nickname}}')">☆</button>
+            {% endif %}
+            <br><br><br>
+        
         {% endfor %}
     </div>
     <a href="{% url 'create' user.nickname %}">go to create bucket</a>
