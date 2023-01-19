@@ -10,7 +10,7 @@ def total(request):
 
 def private(request, nickname):
     user = HaehooUser.objects.filter(nickname = nickname)
-    buckets = Bucket.objects.filter(userID = user.get())
+    buckets = Bucket.objects.filter(user = user.get())
     return render(request, "private.html", {"nickname" : nickname, "buckets" : buckets})
 
 def create(request, nickname):
@@ -22,7 +22,7 @@ def create(request, nickname):
             title = title,
             category = category
         )
-        newBucket.userID = user.get()
+        newBucket.user = user.get()
         newBucket.save()
         # top_fixed = request.POST.getlist('top_fixed')
         # class Meta:
@@ -51,7 +51,7 @@ def update(request, nickname, bucket_id):
     edit_bucket.title = request.POST.get('title')
     edit_bucket.category = request.POST["category"]
 
-    edit_bucket.userID = user.get()
+    edit_bucket.user = user.get()
     edit_bucket.save()
 
     return redirect('private', nickname=nickname)
