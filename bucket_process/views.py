@@ -26,7 +26,22 @@ def create_bucketprcs(request, bucketid):
             form = ProcessForm(request.POST, request.FILES, instance= prcs_instance)
             form.save()
             return redirect('bucketprocess', bucketid = bucketid)
-            
+
+def edit_bucketprcs(request, processid):
+    process = Process.objects.get(pk = processid)
+    
+    if request.method == 'GET':
+        form = ProcessForm(instance=process)    
+        return render(request, "prcs_edit.html", {'process_form': form})
+    
+    elif request.method == 'POST' or request.method == 'FILES':
+        form = ProcessForm(request.POST, request.FILES)
+        if form.is_valid():
+            bucketid = process.bucketID.id
+            form = ProcessForm(request.POST, request.FILES, instance= process)
+            form.save()
+            return redirect('bucketprocess', bucketid = bucketid)
+          
 def delete_bucketprcs(request, processid):
     process = get_object_or_404(Process, pk = processid)
     bucketid = process.bucketID.id
@@ -42,4 +57,11 @@ def create_comment(request, bucketid, userid):
         form.userID = get_object_or_404(HaehooUser, pk = userid)
         form.save()
     return redirect('bucketprocess', bucketid = bucketid)
+          
+def delete_comment(request, bucketid, commentid):
+    comment = get_object_or_404(Comment, pk = commentid)
+    comment.delete()
+    
+    return redirect('bucketprocess', bucketid = bucketid)
+
         
