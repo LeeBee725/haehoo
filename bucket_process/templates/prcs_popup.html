@@ -7,14 +7,14 @@
         {%endif%}
         <p>{{process.text}}</p>
         <p>{{process.createdAt}}</p>
-        {% if user.id == process.bucketID.userID.id %}
+        {% if user.id == process.bucket.user.id %}
             <a href = "{% url 'processedit' process.id %}">edit process</a>
             <a href = "{% url 'processdelete' process.id %}">delete process</a>
         {% endif %}
         <br>
     {% endfor %}
     
-    {% if user.id == bucket.userID.id %}
+    {% if user.id == bucket.user.id %}
         <a href = "{% url 'processcreate' bucket.id %}">create process</a>
     {% endif %}
 
@@ -22,8 +22,8 @@
         <h4>Comments</h4>
         {% for comment in total_comment %}
             <li>
-                {{comment.userID}} : {{comment.comment}}
-                {% if user.id == comment.userID.id %}
+                {{comment.user}} : {{comment.comment}}
+                {% if user.id == comment.user.id %}
                     <a href = "{% url 'deletecomment' bucketid=bucket.id commentid=comment.id %}">delete</a>
                 {% endif %}
         
