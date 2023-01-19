@@ -22,7 +22,7 @@ def create_bucketprcs(request, bucketid):
     elif request.method == 'POST' or request.method == 'FILES':
         form = ProcessForm(request.POST, request.FILES)
         if form.is_valid():
-            prcs_instance = Process(bucketID = Bucket.objects.get(pk = bucketid))
+            prcs_instance = Process(bucket = Bucket.objects.get(pk = bucketid))
             form = ProcessForm(request.POST, request.FILES, instance= prcs_instance)
             form.save()
             return redirect('bucketprocess', bucketid = bucketid)
