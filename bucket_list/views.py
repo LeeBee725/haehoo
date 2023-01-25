@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from django.forms.models import model_to_dict
 from account.models import HaehooUser
 from bucket_list.models import Bucket
 
@@ -10,7 +9,7 @@ def total(request):
 
 def private(request, nickname):
     user = HaehooUser.objects.filter(nickname = nickname)
-    buckets = Bucket.objects.filter(userID = user.get())
+    buckets = Bucket.objects.filter(user = user.get())
     return render(request, "private.html", {"nickname" : nickname, "buckets" : buckets})
 
 def create(request, nickname):
@@ -22,7 +21,7 @@ def create(request, nickname):
             title = title,
             category = category
         )
-        newBucket.userID = user.get()
+        newBucket.user = user.get()
         newBucket.save()
         return redirect('private', nickname=nickname)
     else:
@@ -45,12 +44,14 @@ def update(request, nickname, bucket_id):
     edit_bucket.title = request.POST.get('title')
     edit_bucket.category = request.POST["category"]
 
-    edit_bucket.userID = user.get()
+    edit_bucket.user = user.get()
     edit_bucket.save()
 
     return redirect('private', nickname=nickname)
 
 def click_like(request, nickname, bucket_id):
+    if request.method != "POST":
+        return JsonResponse({"message":"Permission denied."})
     bucket = Bucket.objects.get(pk=bucket_id)
     user = HaehooUser.objects.get(nickname=nickname)
     if user in bucket.liked_users.all():
@@ -59,3 +60,21 @@ def click_like(request, nickname, bucket_id):
         bucket.liked_users.add(user)
     bucket.save()
     return JsonResponse({"message":"OK", "is_contains":user in bucket.liked_users.all(), "like_cnt":bucket.liked_users.count()})
+
+def click_scrap(request, nickname, bucket_id):
+    bucket = Bucket.objects.get(pk=bucket_id)
+    user = HaehooUser.objects.get(nickname=nickname)
+    if request.method == "GET":
+        return render(request, 'scrap.html', {'nickname': nickname, 'bucket': bucket})
+    if request.method == "POST":
+        title = request.POST.get("title")
+        category = int(request.POST["category"])
+        derived = Bucket(
+            user = user,
+            title = title,
+            category = category,
+            derived_bucket = bucket
+        )
+        derived.save()
+        return redirect('total')
+    

@@ -7,7 +7,7 @@ class Bucket(models.Model):
     category = models.IntegerField()
     createdAt = models.DateTimeField(auto_now = True)
     liked_users = models.ManyToManyField(HaehooUser, blank = True, related_name="user-like-bucket+")
-    deriving_bucket = models.ForeignKey('self', on_delete=models.SET_NULL, null=True)
+    derived_bucket = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, related_name="deriving_bucket")
 
     def __str__(self):
         return f"{self.user}'s {self.title}"

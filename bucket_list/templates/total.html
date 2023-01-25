@@ -61,7 +61,7 @@
           {% endif %}
           <p id="like_cnt{{total_bucket.id}}" class="description-username">{{ total_bucket.liked_users.count }}</p>
           <button id="btn_scrap{{total_bucket.id}}" onclick="click_scrap({{total_bucket.id}}, '{{user.nickname}}')">퍼가기</button>
-          <p class="description-username">{{ total_bucket.number_of_deriving }}</p>
+          <p class="description-username">{{ total_bucket.deriving_bucket.all.count }}</p>
           </div>
         </div>
         {% endfor %}
