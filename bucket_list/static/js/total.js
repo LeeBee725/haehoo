@@ -40,3 +40,7 @@ function click_like(bucket_id, nickname) {
         }
     }
 }
+
+function click_scrap(bucket_id, nickname) {
+    window.location.assign(nickname + "/scrap/" + bucket_id)
+}
