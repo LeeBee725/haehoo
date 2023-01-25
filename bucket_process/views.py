@@ -5,10 +5,10 @@ from .models import Process, Comment
 from .forms import ProcessForm, CommentForm
 
 def show_bucketprcs(request, bucketid):
-    total_process = Process.objects.filter(bucketID = bucketid)
+    total_process = Process.objects.filter(bucket = bucketid)
     bucket = Bucket.objects.get(pk = bucketid)
     
-    total_comment = Comment.objects.filter(bucketID = bucketid)
+    total_comment = Comment.objects.filter(bucket = bucketid)
     
     comment_form = CommentForm()
     
@@ -22,14 +22,29 @@ def create_bucketprcs(request, bucketid):
     elif request.method == 'POST' or request.method == 'FILES':
         form = ProcessForm(request.POST, request.FILES)
         if form.is_valid():
-            prcs_instance = Process(bucketID = Bucket.objects.get(pk = bucketid))
+            prcs_instance = Process(bucket = Bucket.objects.get(pk = bucketid))
             form = ProcessForm(request.POST, request.FILES, instance= prcs_instance)
             form.save()
             return redirect('bucketprocess', bucketid = bucketid)
-            
+
+def edit_bucketprcs(request, processid):
+    process = Process.objects.get(pk = processid)
+    
+    if request.method == 'GET':
+        form = ProcessForm(instance=process)    
+        return render(request, "prcs_edit.html", {'process_form': form})
+    
+    elif request.method == 'POST' or request.method == 'FILES':
+        form = ProcessForm(request.POST, request.FILES)
+        if form.is_valid():
+            bucketid = process.bucket.id
+            form = ProcessForm(request.POST, request.FILES, instance= process)
+            form.save()
+            return redirect('bucketprocess', bucketid = bucketid)
+          
 def delete_bucketprcs(request, processid):
     process = get_object_or_404(Process, pk = processid)
-    bucketid = process.bucketID.id
+    bucketid = process.bucket.id
     process.delete()
     
     return redirect('bucketprocess', bucketid = bucketid)
@@ -38,8 +53,15 @@ def create_comment(request, bucketid, userid):
     form = CommentForm(request.POST)
     if form.is_valid():
         form = form.save(commit = False)
-        form.bucketID = get_object_or_404(Bucket, pk = bucketid)
-        form.userID = get_object_or_404(HaehooUser, pk = userid)
+        form.bucket = get_object_or_404(Bucket, pk = bucketid)
+        form.user = get_object_or_404(HaehooUser, pk = userid)
         form.save()
     return redirect('bucketprocess', bucketid = bucketid)
+          
+def delete_comment(request, bucketid, commentid):
+    comment = get_object_or_404(Comment, pk = commentid)
+    comment.delete()
+    
+    return redirect('bucketprocess', bucketid = bucketid)
+
         
