@@ -15,6 +15,12 @@ function getCookie(name) {
 const csrftoken = getCookie('csrftoken');
 
 window.onload = function() {
+    $('.bucket').on('click', function(){
+        console.log("is it execute?\n");
+        $('#exampleModal .modal-body').load('http://127.0.0.1:8000/bucketprocess/1', function(){
+            $('#exampleModal').modal('show')
+        });
+    });
 }
 
 function click_like(bucket_id, nickname) {
