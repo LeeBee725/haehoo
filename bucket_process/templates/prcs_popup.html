@@ -16,54 +16,56 @@
 <body class = "container">
 <div class = "row">
     <div class = "col">
-        <div id="title" class="card row">
-            <div class="col">
-            <h4 class="card-title">{{bucket.title}}'s process</h4>
-                <div class="card-body"> 
-                    {% if user in bucket.liked_users.all %}
-                    <button id="btn_like{{bucket.id}}" onclick="click_like({{bucket.id}}, '{{user.nickname}}')">♥</button>
-                    {% else %}
-                    <button id="btn_like{{bucket.id}}" onclick="click_like({{bucket.id}}, '{{user.nickname}}')">♡</button>
+        <div id="title" class="card">
+            <div class="row">
+                <div class="col">
+                    <h4 class="card-title">{{bucket.title}}'s process</h4>
+                    <div class="card-body"> 
+                        {% if user in bucket.liked_users.all %}
+                            <button id="btn_like{{bucket.id}}" onclick="click_like({{bucket.id}}, '{{user.nickname}}')">♥</button>
+                        {% else %}
+                            <button id="btn_like{{bucket.id}}" onclick="click_like({{bucket.id}}, '{{user.nickname}}')">♡</button>
+                        {% endif %}
+                        <div id="like_cnt{{bucket.id}}" class="description-username">{{ bucket.liked_users.count }}</div>
+                        
+                        <button>퍼가기</button>
+                        <div class="description-username">{{ bucket.referenced_users.count }}</div>
+                    </div>
+                </div>
+                <div class="col">
+                    {% if user.id == bucket.user.id %}
+                        <a href = "{% url 'processcreate' bucket.id %}">create process</a>
                     {% endif %}
-                    <p id="like_cnt{{bucket.id}}" class="description-username">{{ bucket.liked_users.count }}</p>
-                    <button>퍼가기</button>
-                    <p class="description-username">{{ bucket.referenced_users.count }}</p>
                 </div>
             </div>
-            <div class="col">
-                {% if user.id == bucket.user.id %}
-                    <a href = "{% url 'processcreate' bucket.id %}">create process</a>
-                {% endif %}
-            </div>
         </div>  
-        <div>
-            {% for process in total_process %}
-                <h4>{{process.title}}</h4>
-                {% if process.image %}
-                    <image src="{{process.image.url}}" height = 100>
-                {%endif%}
-                <p>{{process.text}}</p>
-                <p>{{process.createdAt}}</p>
-                {% if user.id == process.bucket.user.id %}
-                    <a href = "{% url 'processedit' process.id %}">edit process</a>
-                    <a href = "{% url 'processdelete' process.id %}">delete process</a>
-                {% endif %}
-                <br>
-            {% endfor %}
-            
+        {% for process in total_process %}
+        <div class="card">
+            <h4>{{process.title}}</h4>
+            {% if process.image %}
+                <image src="{{process.image.url}}" height = 100>
+            {%endif%}
+            <p>{{process.text}}</p>
+            <p>{{process.createdAt}}</p>
+            {% if user.id == process.bucket.user.id %}
+                <a href = "{% url 'processedit' process.id %}">edit process</a>
+                <a href = "{% url 'processdelete' process.id %}">delete process</a>
+            {% endif %}
+            <br>
         </div>
+        {% endfor %}
     </div>
     <div class = "col">
         <div>
             <h4>Comments</h4>
             {% for comment in total_comment %}
-                <li>
-                    {{comment.user.nickname}} : {{comment.comment}}
-                    {% if user.id == comment.user.id %}
-                        <a href = "{% url 'deletecomment' bucketid=bucket.id commentid=comment.id %}">delete</a>
-                    {% endif %}
-            
-                </li>
+            <div class="card">
+                {{comment.user.nickname}} : {{comment.comment}}
+                {% if user.id == comment.user.id %}
+                    <a href = "{% url 'deletecomment' bucketid=bucket.id commentid=comment.id %}">delete</a>
+                {% endif %}
+        
+            </div>
             {%endfor%}
         </div>
         <form method = 'POST' action = "{% url 'createcomment'  userid=user.id bucketid=bucket.id %}">
@@ -76,4 +78,4 @@
     </div>
 </div>
 </body>
-</<html>
+</html>
