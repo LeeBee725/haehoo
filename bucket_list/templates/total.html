@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block links %}
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 <script src="https://kit.fontawesome.com/f26e9103bc.js" crossorigin="anonymous"></script>
 <script src="{% static 'js/total.js' %}" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="{% static 'css/style.css' %}" />
@@ -42,30 +43,49 @@
       </div>
       <div class="container bucket-contatiner">
         {% for total_bucket in total_bucket.all %}
-        <div>
-          <a class="bucket" href="{% url 'bucketprocess' total_bucket.id %}">
-            <div class="img-container">
-              <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
-            </div>
-            <div class="description">
-              <h3 class="description-title">{{ total_bucket.title }}</h4>
-              <p class="description-username">{{ total_bucket.user }}</p>
-              <p class="description-username">{{ total_bucket.category }}</p>
-            </div>
-          </a>
           <div>
-          {% if user in total_bucket.liked_users.all %}
-            <button id="btn_like{{total_bucket.id}}" onclick="click_like({{total_bucket.id}}, '{{user.nickname}}')">♥</button>
-          {% else %}
-            <button id="btn_like{{total_bucket.id}}" onclick="click_like({{total_bucket.id}}, '{{user.nickname}}')">♡</button>
-          {% endif %}
-          <p id="like_cnt{{total_bucket.id}}" class="description-username">{{ total_bucket.liked_users.count }}</p>
-          <button id="btn_scrap{{total_bucket.id}}" onclick="click_scrap({{total_bucket.id}}, '{{user.nickname}}')">퍼가기</button>
-          <p class="description-username">{{ total_bucket.deriving_bucket.all.count }}</p>
+            <button type = "button" class="bucket" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div class="img-container">
+                <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
+              </div>
+              <div class="description">
+                <h3 class="description-title">{{ total_bucket.title }}</h4>
+                  <p class="description-username">{{ total_bucket.user }}</p>
+                  <p class="description-username">{{ total_bucket.category }}</p>
+              </div>
+            </button>
+            <div>
+              {% if user in total_bucket.liked_users.all %}
+                <button id="btn_like{{total_bucket.id}}" onclick="click_like({{total_bucket.id}}, '{{user.nickname}}')">♥</button>
+              {% else %}
+                <button id="btn_like{{total_bucket.id}}" onclick="click_like({{total_bucket.id}}, '{{user.nickname}}')">♡</button>
+              {% endif %}
+              <p id="like_cnt{{total_bucket.id}}" class="description-username">{{ total_bucket.liked_users.count }}</p>
+              <button id="btn_scrap{{total_bucket.id}}" onclick="click_scrap({{total_bucket.id}}, '{{user.nickname}}')">퍼가기</button>
+              <p class="description-username">{{ total_bucket.deriving_bucket.all.count }}</p>
+            </div>
           </div>
-        </div>
+          
+          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
         {% endfor %}
       </div>
     </div>
 </section>
 {% endblock content %}
+
