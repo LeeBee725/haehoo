@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block links %}
+  
+{% endblock links %}
+{% block content %}
+  <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+  Do you really scrap {{bucket.user.nickname}}'s bucket
+  <form action="{% url 'click_scrap' nickname bucket.id %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="title" placeholder="버킷리스트를 적어주세요" value="{{bucket.title}}" readonly>
+    <br>
+    <div readonly>
+      {% for num_str in "123456" %}
+        {% if num_str == bucket.category|stringformat:'d' %}
+          <input type="radio" name="category" id="{{num_str}}" value="{{num_str}}" readonly checked><label for="{{num_str}}">{{num_str}}</label>
+        {% else %}
+          <input type="radio" name="category" id="{{num_str}}" value="{{num_str}}" disabled><label for="{{num_str}}">{{num_str}}</label>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <button type="submit">완료</button>
+  </form>
+{% endblock content %}
