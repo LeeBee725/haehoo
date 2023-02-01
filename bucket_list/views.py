@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.http import JsonResponse
 from account.models import HaehooUser
 from bucket_list.models import Bucket
@@ -64,6 +64,8 @@ def click_like(request, nickname, bucket_id):
 def click_scrap(request, nickname, bucket_id):
     bucket = Bucket.objects.get(pk=bucket_id)
     user = HaehooUser.objects.get(nickname=nickname)
+    if (bucket.user.nickname == user.nickname):
+        return redirect(reverse("total") + "?fail=same_user_scrap")
     if request.method == "GET":
         return render(request, 'scrap.html', {'nickname': nickname, 'bucket': bucket})
     if request.method == "POST":

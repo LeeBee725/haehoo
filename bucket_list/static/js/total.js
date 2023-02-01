@@ -21,6 +21,23 @@ window.onload = function() {
             $('#exampleModal').modal('show')
         });
     });
+
+    const queryString = window.location.search;
+    const urlParam = new URLSearchParams(queryString);
+    console.log(urlParam);
+    console.log(urlParam.get('fail'));
+    var fail = urlParam.get('fail')
+    if (fail)
+    {
+        var alertBox = document.createElement('div');
+        var alertSpace = document.getElementById("alert-space");
+        alertBox.setAttribute("id", "fail");
+        alertBox.setAttribute("class", "alert alert-danger");
+        alertBox.setAttribute("role", "alert");
+        if (fail == "same_user_scrap")
+            alertBox.textContent = "자신의 버킷을 스크랩 할 수 없습니다."
+        alertSpace.appendChild(alertBox);
+    }
 }
 
 function click_like(bucket_id, nickname) {
