@@ -1,11 +1,17 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.http import JsonResponse
+from django.contrib import auth
 from account.models import HaehooUser
 from bucket_list.models import Bucket
 
 def total(request):
+    user_scraps = None
+    if request.user.is_authenticated:
+        user_scraps = request.user.buckets.filter(derived_bucket__isnull=False) \
+                        .values_list('derived_bucket_id', flat=True)
+        print(user_scraps)
     total_bucket = Bucket.objects
-    return render(request, "total.html", {'total_bucket' : total_bucket})
+    return render(request, "total.html", {'total_bucket' : total_bucket, 'user_scraps': user_scraps})
 
 def private(request, nickname):
     user = HaehooUser.objects.filter(nickname = nickname)
