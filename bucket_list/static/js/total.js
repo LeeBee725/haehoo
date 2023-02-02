@@ -15,17 +15,19 @@ function getCookie(name) {
 const csrftoken = getCookie('csrftoken');
 
 window.onload = function() {
-    $('.bucket').on('click', function(){
-        console.log("is it execute?\n");
-        $('#exampleModal .modal-body').load('http://127.0.0.1:8000/bucketprocess/1', function(){
-            $('#exampleModal').modal('show')
+    const userNickname = JSON.parse(document.getElementById("userNickname").textContent);
+    $('.bucket').on('click', function() {
+        let bucket_id = this.getAttribute("value");
+        $('#exampleModal .modal-body').load(window.origin + "/bucketprocess/" + bucket_id, function(){
+            $('#exampleModal').modal('show');
+            $('#exampleModal .modal-body #btn_like' + bucket_id).on("click", function() {
+                click_like(this, userNickname);
+            });
         });
     });
 
     const queryString = window.location.search;
     const urlParam = new URLSearchParams(queryString);
-    console.log(urlParam);
-    console.log(urlParam.get('fail'));
     var fail = urlParam.get('fail')
     if (fail)
     {
@@ -38,25 +40,48 @@ window.onload = function() {
             alertBox.textContent = "자신의 버킷을 스크랩 할 수 없습니다."
         alertSpace.appendChild(alertBox);
     }
+
+    let btnLikes = document.getElementsByClassName("btn_like");
+    for(let i = 0; i < btnLikes.length; ++i) {
+        btnLikes[i].addEventListener("click", () => {
+            click_like(btnLikes[i], userNickname);
+        });
+    }
+
+    let btnScraps = document.getElementsByClassName("btn_scrap");
+    for(let i = 0; i < btnScraps.length; ++i) {
+        btnScraps[i].addEventListener("click", () => {
+            click_scrap(btnScraps[i].getAttribute("value"), userNickname);
+        });
+    }
 }
 
-function click_like(bucket_id, nickname) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", nickname + "/like/" + bucket_id, true);
+function click_like(btn, nickname) {
+    if (nickname == "" || nickname == null)
+        window.location.assign(window.origin + "/account/login/");
+    let xhr = new XMLHttpRequest();
+    let bucket_id = btn.getAttribute("value");
+    let url = window.origin + "/bucket-list/" + nickname + "/like/" + bucket_id
+    xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.setRequestHeader("X-CSRFToken", csrftoken);
     xhr.send()
-    
+
     xhr.onload = function() {
         if (xhr.status == 200) {
             var res = JSON.parse(xhr.response);
-            var like_cnt = document.getElementById("like_cnt" + bucket_id);
-            var btn_like = document.getElementById("btn_like" + bucket_id);
-            like_cnt.textContent = res.like_cnt;
+            var like_cnts = document.querySelectorAll("#btn_like" + bucket_id + " + label");
+            var btn_likes = document.querySelectorAll("#btn_like" + bucket_id);
+            
+            for (let i = 0; i < like_cnts.length; ++i) {
+                like_cnts[i].textContent = res.like_cnt;
+            }
             if (res.is_contains) {
-                btn_like.textContent = "♥";
+                for (let i = 0; i < btn_likes.length; ++i)
+                    btn_likes[i].textContent = "♥";
             } else {
-                btn_like.textContent = "♡";
+                for (let i = 0; i < btn_likes.length; ++i)
+                    btn_likes[i].textContent = "♡";
             }
         } else {
             // fail 처리
@@ -65,5 +90,8 @@ function click_like(bucket_id, nickname) {
 }
 
 function click_scrap(bucket_id, nickname) {
-    window.location.assign(nickname + "/scrap/" + bucket_id)
+    if (nickname == "" || nickname == null)
+        window.location.assign(window.origin + "/account/login/");
+    else
+        window.location.assign(nickname + "/scrap/" + bucket_id);
 }

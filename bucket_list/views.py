@@ -9,7 +9,6 @@ def total(request):
     if request.user.is_authenticated:
         user_scraps = request.user.buckets.filter(derived_bucket__isnull=False) \
                         .values_list('derived_bucket_id', flat=True)
-        print(user_scraps)
     total_bucket = Bucket.objects
     return render(request, "total.html", {'total_bucket' : total_bucket, 'user_scraps': user_scraps})
 
@@ -68,6 +67,8 @@ def click_like(request, nickname, bucket_id):
     return JsonResponse({"message":"OK", "is_contains":user in bucket.liked_users.all(), "like_cnt":bucket.liked_users.count()})
 
 def click_scrap(request, nickname, bucket_id):
+    if not request.user.is_authenticated:
+        return redirect(reverse("login"))
     bucket = Bucket.objects.get(pk=bucket_id)
     user = HaehooUser.objects.get(nickname=nickname)
     if (bucket.user.nickname == user.nickname):
