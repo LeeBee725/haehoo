@@ -1,16 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.http import JsonResponse
-from django.contrib import auth
 from account.models import HaehooUser
 from bucket_list.models import Bucket
+import json
 
 def total(request):
     user_scraps = None
     if request.user.is_authenticated:
         user_scraps = request.user.buckets.filter(derived_bucket__isnull=False) \
-                        .values_list('derived_bucket_id', flat=True)
+                        .values_list("derived_bucket_id", flat=True)
     total_bucket = Bucket.objects
-    return render(request, "total.html", {'total_bucket' : total_bucket, 'user_scraps': user_scraps})
+    return render(request, "total.html", {"total_bucket" : total_bucket, "user_scraps": user_scraps})
 
 def private(request, nickname):
     user = HaehooUser.objects.filter(nickname = nickname)
@@ -28,7 +28,7 @@ def create(request, nickname):
         )
         newBucket.user = user.get()
         newBucket.save()
-        return redirect('private', nickname=nickname)
+        return redirect("private", nickname=nickname)
     else:
         return render(request, "create.html", {"nickname" : nickname})
 
@@ -36,27 +36,27 @@ def delete(request, nickname, bucket_id):
     bucket = get_object_or_404(Bucket, pk = bucket_id)
     bucket.delete()
 
-    return redirect('private', nickname=nickname)
+    return redirect("private", nickname=nickname)
 
 def edit(request, nickname, bucket_id):
     edit_bucket = Bucket.objects.get(id = bucket_id)
 
-    return render(request, 'edit.html', {'bucket' : edit_bucket, 'nickname' : nickname})
+    return render(request, "edit.html", {"bucket" : edit_bucket, "nickname" : nickname})
 
 def update(request, nickname, bucket_id):
     user = HaehooUser.objects.filter(nickname=nickname)
     edit_bucket = Bucket.objects.get(id=bucket_id)
-    edit_bucket.title = request.POST.get('title')
+    edit_bucket.title = request.POST.get("title")
     edit_bucket.category = request.POST["category"]
 
     edit_bucket.user = user.get()
     edit_bucket.save()
 
-    return redirect('private', nickname=nickname)
+    return redirect("private", nickname=nickname)
 
 def click_like(request, nickname, bucket_id):
     if request.method != "POST":
-        return JsonResponse({"message":"Permission denied."})
+        return JsonResponse({"status_code": 404, "error": "Permission denied"})
     bucket = Bucket.objects.get(pk=bucket_id)
     user = HaehooUser.objects.get(nickname=nickname)
     if user in bucket.liked_users.all():
@@ -73,17 +73,21 @@ def click_scrap(request, nickname, bucket_id):
     user = HaehooUser.objects.get(nickname=nickname)
     if (bucket.user.nickname == user.nickname):
         return redirect(reverse("total") + "?fail=same_user_scrap")
-    if request.method == "GET":
-        return render(request, 'scrap.html', {'nickname': nickname, 'bucket': bucket})
-    if request.method == "POST":
-        title = request.POST.get("title")
-        category = int(request.POST["category"])
-        derived = Bucket(
-            user = user,
-            title = title,
-            category = category,
-            derived_bucket = bucket
-        )
-        derived.save()
-        return redirect('total')
+    if request.method != "POST":
+        return JsonResponse({"status_code": 404, "error": "Permission denied"})
+    user_scraps = request.user.buckets.filter(derived_bucket__isnull=False) \
+                        .values_list("derived_bucket_id", flat=True)
+    if bucket.id in user_scraps:
+        deleted = user.buckets.filter(derived_bucket=bucket.id)
+        deleted.delete()
+        return JsonResponse({"message": "OK", "type": "delete", "scrap_cnt": bucket.deriving_bucket.all().count()})
+    data = json.loads(request.body)
+    derived = Bucket(
+        user = user,
+        title = data["title"],
+        category = data["category"],
+        derived_bucket = bucket
+    )
+    derived.save()
+    return JsonResponse({"message": "OK", "type": "create", "scrap_cnt": bucket.deriving_bucket.all().count()})
     

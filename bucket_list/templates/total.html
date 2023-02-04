@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 {% endblock links %}
 {% block content %}
-{{ user.nickname|json_script:"userNickname" }}
+{{ user.nickname|json_script:"user-nickname" }}
 <section id="top-space">
   <div class="top-container container">
     <div class="search-container container">
@@ -46,14 +46,14 @@
       <div class="container bucket-contatiner">
         {% for bucket in total_bucket.all %}
           <div>
-            <button type = "button" class="bucket" value="{{bucket.id}}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <button id="bucket{{bucket.id}}" type = "button" class="bucket" value="{{bucket.id}}" data-bs-toggle="modal" data-bs-target="#exampleModal">
               <div class="img-container">
                 <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
               </div>
               <div class="description">
-                <h3 class="description-title">{{ bucket.title }}</h4>
-                  <p class="description-username">{{ bucket.user }}</p>
-                  <p class="description-username">{{ bucket.category }}</p>
+                <h3 id="bucket-title" class="description-title">{{ bucket.title }}</h3>
+                <p id="bucket-user" class="description-username">{{ bucket.user }}</p>
+                <p id="bucket-category" class="description-username">{{ bucket.category }}</p>
               </div>
             </button>
             <div>
@@ -70,9 +70,9 @@
                   <button id="btn_scrap{{bucket.id}}" class="btn_scrap" value="{{bucket.id}}">퍼가기</button>
                 {% endif %}
               {% else %}
-                  <div id="btn_scrap{{bucket.id}}">퍼가기</div>
+                  <span id="btn_scrap{{bucket.id}}">퍼가기</span>
               {% endif %}
-              <p class="description-username">{{ bucket.deriving_bucket.all.count }}</p>
+              <label for="btn_scrap{{bucket.id}}">{{ bucket.deriving_bucket.all.count }}</label>
             </div>
           </div>
         {% endfor %}  

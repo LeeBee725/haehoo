@@ -15,7 +15,7 @@ function getCookie(name) {
 const csrftoken = getCookie('csrftoken');
 
 window.onload = function() {
-    const userNickname = JSON.parse(document.getElementById("userNickname").textContent);
+    const userNickname = JSON.parse(document.getElementById("user-nickname").textContent);
     $('.bucket').on('click', function() {
         let bucket_id = this.getAttribute("value");
         $('#exampleModal .modal-body').load(window.origin + "/bucketprocess/" + bucket_id, function(){
@@ -42,16 +42,16 @@ window.onload = function() {
     }
 
     let btnLikes = document.getElementsByClassName("btn_like");
-    for(let i = 0; i < btnLikes.length; ++i) {
+    for (let i = 0; i < btnLikes.length; ++i) {
         btnLikes[i].addEventListener("click", () => {
             click_like(btnLikes[i], userNickname);
         });
     }
 
     let btnScraps = document.getElementsByClassName("btn_scrap");
-    for(let i = 0; i < btnScraps.length; ++i) {
+    for (let i = 0; i < btnScraps.length; ++i) {
         btnScraps[i].addEventListener("click", () => {
-            click_scrap(btnScraps[i].getAttribute("value"), userNickname);
+            click_scrap(btnScraps[i], userNickname);
         });
     }
 }
@@ -69,9 +69,9 @@ function click_like(btn, nickname) {
 
     xhr.onload = function() {
         if (xhr.status == 200) {
-            var res = JSON.parse(xhr.response);
-            var like_cnts = document.querySelectorAll("#btn_like" + bucket_id + " + label");
-            var btn_likes = document.querySelectorAll("#btn_like" + bucket_id);
+            let res = JSON.parse(xhr.response);
+            let like_cnts = document.querySelectorAll("#btn_like" + bucket_id + " + label");
+            let btn_likes = document.querySelectorAll("#btn_like" + bucket_id);
             
             for (let i = 0; i < like_cnts.length; ++i) {
                 like_cnts[i].textContent = res.like_cnt;
@@ -89,9 +89,30 @@ function click_like(btn, nickname) {
     }
 }
 
-function click_scrap(bucket_id, nickname) {
+function click_scrap(btn, nickname) {
     if (nickname == "" || nickname == null)
         window.location.assign(window.origin + "/account/login/");
-    else
-        window.location.assign(nickname + "/scrap/" + bucket_id);
+        // window.location.assign(nickname + "/scrap/" + bucket_id);
+    let xhr = new XMLHttpRequest();
+    let bucket_id = btn.getAttribute("value");
+    let bucketElem = document.querySelector("#bucket" + bucket_id);
+    let bucketDesc = bucketElem.querySelector(".description");
+    let bucket = {
+        "title": bucketDesc.querySelector("#bucket-title").textContent,
+        "category": bucketDesc.querySelector("#bucket-category").textContent
+    };
+    let url = window.origin + "/bucket-list/" + nickname + "/scrap/" + bucket_id;
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    xhr.send(JSON.stringify(bucket));
+
+    xhr.onload = () => {
+        if (xhr.response == 200) {
+            let res = JSON.parse(xhr.response);
+
+        } else {
+            // fail
+        }
+    }
 }
