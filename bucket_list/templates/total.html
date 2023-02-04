@@ -43,7 +43,7 @@
         </div>
         
       </div>
-      <div class="container bucket-contatiner">
+      <div class="container bucket-container">
         {% for bucket in total_bucket.all %}
           <div>
             <button id="bucket{{bucket.id}}" type = "button" class="bucket" value="{{bucket.id}}" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -52,7 +52,7 @@
               </div>
               <div class="description">
                 <h3 id="bucket-title" class="description-title">{{ bucket.title }}</h3>
-                <p id="bucket-user" class="description-username">{{ bucket.user }}</p>
+                <p id="bucket-user" class="description-username">{{ bucket.user.nickname }}</p>
                 <p id="bucket-category" class="description-username">{{ bucket.category }}</p>
               </div>
             </button>

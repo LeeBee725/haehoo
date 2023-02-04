@@ -89,16 +89,57 @@ function click_like(btn, nickname) {
     }
 }
 
+function createBucketElem(bucketObj, nickname) {
+    let elem = document.createElement("div");
+    let btnDetail = document.createElement("button");
+    let interactions = document.createElement("div");
+    btnDetail.setAttribute("id", "bucket" + bucketObj.pk);
+    btnDetail.setAttribute("type", "button");
+    btnDetail.setAttribute("class", "bucket");
+    btnDetail.setAttribute("value", bucketObj.pk);
+    btnDetail.setAttribute("data-bs-toggle", "modal");
+    btnDetail.setAttribute("data-bs-target", "#exampleModal");
+    btnDetail.innerHTML = ' \
+        <div class="img-container"> \
+        <img class="thumbnail" src="/static/image/sample.jpg" alt="sample"/> \
+        </div> \
+        <div class="description"> \
+        <h3 id="bucket-title" class="description-title">' + bucketObj.fields.title + '</h3> \
+        <p id="bucket-user" class="description-username">' + nickname + '</p> \
+        <p id="bucket-category" class="description-username">' + bucketObj.fields.category + '</p> \
+        </div> \
+    '
+    var btnLike = document.createElement("button");
+    btnLike.setAttribute("id", "btn_like" + bucketObj.pk);
+    btnLike.setAttribute("class", "btn_like");
+    btnLike.setAttribute("value", bucketObj.pk);
+    btnLike.textContent = "♡";
+    btnLike.addEventListener("click", () => {
+        console.log("haha");
+        // console.log(this);
+        // click_like(this, nickname);
+    });
+    interactions.appendChild(btnLike);
+    interactions.innerHTML += ' \
+        <label for="btn_like' + bucketObj.pk + '">0</label> \
+        <span id="btn_scrap' + bucketObj.pk + '">퍼가기</span> \
+        <label for="btn_scrap' + bucketObj.pk + '">0</label> \
+    '
+    elem.appendChild(btnDetail);
+    elem.appendChild(interactions);
+    return elem;
+}
+
 function click_scrap(btn, nickname) {
     if (nickname == "" || nickname == null)
         window.location.assign(window.origin + "/account/login/");
-        // window.location.assign(nickname + "/scrap/" + bucket_id);
     let xhr = new XMLHttpRequest();
     let bucket_id = btn.getAttribute("value");
     let bucketElem = document.querySelector("#bucket" + bucket_id);
     let bucketDesc = bucketElem.querySelector(".description");
     let bucket = {
         "title": bucketDesc.querySelector("#bucket-title").textContent,
+        "user": nickname,
         "category": bucketDesc.querySelector("#bucket-category").textContent
     };
     let url = window.origin + "/bucket-list/" + nickname + "/scrap/" + bucket_id;
@@ -107,10 +148,27 @@ function click_scrap(btn, nickname) {
     xhr.setRequestHeader("X-CSRFToken", csrftoken);
     xhr.send(JSON.stringify(bucket));
 
-    xhr.onload = () => {
-        if (xhr.response == 200) {
+    xhr.onload = function() {
+        if (xhr.status == 200) {
             let res = JSON.parse(xhr.response);
+            let scrap_cnts = document.querySelectorAll("#btn_scrap" + bucket_id + " + label");
+            let btn_scraps = document.querySelectorAll("#btn_scrap" + bucket_id);
 
+            for (let i = 0; i < scrap_cnts.length; ++i)
+                scrap_cnts[i].textContent = res.scrap_cnt;
+            if (res.type == "create") {
+                for (let i = 0; i < btn_scraps.length; ++i) {
+                    btn_scraps[i].textContent = "퍼가기 취소";
+                }
+                newBucketElem = createBucketElem(JSON.parse(res.new_bucket)[0], nickname);
+                document.querySelector(".bucket-container").appendChild(newBucketElem);
+            } else {
+                for (let i = 0; i < btn_scraps.length; ++i) {
+                    btn_scraps[i].textContent = "퍼가기";
+                }
+                let deletedElem = document.querySelector("#bucket" + res.deleted_bucket_id).parentElement;
+                document.querySelector(".bucket-container").removeChild(deletedElem);
+            }
         } else {
             // fail
         }

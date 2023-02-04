@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.http import JsonResponse
+from django.core import serializers
 from account.models import HaehooUser
 from bucket_list.models import Bucket
 import json
@@ -79,8 +80,14 @@ def click_scrap(request, nickname, bucket_id):
                         .values_list("derived_bucket_id", flat=True)
     if bucket.id in user_scraps:
         deleted = user.buckets.filter(derived_bucket=bucket.id)
+        deleted_id = deleted.get().id
         deleted.delete()
-        return JsonResponse({"message": "OK", "type": "delete", "scrap_cnt": bucket.deriving_bucket.all().count()})
+        return JsonResponse({ \
+            "message": "OK", \
+            "type": "delete", \
+            "scrap_cnt": bucket.deriving_bucket.all().count(), \
+            "deleted_bucket_id": deleted_id
+        })
     data = json.loads(request.body)
     derived = Bucket(
         user = user,
@@ -89,5 +96,10 @@ def click_scrap(request, nickname, bucket_id):
         derived_bucket = bucket
     )
     derived.save()
-    return JsonResponse({"message": "OK", "type": "create", "scrap_cnt": bucket.deriving_bucket.all().count()})
+    return JsonResponse({ \
+        "message": "OK", \
+        "type": "create", \
+        "scrap_cnt": bucket.deriving_bucket.all().count(), \
+        "new_bucket": serializers.serialize("json", Bucket.objects.filter(pk=derived.id))
+    })
     
