@@ -19,7 +19,7 @@ window.onload = function() {
 
 function click_like(bucket_id, nickname) {
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", nickname + "/like/" + bucket_id, true);
+    xhr.open("POST", window.origin + "/bucket-list/" + nickname + "/like/" + bucket_id, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.setRequestHeader("X-CSRFToken", csrftoken);
     xhr.send()
@@ -34,6 +34,28 @@ function click_like(bucket_id, nickname) {
                 btn_like.textContent = "♥";
             } else {
                 btn_like.textContent = "♡";
+            }
+        } else {
+            // fail 처리
+        }
+    }
+}
+
+function click_fix(bucket_id, nickname) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", window.origin + "/bucket-list/" + nickname + "/top_fixed/" + bucket_id, true);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    xhr.send()
+    
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            var res = JSON.parse(xhr.response);
+            var btn_fix = document.getElementById("btn_fix" + bucket_id);
+            if (res.top_fixed == true) {
+                btn_fix.textContent = "★";
+            } else {
+                btn_fix.textContent = "☆";
             }
         } else {
             // fail 처리

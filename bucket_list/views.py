@@ -24,10 +24,6 @@ def create(request, nickname):
         )
         newBucket.user = user.get()
         newBucket.save()
-        # top_fixed = request.POST.getlist('top_fixed')
-        # class Meta:
-        #     model = Bucket
-        #     fields = ['title', 'category', 'top_fixed']
 
         return redirect('private', nickname=nickname)
     else:
@@ -69,17 +65,12 @@ def click_like(request, nickname, bucket_id):
 def click_fix(request, nickname, bucket_id):
     bucket = Bucket.objects.get(pk=bucket_id)
     user = HaehooUser.objects.get(nickname=nickname)
-    if user in bucket.top_fixed.all():
-        bucket.top_fixed.remove(user)
+    if bucket.top_fixed is True:
+        bucket.top_fixed = False
     else:
-        bucket.top_fixed.add(user)
+        bucket.top_fixed = True
     bucket.save()
-    return JsonResponse({"message":"OK", "is_contains":user in bucket.top_fixed.all()})
-
-# def get_context_data(self, **kwargs):
-#     bucket_fixed = Bucket.objects.filter(top_fixed=True).order_by('-registered_date')
-#     Bucket['bucket_fixed'] = bucket_fixed
-
-# def show_top_fixed_bucket(request):
-# 	postlist = Bucket.objects.all()
-#     return render(request,'private', {'postlist':postlist})
+    
+    # return JsonResponse('private', nickname=nickname)
+    # return JsonResponse({"message":"OK", "top_fixed":bucket in bucket.top_fixed.all()})
+    return JsonResponse({"message":"OK", "top_fixed":bucket.top_fixed})

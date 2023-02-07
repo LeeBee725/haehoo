@@ -9,19 +9,31 @@
         <h1>
             {{nickname}}'s bucket list
         </h1>
-
-        <!-- {% if bucket_fixed %}
-        {% for bucket in bucket_fixed %}
-        <h4><a href="{% url 'bucketprocess' bucket.id %}">{{bucket.title}}</h4>
-            <h4>{{bucket.category}}</h4>
-            <h4>{{bucket.createdAt}}</h4>
-            <p id="like_cnt{{bucket.id}}" class="description-username">좋아요 수 = {{ bucket.liked_users.count }}</p>
-            <p class="description-username">스크랩 수 = {{ bucket.referenced_users.count }}</p>
-            <h4><a href="{% url 'delete' user.nickname bucket.id %}">DELETE</a></h4>
-            <h4><a href="{% url 'edit' user.nickname bucket.id %}">EDIT</a></h4>
-            <br><br><br>
+        <br><br>
+        <div class="category-container container">
+            <form action="" method="get">
+              <div class="filter-btn-container container">
+                <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-do" value="1">하고 싶은 것</button>
+                <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-eat" value="2">먹고 싶은 것</button>
+                <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-have" value="3">갖고 싶은 것</button>
+                <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-go" value="4">가고 싶은 곳</button>
+                <button class="btn btn-primary m-2" type="submit" name="category" id="travel" value="5">여행</button>
+                <button class="btn btn-primary m-2" type="submit" name="category" id="hobby" value="6">취미</button>
+              </div>
+            </form>
+          </div>
+        <br><br>
+        <h2>고정된 버킷</h2>
+        <br><br>
+        {% for bucket in buckets %}
+            {% if bucket.top_fixed is True %}
+                <h4><a href="{% url 'bucketprocess' bucket.id %}">{{bucket.title}}</a></h4>
+                <h4>{{bucket.category}}</h4>
+                <h4>{{bucket.createdAt}}</h4>
+                <br><br>
+            {% endif %}
         {% endfor %}
-        {% endif %} -->
+
         <br><br>
         {% for bucket in buckets %}
             <h4><a href="{% url 'bucketprocess' bucket.id %}">{{bucket.title}}</a></h4>
@@ -40,7 +52,7 @@
             <h4><a href="{% url 'delete' user.nickname bucket.id %}">DELETE</a></h4>
             <h4><a href="{% url 'edit' user.nickname bucket.id %}">EDIT</a></h4>
             
-            {% if user in bucket.top_fixed.all %}
+            {% if bucket.top_fixed is True %}
                 <button id="btn_fix{{bucket.id}}" onclick="click_fix('{{bucket.id}}', '{{user.nickname}}')">★</button>
             {% else %}
                 <button id="btn_fix{{bucket.id}}" onclick="click_fix('{{bucket.id}}', '{{user.nickname}}')">☆</button>
