@@ -13,26 +13,28 @@
         <div class="category-container container">
             <form action="" method="get">
               <div class="filter-btn-container container">
-                <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-do" value="1">하고 싶은 것</button>
-                <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-eat" value="2">먹고 싶은 것</button>
-                <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-have" value="3">갖고 싶은 것</button>
-                <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-go" value="4">가고 싶은 곳</button>
-                <button class="btn btn-primary m-2" type="submit" name="category" id="travel" value="5">여행</button>
-                <button class="btn btn-primary m-2" type="submit" name="category" id="hobby" value="6">취미</button>
+                <button class="btn btn-primary m-2" onclick="show_category" type="submit" name="category" id="want-to-do" value="1">하고 싶은 것</button>
+                <button class="btn btn-primary m-2" onclick="show_category" type="submit" name="category" id="want-to-eat" value="2">먹고 싶은 것</button>
+                <button class="btn btn-primary m-2" onclick="show_category" type="submit" name="category" id="want-to-have" value="3">갖고 싶은 것</button>
+                <button class="btn btn-primary m-2" onclick="show_category" type="submit" name="category" id="want-to-go" value="4">가고 싶은 곳</button>
+                <button class="btn btn-primary m-2" onclick="show_category" type="submit" name="category" id="travel" value="5">여행</button>
+                <button class="btn btn-primary m-2" onclick="show_category" type="submit" name="category" id="hobby" value="6">취미</button>
               </div>
             </form>
           </div>
         <br><br>
         <h2>고정된 버킷</h2>
         <br><br>
-        {% for bucket in buckets %}
-            {% if bucket.top_fixed is True %}
-                <h4><a href="{% url 'bucketprocess' bucket.id %}">{{bucket.title}}</a></h4>
-                <h4>{{bucket.category}}</h4>
-                <h4>{{bucket.createdAt}}</h4>
-                <br><br>
-            {% endif %}
-        {% endfor %}
+        <div id="show top_fixed container">
+            {% for bucket in buckets %}
+                {% if bucket.top_fixed is True %}
+                    <h4><a href="{% url 'bucketprocess' bucket.id %}">{{bucket.title}}</a></h4>
+                    <h4>{{bucket.category}}</h4>
+                    <h4>{{bucket.createdAt}}</h4>
+                    <br><br>
+                {% endif %}
+            {% endfor %}
+        </div>
 
         <br><br>
         {% for bucket in buckets %}
@@ -62,5 +64,5 @@
         {% endfor %}
     </div>
     <a href="{% url 'create' user.nickname %}">go to create bucket</a>
-    
+
 {% endblock %} 

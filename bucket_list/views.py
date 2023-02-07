@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from django.forms.models import model_to_dict
 from account.models import HaehooUser
 from bucket_list.models import Bucket
 
@@ -53,6 +52,8 @@ def update(request, nickname, bucket_id):
     return redirect('private', nickname=nickname)
 
 def click_like(request, nickname, bucket_id):
+    if request.method != "POST":
+        return JsonResponse({"message":"Permission denied."})
     bucket = Bucket.objects.get(pk=bucket_id)
     user = HaehooUser.objects.get(nickname=nickname)
     if user in bucket.liked_users.all():
@@ -74,3 +75,24 @@ def click_fix(request, nickname, bucket_id):
     # return JsonResponse('private', nickname=nickname)
     # return JsonResponse({"message":"OK", "top_fixed":bucket in bucket.top_fixed.all()})
     return JsonResponse({"message":"OK", "top_fixed":bucket.top_fixed})
+
+def click_scrap(request, nickname, bucket_id):
+    bucket = Bucket.objects.get(pk=bucket_id)
+    user = HaehooUser.objects.get(nickname=nickname)
+    if request.method == "GET":
+        return render(request, 'scrap.html', {'nickname': nickname, 'bucket': bucket})
+    if request.method == "POST":
+        title = request.POST.get("title")
+        category = int(request.POST["category"])
+        derived = Bucket(
+            user = user,
+            title = title,
+            category = category,
+            derived_bucket = bucket
+        )
+        derived.save()
+        return redirect('total')
+
+def show_category(request, nickname, bucket_id):
+    selected_category = Bucket.objects.filter(field_name='specific_value')
+    return render(request, 'private.html', {'records': selected_category})

@@ -15,6 +15,12 @@ function getCookie(name) {
 const csrftoken = getCookie('csrftoken');
 
 window.onload = function() {
+    $('.bucket').on('click', function(){
+        console.log("is it execute?\n");
+        $('#exampleModal .modal-body').load('http://127.0.0.1:8000/bucketprocess/1', function(){
+            $('#exampleModal').modal('show')
+        });
+    });
 }
 
 function click_like(bucket_id, nickname) {
@@ -47,7 +53,9 @@ function click_fix(bucket_id, nickname) {
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.setRequestHeader("X-CSRFToken", csrftoken);
     xhr.send()
-    
+
+    let top_fixed = document.createElement("top_fixed")
+
     xhr.onload = function() {
         if (xhr.status == 200) {
             var res = JSON.parse(xhr.response);
@@ -61,4 +69,8 @@ function click_fix(bucket_id, nickname) {
             // fail 처리
         }
     }
+}
+
+function click_scrap(bucket_id, nickname) {
+    window.location.assign(nickname + "/scrap/" + bucket_id)
 }
