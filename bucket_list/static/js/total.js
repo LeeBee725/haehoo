@@ -14,8 +14,7 @@ function getCookie(name) {
 }
 const csrftoken = getCookie('csrftoken');
 
-window.onload = function() {
-    const userNickname = JSON.parse(document.getElementById("user-nickname").textContent);
+function event_update(userNickname) {
     $('.bucket').on('click', function() {
         let bucket_id = this.getAttribute("value");
         $('#exampleModal .modal-body').load(window.origin + "/bucketprocess/" + bucket_id, function(){
@@ -25,6 +24,24 @@ window.onload = function() {
             });
         });
     });
+
+    let btnLikes = document.getElementsByClassName("btn_like");
+    for (let i = 0; i < btnLikes.length; ++i) {
+        btnLikes[i].addEventListener("click", () => {
+            click_like(btnLikes[i], userNickname);
+        });
+    }
+
+    let btnScraps = document.getElementsByClassName("btn_scrap");
+    for (let i = 0; i < btnScraps.length; ++i) {
+        btnScraps[i].addEventListener("click", () => {
+            click_scrap(btnScraps[i], userNickname);
+        });
+    }
+}
+
+window.onload = function() {
+    const userNickname = JSON.parse(document.getElementById("user-nickname").textContent);
 
     const queryString = window.location.search;
     const urlParam = new URLSearchParams(queryString);
@@ -41,19 +58,7 @@ window.onload = function() {
         alertSpace.appendChild(alertBox);
     }
 
-    let btnLikes = document.getElementsByClassName("btn_like");
-    for (let i = 0; i < btnLikes.length; ++i) {
-        btnLikes[i].addEventListener("click", () => {
-            click_like(btnLikes[i], userNickname);
-        });
-    }
-
-    let btnScraps = document.getElementsByClassName("btn_scrap");
-    for (let i = 0; i < btnScraps.length; ++i) {
-        btnScraps[i].addEventListener("click", () => {
-            click_scrap(btnScraps[i], userNickname);
-        });
-    }
+    event_update(userNickname);
 }
 
 function click_like(btn, nickname) {
@@ -89,10 +94,8 @@ function click_like(btn, nickname) {
     }
 }
 
-function createBucketElem(bucketObj, nickname) {
-    let elem = document.createElement("div");
-    let btnDetail = document.createElement("button");
-    let interactions = document.createElement("div");
+function createBtnDetail(bucketObj, nickname) {
+    const btnDetail = document.createElement("button");
     btnDetail.setAttribute("id", "bucket" + bucketObj.pk);
     btnDetail.setAttribute("type", "button");
     btnDetail.setAttribute("class", "bucket");
@@ -108,23 +111,56 @@ function createBucketElem(bucketObj, nickname) {
         <p id="bucket-user" class="description-username">' + nickname + '</p> \
         <p id="bucket-category" class="description-username">' + bucketObj.fields.category + '</p> \
         </div> \
-    '
-    var btnLike = document.createElement("button");
+    ';
+    btnDetail.addEventListener("click", function() {
+        $('#exampleModal .modal-body').load(window.origin + "/bucketprocess/" + bucketObj.pk, function(){
+            $('#exampleModal').modal('show');
+            $('#exampleModal .modal-body #btn_like' + bucketObj.pk).on("click", function() {
+                click_like(this, nickname);
+            });
+        });
+    });
+    return btnDetail;
+}
+
+function createBtnLike(bucketObj, nickname) {
+    const btnLike = document.createElement("button");
     btnLike.setAttribute("id", "btn_like" + bucketObj.pk);
     btnLike.setAttribute("class", "btn_like");
     btnLike.setAttribute("value", bucketObj.pk);
     btnLike.textContent = "♡";
-    btnLike.addEventListener("click", () => {
-        console.log("haha");
-        // console.log(this);
-        // click_like(this, nickname);
+    btnLike.addEventListener("click", function() {
+        click_like(this, nickname);
     });
+    return btnLike;
+}
+
+function createInteractions(bucketObj, nickname) {
+    const interactions = document.createElement("div");
+    const btnLike = createBtnLike(bucketObj, nickname);
+    const labelLike = document.createElement("label");
+    const spanScrap = document.createElement("span");
+    const labelScrap = document.createElement("label");
+
+    labelLike.setAttribute("for", "btn_like" + bucketObj.pk);
+    labelLike.textContent = "0";
+    spanScrap.setAttribute("id", "btn_scrap" + bucketObj.pk);
+    spanScrap.textContent = "퍼가기";
+    labelScrap.setAttribute("for", "btn_scrap" + bucketObj.pk);
+    labelScrap.textContent = "0";
+
     interactions.appendChild(btnLike);
-    interactions.innerHTML += ' \
-        <label for="btn_like' + bucketObj.pk + '">0</label> \
-        <span id="btn_scrap' + bucketObj.pk + '">퍼가기</span> \
-        <label for="btn_scrap' + bucketObj.pk + '">0</label> \
-    '
+    interactions.appendChild(labelLike);
+    interactions.appendChild(spanScrap);
+    interactions.appendChild(labelScrap);
+    return interactions;
+}
+
+function createBucketElem(bucketObj, nickname) {
+    const elem = document.createElement("div");
+    const btnDetail = createBtnDetail(bucketObj, nickname);
+    const interactions = createInteractions(bucketObj, nickname);
+
     elem.appendChild(btnDetail);
     elem.appendChild(interactions);
     return elem;
@@ -160,7 +196,7 @@ function click_scrap(btn, nickname) {
                 for (let i = 0; i < btn_scraps.length; ++i) {
                     btn_scraps[i].textContent = "퍼가기 취소";
                 }
-                newBucketElem = createBucketElem(JSON.parse(res.new_bucket)[0], nickname);
+                let newBucketElem = createBucketElem(JSON.parse(res.new_bucket)[0], nickname);
                 document.querySelector(".bucket-container").appendChild(newBucketElem);
             } else {
                 for (let i = 0; i < btn_scraps.length; ++i) {
