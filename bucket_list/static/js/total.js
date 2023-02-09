@@ -46,15 +46,12 @@ window.onload = function() {
     const queryString = window.location.search;
     const urlParam = new URLSearchParams(queryString);
     var fail = urlParam.get('fail')
-    if (fail)
-    {
-        var alertBox = document.createElement('div');
-        var alertSpace = document.getElementById("alert-space");
-        alertBox.setAttribute("id", "fail");
-        alertBox.setAttribute("class", "alert alert-danger");
-        alertBox.setAttribute("role", "alert");
-        if (fail == "same_user_scrap")
-            alertBox.textContent = "자신의 버킷을 스크랩 할 수 없습니다."
+    if (fail) {
+        let alertBox
+        const alertSpace = document.getElementById("alert-space");
+        if (fail == "same_user_scrap") {
+            alertBox = createAlertBox(danger, "자신의 버킷을 스크랩 할 수 없습니다.", null);
+        }
         alertSpace.appendChild(alertBox);
     }
 
@@ -166,6 +163,21 @@ function createBucketElem(bucketObj, nickname) {
     return elem;
 }
 
+function createAlertBox(type, msg, url) {
+    const alertBox = document.createElement("div");
+    alertBox.setAttribute("id", "alert-box-" + type);
+    alertBox.setAttribute("class", "hh-alert-box alert alert-" + type);
+    alertBox.setAttribute("role", "alert");
+    alertBox.textContent = msg;
+    if (url) {
+        let anchor = document.createElement("a");
+        anchor.setAttribute("href", url);
+        anchor.innerHTML = "<small>바로가기</small>";
+        alertBox.appendChild(anchor);
+    }
+    return alertBox
+}
+
 function click_scrap(btn, nickname) {
     if (nickname == "" || nickname == null)
         window.location.assign(window.origin + "/account/login/");
@@ -197,13 +209,17 @@ function click_scrap(btn, nickname) {
                     btn_scraps[i].textContent = "퍼가기 취소";
                 }
                 let newBucketElem = createBucketElem(JSON.parse(res.new_bucket)[0], nickname);
+                let alertBox = createAlertBox("success", "새 버킷이 생성되었습니다.", window.origin + "/bucket-list/" + nickname);
                 document.querySelector(".bucket-container").appendChild(newBucketElem);
+                document.querySelector("#alert-space").appendChild(alertBox);
             } else {
                 for (let i = 0; i < btn_scraps.length; ++i) {
                     btn_scraps[i].textContent = "퍼가기";
                 }
                 let deletedElem = document.querySelector("#bucket" + res.deleted_bucket_id).parentElement;
+                let alertBox = createAlertBox("success", "버킷을 삭제했습니다.", null);
                 document.querySelector(".bucket-container").removeChild(deletedElem);
+                document.querySelector("#alert-space").appendChild(alertBox);
             }
         } else {
             // fail

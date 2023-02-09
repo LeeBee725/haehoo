@@ -8,6 +8,9 @@
 {% endblock links %}
 {% block content %}
 {{ user.nickname|json_script:"user-nickname" }}
+<div id="alert-space">
+  <div class="hh-alert-box alert alert-success">test</div>
+</div>
 <section id="top-space">
   <div class="top-container container">
     <div class="search-container container">
@@ -24,7 +27,6 @@
   </div>
 </section>
 <section id="main-space">
-  <div id="alert-space"></div>
   <div class="contents">
     <div id="contents-container" class="container">
       <div id="title-container" class="container">
@@ -95,6 +97,7 @@
         </div>
       </div>
     </div>
+  </div>
 </section>
 {% endblock content %}
 
