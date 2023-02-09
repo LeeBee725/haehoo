@@ -3,27 +3,42 @@
 {% block links %}
 <link rel="stylesheet" href="{% static 'css/signup.css' %}" />
 {% endblock links %}
-
 {% block content %}
-    <div class="signup-form">
-        <h1 class="title">회원가입</h1> <!--div안에 넣어주기? -->
-        <div class="already">이미 해후 회원이신가요? <a href="{% url 'login' %}">로그인</a></div>
-        <form action="{% url 'signup' %}" method="POST">
-            {% csrf_token %}
-            {% if error %}
-                <p>{{error}}</p>
-                <br>
-                <br>
-            {% endif %}
-            <div class="text-container">
-                <input type="text" placeholder="아이디" class="id text" name="id"><br>
-                <input type="text" placeholder="비밀번호" class="password text" name="password"><br>
-                <input type="text" placeholder="비밀번호 확인" class="passwordCheck text" name="passwordCheck"><br>
-                <input type="text" placeholder="닉네임" class="nickname text" name="nickname"><br>    
-            </div>
-            <div class="signup-confirm"> 
-                <input type="submit" value="가입하기" class="signup confirm btn">
-        </form>
+<div class="signup-form">
+  <h1 class="title">회원가입</h1>
+  <div class="already">
+    이미 해후 회원이신가요? <a href="{% url 'login' %}">로그인</a>
+  </div>
+  <form action="{% url 'signup' %}" method="POST">
+    {% csrf_token %} {% if error %}
+    <p>{{error}}</p>
+    <br />
+    <br />
+    {% endif %}
+    <div class="text-container">
+      <input type="text" placeholder="아이디" class="id text" name="id" /><br />
+      <input
+        type="text"
+        placeholder="비밀번호"
+        class="password text"
+        name="password"
+      /><br />
+      <input
+        type="text"
+        placeholder="비밀번호 확인"
+        class="passwordCheck text"
+        name="passwordCheck"
+      /><br />
+      <input
+        type="text"
+        placeholder="닉네임"
+        class="nickname text"
+        name="nickname"
+      /><br />
     </div>
-
+    <div class="signup-confirm">
+      <input type="submit" value="가입하기" class="signup confirm btn" />
+    </div>
+  </form>
+</div>
 {% endblock %}
