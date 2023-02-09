@@ -3,6 +3,7 @@ from account.models import HaehooUser
 
 class Bucket(models.Model):
     user = models.ForeignKey(HaehooUser, on_delete = models.CASCADE, related_name="user-make-bucket+")
+    user = models.ForeignKey(HaehooUser, on_delete = models.CASCADE, related_name="buckets")
     title = models.CharField(max_length = 100)
     category = models.IntegerField()
     category_checkbox = models.BooleanField(default=False)
@@ -10,6 +11,7 @@ class Bucket(models.Model):
     liked_users = models.ManyToManyField(HaehooUser, blank = True, related_name="user-like-bucket+")
     referenced_users = models.ManyToManyField(HaehooUser, blank = True, related_name="user-reference-bucket+")
     top_fixed = models.BooleanField(default=False)
+    top_fixed = models.ManyToManyField(HaehooUser, blank = True, related_name="top_fixed-bucket+")
     derived_bucket = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, related_name="deriving_bucket")
 
     # ordered_records = models.objects.all().order_by('top_fixed')
@@ -26,3 +28,4 @@ class Bucket(models.Model):
     #     else:
     #         models = Bucket.category_checkbox()
     #     return (request, 'private.html', {'checked': models})
+        return f"{self.user}'s {self.title}"

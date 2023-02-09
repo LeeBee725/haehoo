@@ -1,11 +1,11 @@
 /*배경*/
 
-body {
+main {
     background: linear-gradient(#FFFFFF, #e8e8e8);
 }
 
-.container {
-	width: 1180px;
+.hh-container {
+	width: 100%;
 	padding: 0 30px;
 	padding-top: 40px;
 	margin: 0 auto;
