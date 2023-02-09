@@ -31,7 +31,6 @@
     position: relative;
     display: inline-block;
     line-height: 4.17vw;
-    /* margin: auto 0; */
     flex-grow: 1;
 }
 
@@ -171,3 +170,7 @@
     height: 100%;
     object-fit: cover;
 }
+
+/* .hh-alert-box {
+
+} */
