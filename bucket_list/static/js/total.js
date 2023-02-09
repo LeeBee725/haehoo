@@ -14,32 +14,76 @@ function getCookie(name) {
 }
 const csrftoken = getCookie('csrftoken');
 
-window.onload = function() {
-    $('.bucket').on('click', function(){
-        console.log("is it execute?\n");
-        $('#exampleModal .modal-body').load('http://127.0.0.1:8000/bucketprocess/1', function(){
-            $('#exampleModal').modal('show')
+function event_update(userNickname) {
+    $('.bucket').on('click', function() {
+        let bucket_id = this.getAttribute("value");
+        $('#exampleModal .modal-body').load(window.origin + "/bucketprocess/" + bucket_id, function(){
+            $('#exampleModal').modal('show');
+            $('#exampleModal .modal-body #btn_like' + bucket_id).on("click", function() {
+                click_like(this, userNickname);
+            });
         });
     });
+
+    let btnLikes = document.getElementsByClassName("btn_like");
+    for (let i = 0; i < btnLikes.length; ++i) {
+        btnLikes[i].addEventListener("click", () => {
+            click_like(btnLikes[i], userNickname);
+        });
+    }
+
+    let btnScraps = document.getElementsByClassName("btn_scrap");
+    for (let i = 0; i < btnScraps.length; ++i) {
+        btnScraps[i].addEventListener("click", () => {
+            click_scrap(btnScraps[i], userNickname);
+        });
+    }
 }
 
-function click_like(bucket_id, nickname) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", nickname + "/like/" + bucket_id, true);
+window.onload = function() {
+    const userNickname = JSON.parse(document.getElementById("user-nickname").textContent);
+
+    const queryString = window.location.search;
+    const urlParam = new URLSearchParams(queryString);
+    var fail = urlParam.get('fail')
+    if (fail) {
+        let alertBox
+        const alertSpace = document.getElementById("alert-space");
+        if (fail == "same_user_scrap") {
+            alertBox = createAlertBox(danger, "자신의 버킷을 스크랩 할 수 없습니다.", null);
+        }
+        alertSpace.appendChild(alertBox);
+    }
+
+    event_update(userNickname);
+}
+
+function click_like(btn, nickname) {
+    if (nickname == "" || nickname == null)
+        window.location.assign(window.origin + "/account/login/");
+    let xhr = new XMLHttpRequest();
+    let bucket_id = btn.getAttribute("value");
+    let url = window.origin + "/bucket-list/" + nickname + "/like/" + bucket_id
+    xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.setRequestHeader("X-CSRFToken", csrftoken);
     xhr.send()
-    
+
     xhr.onload = function() {
         if (xhr.status == 200) {
-            var res = JSON.parse(xhr.response);
-            var like_cnt = document.getElementById("like_cnt" + bucket_id);
-            var btn_like = document.getElementById("btn_like" + bucket_id);
-            like_cnt.textContent = res.like_cnt;
+            let res = JSON.parse(xhr.response);
+            let like_cnts = document.querySelectorAll("#btn_like" + bucket_id + " + label");
+            let btn_likes = document.querySelectorAll("#btn_like" + bucket_id);
+            
+            for (let i = 0; i < like_cnts.length; ++i) {
+                like_cnts[i].textContent = res.like_cnt;
+            }
             if (res.is_contains) {
-                btn_like.textContent = "♥";
+                for (let i = 0; i < btn_likes.length; ++i)
+                    btn_likes[i].textContent = "♥";
             } else {
-                btn_like.textContent = "♡";
+                for (let i = 0; i < btn_likes.length; ++i)
+                    btn_likes[i].textContent = "♡";
             }
         } else {
             // fail 처리
@@ -47,6 +91,144 @@ function click_like(bucket_id, nickname) {
     }
 }
 
-function click_scrap(bucket_id, nickname) {
-    window.location.assign(nickname + "/scrap/" + bucket_id)
+function createBtnDetail(bucketObj, nickname) {
+    const btnDetail = document.createElement("button");
+    btnDetail.setAttribute("id", "bucket" + bucketObj.pk);
+    btnDetail.setAttribute("type", "button");
+    btnDetail.setAttribute("class", "bucket");
+    btnDetail.setAttribute("value", bucketObj.pk);
+    btnDetail.setAttribute("data-bs-toggle", "modal");
+    btnDetail.setAttribute("data-bs-target", "#exampleModal");
+    btnDetail.innerHTML = ' \
+        <div class="img-container"> \
+        <img class="thumbnail" src="/static/image/sample.jpg" alt="sample"/> \
+        </div> \
+        <div class="description"> \
+        <h3 id="bucket-title" class="description-title">' + bucketObj.fields.title + '</h3> \
+        <p id="bucket-user" class="description-username">' + nickname + '</p> \
+        <p id="bucket-category" class="description-username">' + bucketObj.fields.category + '</p> \
+        </div> \
+    ';
+    btnDetail.addEventListener("click", function() {
+        $('#exampleModal .modal-body').load(window.origin + "/bucketprocess/" + bucketObj.pk, function(){
+            $('#exampleModal').modal('show');
+            $('#exampleModal .modal-body #btn_like' + bucketObj.pk).on("click", function() {
+                click_like(this, nickname);
+            });
+        });
+    });
+    return btnDetail;
+}
+
+function createBtnLike(bucketObj, nickname) {
+    const btnLike = document.createElement("button");
+    btnLike.setAttribute("id", "btn_like" + bucketObj.pk);
+    btnLike.setAttribute("class", "btn_like");
+    btnLike.setAttribute("value", bucketObj.pk);
+    btnLike.textContent = "♡";
+    btnLike.addEventListener("click", function() {
+        click_like(this, nickname);
+    });
+    return btnLike;
+}
+
+function createInteractions(bucketObj, nickname) {
+    const interactions = document.createElement("div");
+    const btnLike = createBtnLike(bucketObj, nickname);
+    const labelLike = document.createElement("label");
+    const spanScrap = document.createElement("span");
+    const labelScrap = document.createElement("label");
+
+    labelLike.setAttribute("for", "btn_like" + bucketObj.pk);
+    labelLike.textContent = "0";
+    spanScrap.setAttribute("id", "btn_scrap" + bucketObj.pk);
+    spanScrap.textContent = "퍼가기";
+    labelScrap.setAttribute("for", "btn_scrap" + bucketObj.pk);
+    labelScrap.textContent = "0";
+
+    interactions.appendChild(btnLike);
+    interactions.appendChild(labelLike);
+    interactions.appendChild(spanScrap);
+    interactions.appendChild(labelScrap);
+    return interactions;
+}
+
+function createBucketElem(bucketObj, nickname) {
+    const elem = document.createElement("div");
+    const btnDetail = createBtnDetail(bucketObj, nickname);
+    const interactions = createInteractions(bucketObj, nickname);
+
+    elem.appendChild(btnDetail);
+    elem.appendChild(interactions);
+    return elem;
+}
+
+function createAlertBox(type, msg, url) {
+    const alertBox = document.createElement("div");
+    alertBox.setAttribute("id", `alert-box-${type}`);
+    alertBox.setAttribute("class", `hh-alert-box alert alert-${type} alert-dismissible fade show`);
+    alertBox.setAttribute("role", "alert");
+    alertBox.innerHTML = [
+        `<div>${msg}</div>`,
+        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
+    ].join("");
+    if (url) {
+        let anchor = document.createElement("a");
+        anchor.setAttribute("href", url);
+        anchor.innerHTML = "<small>바로가기</small>";
+        alertBox.querySelector("div").appendChild(anchor);
+    }
+    setTimeout(function() {
+        $(`#alert-box-${type}`).alert('close');
+    }, 3000);
+    return alertBox
+}
+
+function click_scrap(btn, nickname) {
+    if (nickname == "" || nickname == null)
+        window.location.assign(window.origin + "/account/login/");
+    let xhr = new XMLHttpRequest();
+    let bucket_id = btn.getAttribute("value");
+    let bucketElem = document.querySelector("#bucket" + bucket_id);
+    let bucketDesc = bucketElem.querySelector(".description");
+    let bucket = {
+        "title": bucketDesc.querySelector("#bucket-title").textContent,
+        "user": nickname,
+        "category": bucketDesc.querySelector("#bucket-category").textContent
+    };
+    let url = window.origin + "/bucket-list/" + nickname + "/scrap/" + bucket_id;
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    xhr.send(JSON.stringify(bucket));
+
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            let res = JSON.parse(xhr.response);
+            let scrap_cnts = document.querySelectorAll("#btn_scrap" + bucket_id + " + label");
+            let btn_scraps = document.querySelectorAll("#btn_scrap" + bucket_id);
+
+            for (let i = 0; i < scrap_cnts.length; ++i)
+                scrap_cnts[i].textContent = res.scrap_cnt;
+            if (res.type == "create") {
+                for (let i = 0; i < btn_scraps.length; ++i) {
+                    btn_scraps[i].textContent = "퍼가기 취소";
+                }
+                let newBucketElem = createBucketElem(JSON.parse(res.new_bucket)[0], nickname);
+                let alertBox = createAlertBox("success", "새 버킷이 생성되었습니다.", window.origin + "/bucket-list/" + nickname);
+                document.querySelector(".bucket-container").appendChild(newBucketElem);
+                document.querySelector("#alert-space").appendChild(alertBox);
+            } else {
+                for (let i = 0; i < btn_scraps.length; ++i) {
+                    btn_scraps[i].textContent = "퍼가기";
+                }
+                let deletedElem = document.querySelector("#bucket" + res.deleted_bucket_id).parentElement;
+                let alertBox = createAlertBox("success", "버킷을 삭제했습니다.", null);
+                document.querySelector(".bucket-container").removeChild(deletedElem);
+                document.querySelector("#alert-space").appendChild(alertBox);
+            }
+        } else {
+            // fail
+        }
+    }
 }

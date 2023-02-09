@@ -13,21 +13,20 @@
     {% endblock links %}
 </head>
 
-<body class = "container">
+<body class = "hh-container">
 <div class = "row">
     <div class = "col">
         <div id="title" class="card">
             <div class="row">
                 <div class="col">
                     <h4 class="card-title">{{bucket.title}}'s process</h4>
-                    <div class="card-body"> 
+                    <div class="card-body">
                         {% if user in bucket.liked_users.all %}
-                            <button id="btn_like{{bucket.id}}" onclick="click_like({{bucket.id}}, '{{user.nickname}}')">♥</button>
+                            <button id="btn_like{{bucket.id}}" class="btn_like" value="{{bucket.id}}">♥</button>
                         {% else %}
-                            <button id="btn_like{{bucket.id}}" onclick="click_like({{bucket.id}}, '{{user.nickname}}')">♡</button>
+                            <button id="btn_like{{bucket.id}}" class="btn_like" value="{{bucket.id}}">♡</button>
                         {% endif %}
-                        <div id="like_cnt{{bucket.id}}" class="description-username">{{ bucket.liked_users.count }}</div>
-                        
+                        <label for="btn_like{{bucket.id}}">{{ bucket.liked_users.count }}</label>
                         <button>퍼가기</button>
                         <div class="description-username">{{ bucket.referenced_users.count }}</div>
                     </div>
@@ -68,7 +67,11 @@
             </div>
             {%endfor%}
         </div>
-        <form method = 'POST' action = "{% url 'createcomment'  userid=user.id bucketid=bucket.id %}">
+        {% if user.is_authenticated %}
+            <form method = 'POST' action = "{% url 'createcomment'  userid=user.id bucketid=bucket.id %}">
+        {% else %}
+            <form method = 'GET' action = "{% url 'login' %}">
+        {% endif %}
             {% csrf_token %} 
             <table>
                 {{comment_form.as_table}}

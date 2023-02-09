@@ -2,7 +2,7 @@ from django.db import models
 from account.models import HaehooUser
 
 class Bucket(models.Model):
-    user = models.ForeignKey(HaehooUser, on_delete = models.CASCADE, related_name="user-make-bucket+")
+    user = models.ForeignKey(HaehooUser, on_delete = models.CASCADE, related_name="buckets")
     title = models.CharField(max_length = 100)
     category = models.IntegerField()
     createdAt = models.DateTimeField(auto_now = True)
