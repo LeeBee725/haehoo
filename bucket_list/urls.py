@@ -9,5 +9,6 @@ urlpatterns = [
     path("<str:nickname>/edit/<int:bucket_id>", views.edit, name="edit"),
     path("<str:nickname>/update/<int:bucket_id>", views.update, name="update"),
     path("<str:nickname>/like/<int:bucket_id>", views.click_like, name="click_like"),
+    path("<str:nickname>/top_fixed/<int:bucket_id>", views.click_fix, name="click_fix"),
     path("<str:nickname>/scrap/<int:bucket_id>", views.click_scrap, name="click_scrap"),
 ]

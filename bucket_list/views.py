@@ -29,9 +29,16 @@ def create(request, nickname):
         )
         newBucket.user = user.get()
         newBucket.save()
+        # top_fixed = request.POST.getlist('top_fixed')
+        # class Meta:
+        #     model = Bucket
+        #     fields = ['title', 'category', 'top_fixed']
+
+        return redirect('private', nickname=nickname)
         return redirect("private", nickname=nickname)
     else:
         return render(request, "create.html", {"nickname" : nickname})
+
 
 def delete(request, nickname, bucket_id):
     bucket = get_object_or_404(Bucket, pk = bucket_id)
@@ -66,6 +73,24 @@ def click_like(request, nickname, bucket_id):
         bucket.liked_users.add(user)
     bucket.save()
     return JsonResponse({"message":"OK", "is_contains":user in bucket.liked_users.all(), "like_cnt":bucket.liked_users.count()})
+
+def click_fix(request, nickname, bucket_id):
+    bucket = Bucket.objects.get(pk=bucket_id)
+    user = HaehooUser.objects.get(nickname=nickname)
+    if user in bucket.top_fixed.all():
+        bucket.top_fixed.remove(user)
+    else:
+        bucket.top_fixed.add(user)
+    bucket.save()
+    return JsonResponse({"message":"OK", "is_contains":user in bucket.top_fixed.all()})
+
+# def get_context_data(self, **kwargs):
+#     bucket_fixed = Bucket.objects.filter(top_fixed=True).order_by('-registered_date')
+#     Bucket['bucket_fixed'] = bucket_fixed
+
+# def show_top_fixed_bucket(request):
+# 	postlist = Bucket.objects.all()
+#     return render(request,'private', {'postlist':postlist})
 
 def click_scrap(request, nickname, bucket_id):
     if not request.user.is_authenticated:
@@ -102,4 +127,3 @@ def click_scrap(request, nickname, bucket_id):
         "scrap_cnt": bucket.deriving_bucket.all().count(), \
         "new_bucket": serializers.serialize("json", Bucket.objects.filter(pk=derived.id))
     })
-    

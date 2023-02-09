@@ -91,6 +91,8 @@ function click_like(btn, nickname) {
     }
 }
 
+}
+
 function createBtnDetail(bucketObj, nickname) {
     const btnDetail = document.createElement("button");
     btnDetail.setAttribute("id", "bucket" + bucketObj.pk);
