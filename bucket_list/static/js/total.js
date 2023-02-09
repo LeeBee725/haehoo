@@ -165,16 +165,22 @@ function createBucketElem(bucketObj, nickname) {
 
 function createAlertBox(type, msg, url) {
     const alertBox = document.createElement("div");
-    alertBox.setAttribute("id", "alert-box-" + type);
-    alertBox.setAttribute("class", "hh-alert-box alert alert-" + type);
+    alertBox.setAttribute("id", `alert-box-${type}`);
+    alertBox.setAttribute("class", `hh-alert-box alert alert-${type} alert-dismissible fade show`);
     alertBox.setAttribute("role", "alert");
-    alertBox.textContent = msg;
+    alertBox.innerHTML = [
+        `<div>${msg}</div>`,
+        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
+    ].join("");
     if (url) {
         let anchor = document.createElement("a");
         anchor.setAttribute("href", url);
         anchor.innerHTML = "<small>바로가기</small>";
-        alertBox.appendChild(anchor);
+        alertBox.querySelector("div").appendChild(anchor);
     }
+    setTimeout(function() {
+        $(`#alert-box-${type}`).alert('close');
+    }, 3000);
     return alertBox
 }
 

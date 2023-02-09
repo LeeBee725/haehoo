@@ -8,19 +8,17 @@
 {% endblock links %}
 {% block content %}
 {{ user.nickname|json_script:"user-nickname" }}
-<div id="alert-space">
-  <div class="hh-alert-box alert alert-success">test</div>
-</div>
+<div id="alert-space"></div>
 <section id="top-space">
-  <div class="top-container container">
-    <div class="search-container container">
+  <div class="top-container hh-container">
+    <div class="search-container hh-container">
       <img id="bucket-image" src="{% static 'image/bucket.png' %}" alt="bucket.png">
       <div class="search-group">
-        <form class="search-bar" action="#" method="GET">
+        <form class="hh-search-bar" method="GET" onsubmit="return false;">
           <button class="search-btn">
-            <i class="fa-solid fa-magnifying-glass first-icon fa-2xs"></i>
+            <i class="fa-solid fa-magnifying-glass first-icon fa-s"></i>
           </button>
-          <input class="search-text" type="text" id="searchWord" name="searchWord" placeholder="검색어를 입력하세요" maxlength="60" size="60">
+          <input class="search-text" type="search" id="searchWord" name="searchWord" placeholder="검색어를 입력하세요" maxlength="60" size="60">
         </form>
       </div>
     </div>
@@ -28,12 +26,12 @@
 </section>
 <section id="main-space">
   <div class="contents">
-    <div id="contents-container" class="container">
-      <div id="title-container" class="container">
+    <div id="contents-container" class="hh-container">
+      <div id="title-container" class="hh-container">
         <p id="content-title">Our bucket</p>
-        <div class="category-container container">
+        <div class="category-container hh-container">
           <form action="" method="get">
-            <div class="filter-btn-container container">
+            <div class="filter-btn-container hh-container">
               <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-do" value="1">하고 싶은 것</button>
               <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-eat" value="2">먹고 싶은 것</button>
               <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-have" value="3">갖고 싶은 것</button>
@@ -45,7 +43,7 @@
         </div>
         
       </div>
-      <div class="container bucket-container">
+      <div class="hh-container bucket-container">
         {% for bucket in total_bucket.all %}
           <div>
             <button id="bucket{{bucket.id}}" type = "button" class="bucket" value="{{bucket.id}}" data-bs-toggle="modal" data-bs-target="#exampleModal">
