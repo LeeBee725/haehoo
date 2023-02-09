@@ -56,6 +56,12 @@ window.onload = function() {
     }
 
     event_update(userNickname);
+    
+    // let newElement = document.createElement("h4");
+    // newPara.innerHTML = "This is a new paragraph.";
+    // let parentDiv = document.getElementById("myDiv");
+    // parentDiv.appendChild(newPara);
+    // hide & show div에 보내주고
 }
 
 function click_like(btn, nickname) {
@@ -90,6 +96,32 @@ function click_like(btn, nickname) {
         }
     }
 }
+
+
+function click_fix(bucket_id, nickname) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", window.origin + "/bucket-list/" + nickname + "/top_fixed/" + bucket_id, true);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    xhr.send()
+
+    let top_fixed = document.createElement("top_fixed")
+
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            var res = JSON.parse(xhr.response);
+            var btn_fix = document.getElementById("btn_fix" + bucket_id);
+            if (res.top_fixed == true) {
+                btn_fix.textContent = "★";
+            } else {
+                btn_fix.textContent = "☆";
+            }
+        } else {
+            // fail 처리
+        }
+    }
+}
+
 
 function createBtnDetail(bucketObj, nickname) {
     const btnDetail = document.createElement("button");

@@ -36,13 +36,14 @@
               <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-eat" value="2">먹고 싶은 것</button>
               <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-have" value="3">갖고 싶은 것</button>
               <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-go" value="4">가고 싶은 곳</button>
-              <button class="btn btn-primary m-2" type="submit" name="category" id="travel" value="3">여행</button>
-              <button class="btn btn-primary m-2" type="submit" name="category" id="hobby" value="4">취미</button>
+              <button class="btn btn-primary m-2" type="submit" name="category" id="travel" value="5">여행</button>
+              <button class="btn btn-primary m-2" type="submit" name="category" id="hobby" value="6">취미</button>
             </div>
           </form>
         </div>
         
       </div>
+
       <div class="hh-container bucket-container">
         {% for bucket in total_bucket.all %}
           <div>
@@ -57,6 +58,7 @@
               </div>
             </button>
             <div>
+
               {% if user in bucket.liked_users.all %}
                 <button id="btn_like{{bucket.id}}" class="btn_like" value="{{bucket.id}}">♥</button>
               {% else %}
@@ -73,6 +75,7 @@
                   <span id="btn_scrap{{bucket.id}}">퍼가기</span>
               {% endif %}
               <label for="btn_scrap{{bucket.id}}">{{ bucket.deriving_bucket.all.count }}</label>
+
             </div>
           </div>
         {% endfor %}  

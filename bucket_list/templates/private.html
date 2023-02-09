@@ -1,5 +1,8 @@
-
 {% extends 'base.html' %}
+{% load static %}
+{% block links %}
+<script src="{% static 'js/total.js' %}" crossorigin="anonymous"></script>
+{% endblock links %}
 {% block content %}
     <div class="hh-container">
         <br><br><br>
@@ -7,14 +10,96 @@
             {{nickname}}'s bucket list
         </h1>
         <br><br>
+        <div class="category-container container">
+            <!-- <form action="" method="get"> -->
+            <!-- <div data-toggle="buttons"> -->
+                <label class="btn btn-primary" for="btn-check">
+                    <input class="btn-check" type="checkbox" autocomplete="off">하고 싶은 것
+                </label>
+                <label class="btn btn-primary">
+                    <input type="checkbox" autocomplete="off">먹고 싶은 것
+                </label>
+                <label class="btn btn-primary">
+                    <input type="checkbox" autocomplete="off">갖고 싶은 것
+                </label>
+                <label class="btn btn-primary">
+                    <input type="checkbox" autocomplete="off">가고 싶은 곳
+                </label>
+                <label class="btn btn-primary">
+                    <input type="checkbox" autocomplete="off">여행
+                </label>
+                <label class="btn btn-primary">
+                    <input type="checkbox" autocomplete="off">취미
+                </label>
+                <label class="btn btn-primary">
+                    <input type="checkbox" autocomplete="off">기타
+                </label>
+
+                <input type="checkbox" class="btn-check" id="btn-check-1" checked autocomplete="off">
+                <label class="btn btn-primary" for="btn-check-1">Checked</label>
+                <input type="checkbox" class="btn-check" id="btn-check-2" checked autocomplete="off">
+                <label class="btn btn-primary" for="btn-check-2">Checked</label>
+                <input type="checkbox" class="btn-check" id="btn-check-2" checked autocomplete="off">
+                <label class="btn btn-primary" for="btn-check-2">Checked</label>
+                <input type="checkbox" class="btn-check" id="btn-check-2" checked autocomplete="off">
+                <label class="btn btn-primary" for="btn-check-2">Checked</label>
+                <input type="checkbox" class="btn-check" id="btn-check-2" checked autocomplete="off">
+                <label class="btn btn-primary" for="btn-check-2">Checked</label>
+                <input type="checkbox" class="btn-check" id="btn-check-2" checked autocomplete="off">
+                <label class="btn btn-primary" for="btn-check-2">Checked</label>
+
+                <!-- <button class="btn btn-primary activate" type="checkbox" name="category" id="want-to-do" value="1">하고 싶은 것</button>
+                <button class="btn btn-primary activate" type="checkbox" name="category" id="want-to-eat" value="2">먹고 싶은 것</button>
+                <button class="btn btn-primary activate" type="checkbox" name="category" id="want-to-have" value="3">갖고 싶은 것</button>
+                <button class="btn btn-primary activate" type="checkbox" name="category" id="want-to-go" value="4">가고 싶은 곳</button>
+                <button class="btn btn-primary activate" type="checkbox" name="category" id="travel" value="5">여행</button>
+                <button class="btn btn-primary activate" type="checkbox" name="category" id="hobby" value="6">취미</button> -->
+            <!-- </div> -->
+            <!-- </form> -->
+        </div>
+        <br><br>
+        <h2>고정된 버킷</h2>
+        <br><br>
+        <div id="show top_fixed container">
+            {% for ordered_record in ordered_records %}
+                {% if ordered_record.top_fixed is True %}
+                    <h4><a href="{% url 'bucketprocess' ordered_record.id %}">{{ordered_record.title}}</a></h4>
+                    <h4>{{ordered_record.category}}</h4>
+                    <h4>{{ordered_record.createdAt}}</h4>
+                    <br><br>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <br><br>
         {% for bucket in buckets %}
-                <h4><a href="{% url 'bucketprocess' bucket.id %}">{{bucket.title}}</h4>
-                <h4>{{bucket.category}}</h4>
-                <h4>{{bucket.createdAt}}</h4>
-                <h4><a href="{% url 'delete' user.nickname bucket.id %}">DELETE</a></h4>
-                <h4><a href="{% url 'edit' user.nickname bucket.id %}">EDIT</a></h4>
+        <!-- hide & show / div 감싸고-->
+            <h4><a href="{% url 'bucketprocess' bucket.id %}">{{bucket.title}}</a></h4>
+            <h4>{{bucket.category}}</h4> 
+            <!-- id주고 -->
+            <h4>{{bucket.createdAt}}</h4>
+
+            {% if user in bucket.liked_users.all %}
+                <button id="btn_like{{bucket.id}}" onclick="click_like('{{bucket.id}}', '{{user.nickname}}')">♥</button>
+            {% else %}
+                <button id="btn_like{{bucket.id}}" onclick="click_like('{{bucket.id}}', '{{user.nickname}}')">♡</button>
+            {% endif %}
+            <p id="like_cnt{{bucket.id}}" class="description-username">{{ bucket.liked_users.count }}</p>
+            <button>퍼가기</button>
+            <p class="description-username">{{ bucket.referenced_users.count }}</p>
+
+            <h4><a href="{% url 'delete' user.nickname bucket.id %}">DELETE</a></h4>
+            <h4><a href="{% url 'edit' user.nickname bucket.id %}">EDIT</a></h4>
+            
+            {% if bucket.top_fixed is True %}
+                <button id="btn_fix{{bucket.id}}" onclick="click_fix('{{bucket.id}}', '{{user.nickname}}')">★</button>
+            {% else %}
+                <button id="btn_fix{{bucket.id}}" onclick="click_fix('{{bucket.id}}', '{{user.nickname}}')">☆</button>
+            {% endif %}
+            <br><br><br>
+        
         {% endfor %}
     </div>
     <a href="{% url 'create' user.nickname %}">go to create bucket</a>
-    
+
 {% endblock %} 

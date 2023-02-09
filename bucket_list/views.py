@@ -16,7 +16,8 @@ def total(request):
 def private(request, nickname):
     user = HaehooUser.objects.filter(nickname = nickname)
     buckets = Bucket.objects.filter(user = user.get())
-    return render(request, "private.html", {"nickname" : nickname, "buckets" : buckets})
+    ordered_records = Bucket.objects.filter(user = user.get()).order_by('-createdAt')
+    return render(request, "private.html", {"nickname" : nickname, "buckets" : buckets, "ordered_records" : ordered_records})
 
 def create(request, nickname):
     if request.method == "POST":
@@ -67,6 +68,19 @@ def click_like(request, nickname, bucket_id):
     bucket.save()
     return JsonResponse({"message":"OK", "is_contains":user in bucket.liked_users.all(), "like_cnt":bucket.liked_users.count()})
 
+def click_fix(request, nickname, bucket_id):
+    bucket = Bucket.objects.get(pk=bucket_id)
+    user = HaehooUser.objects.get(nickname=nickname)
+    if bucket.top_fixed is True:
+        bucket.top_fixed = False
+    else:
+        bucket.top_fixed = True
+    bucket.save()
+    
+    # return JsonResponse('private', nickname=nickname)
+    # return JsonResponse({"message":"OK", "top_fixed":bucket in bucket.top_fixed.all()})
+    return JsonResponse({"message":"OK", "top_fixed":bucket.top_fixed})
+
 def click_scrap(request, nickname, bucket_id):
     if not request.user.is_authenticated:
         return redirect(reverse("login"))
@@ -103,3 +117,6 @@ def click_scrap(request, nickname, bucket_id):
         "new_bucket": serializers.serialize("json", Bucket.objects.filter(pk=derived.id))
     })
     
+# def show_category(request, category, nickname, bucket_id):
+#     selected_category = Bucket.objects.filter(category='value')
+#     return render(request, 'private.html', {'selected_category': selected_category})
