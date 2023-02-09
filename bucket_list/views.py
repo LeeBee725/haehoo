@@ -10,7 +10,8 @@ def total(request):
 def private(request, nickname):
     user = HaehooUser.objects.filter(nickname = nickname)
     buckets = Bucket.objects.filter(user = user.get())
-    return render(request, "private.html", {"nickname" : nickname, "buckets" : buckets})
+    ordered_records = Bucket.objects.filter(user = user.get()).order_by('-createdAt')
+    return render(request, "private.html", {"nickname" : nickname, "buckets" : buckets, "ordered_records" : ordered_records})
 
 def create(request, nickname):
     if request.method == "POST":
@@ -93,6 +94,6 @@ def click_scrap(request, nickname, bucket_id):
         derived.save()
         return redirect('total')
 
-def show_category(request, nickname, bucket_id):
-    selected_category = Bucket.objects.filter(field_name='specific_value')
-    return render(request, 'private.html', {'records': selected_category})
+# def show_category(request, category, nickname, bucket_id):
+#     selected_category = Bucket.objects.filter(category='value')
+#     return render(request, 'private.html', {'selected_category': selected_category})

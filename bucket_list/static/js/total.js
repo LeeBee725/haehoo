@@ -21,6 +21,12 @@ window.onload = function() {
             $('#exampleModal').modal('show')
         });
     });
+
+    // let newElement = document.createElement("h4");
+    // newPara.innerHTML = "This is a new paragraph.";
+    // let parentDiv = document.getElementById("myDiv");
+    // parentDiv.appendChild(newPara);
+    // hide & show div에 보내주고
 }
 
 function click_like(bucket_id, nickname) {
