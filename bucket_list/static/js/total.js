@@ -133,7 +133,7 @@ function createBtnDetail(bucketObj, nickname) {
     btnDetail.setAttribute("data-bs-target", "#exampleModal");
     btnDetail.innerHTML = ` \
         <div class="img-container"> \
-        <img class="thumbnail" src="/static/image/sample.jpg" alt="thumbnail"/> \
+        <img class="thumbnail" src="/static/image/bucket.png" alt="thumbnail"/> \
         </div> \
         <div class="description"> \
         <h3 id="bucket-title" class="description-title">${bucketObj.fields.title}</h3> \

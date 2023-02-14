@@ -1,5 +1,6 @@
 from django.db import models
 from account.models import HaehooUser
+from django.contrib.staticfiles.storage import staticfiles_storage
 
 class Bucket(models.Model):
     user = models.ForeignKey(HaehooUser, on_delete = models.CASCADE, related_name="buckets")
@@ -7,9 +8,9 @@ class Bucket(models.Model):
     category = models.IntegerField()
     category_checkbox = models.BooleanField(default=False)
     createdAt = models.DateTimeField(auto_now = True)
-    liked_users = models.ManyToManyField(HaehooUser, blank = True, related_name="user-like-bucket+")
-    referenced_users = models.ManyToManyField(HaehooUser, blank = True, related_name="user-reference-bucket+")
     top_fixed = models.BooleanField(default=False)
+    thumbnail_url = models.URLField(max_length=200, default=staticfiles_storage.url("image/bucket.png"))
+    liked_users = models.ManyToManyField(HaehooUser, blank = True, related_name="user-like-bucket+")
     derived_bucket = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, related_name="deriving_bucket")
 
     # ordered_records = models.objects.all().order_by('top_fixed')
