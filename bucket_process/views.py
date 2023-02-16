@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-import urllib.parse
+from django.contrib.staticfiles.storage import staticfiles_storage
+
 
 from bucket_list.models import Bucket
 from account.models import HaehooUser
@@ -25,9 +26,12 @@ def create_bucketprcs(request, bucketid):
     elif request.method == 'POST' or request.method == 'FILES':
         form = ProcessForm(request.POST, request.FILES)
         if form.is_valid():
-            prcs_instance = Process(bucket = Bucket.objects.get(pk = bucketid))
+            bucket = Bucket.objects.get(pk = bucketid)
+            prcs_instance = Process(bucket = bucket)
             form = ProcessForm(request.POST, request.FILES, instance= prcs_instance)
             form.save()
+            bucket.thumbnail_url = prcs_instance.image.url
+            bucket.save()
             return redirect('bucketprocess', bucketid = bucketid)
 
 def edit_bucketprcs(request, processid):
@@ -47,10 +51,17 @@ def edit_bucketprcs(request, processid):
           
 def delete_bucketprcs(request, processid):
     process = get_object_or_404(Process, pk = processid)
-    bucketid = process.bucket.id
+    deleted_url = process.image.url
+    bucket = Bucket.objects.get(pk=process.bucket.id)
     process.delete()
-    
-    return redirect('bucketprocess', bucketid = bucketid)
+    if (deleted_url == bucket.thumbnail_url):
+        img_of_processes = bucket.processes.filter(image__isnull=False)
+        if (not img_of_processes):
+            bucket.thumbnail_url = staticfiles_storage.url("image/bucket.png")
+        else :
+            bucket.thumbnail_url = img_of_processes.latest("createdAt").image.url
+        bucket.save()
+    return redirect('bucketprocess', bucketid = bucket.id)
 
 def create_comment(request, bucketid, userid):
     form = CommentForm(request.POST)
