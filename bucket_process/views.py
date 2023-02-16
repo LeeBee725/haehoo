@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.staticfiles.storage import staticfiles_storage
 
+
 from bucket_list.models import Bucket
 from account.models import HaehooUser
 from .models import Process, Comment
@@ -79,15 +80,17 @@ def delete_comment(request, bucketid, commentid):
 
 def update_comment(request, commentid):
     comment = Comment.objects.get(pk = commentid)
-    print("POST is:",request.POST)
-    print("body is:",request.body)
-    print("request is:",request)
     if request.method != "POST":
         return JsonResponse({"message":"Permission denied."})
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            print("is valid")
-            form = CommentForm(request.POST, instance= comment)
-            form.save()
-    return JsonResponse({"newcomment":request.POST.get('comment')})
+    
+    if request.method == 'POST':                
+        newcomment = request.POST['comment']        
+        comment.comment = newcomment
+        comment.save()
+        
+        print("save success")
+        return JsonResponse({"success":True, "newcomment":newcomment})
+    else:
+        print("save fail")
+        return JsonResponse({"success":False})
+        
