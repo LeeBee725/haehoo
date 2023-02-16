@@ -17,7 +17,7 @@ const csrftoken = getCookie('csrftoken');
 function event_update(userNickname) {
     $('.bucket').on('click', function() {
         let bucket_id = this.getAttribute("value");
-        $('#exampleModal .modal-body').load(window.origin + "/bucketprocess/" + bucket_id, function(){
+        $('#exampleModal .modal-body').load(`${window.origin}/bucketprocess/${bucket_id}`, function(){
             $('#exampleModal').modal('show');
             $('#exampleModal .modal-body #btn_like' + bucket_id).on("click", function() {
                 click_like(this, userNickname);
@@ -66,10 +66,10 @@ window.onload = function() {
 
 function click_like(btn, nickname) {
     if (nickname == "" || nickname == null)
-        window.location.assign(window.origin + "/account/login/");
+        window.location.assign(`${window.origin}/account/login/`);
     let xhr = new XMLHttpRequest();
     let bucket_id = btn.getAttribute("value");
-    let url = window.origin + "/bucket-list/" + nickname + "/like/" + bucket_id
+    let url = `${window.origin}/bucket-list/${nickname}/like/${bucket_id}`;
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.setRequestHeader("X-CSRFToken", csrftoken);
@@ -78,8 +78,8 @@ function click_like(btn, nickname) {
     xhr.onload = function() {
         if (xhr.status == 200) {
             let res = JSON.parse(xhr.response);
-            let like_cnts = document.querySelectorAll("#btn_like" + bucket_id + " + label");
-            let btn_likes = document.querySelectorAll("#btn_like" + bucket_id);
+            let like_cnts = document.querySelectorAll(`#btn_like${bucket_id} + label`);
+            let btn_likes = document.querySelectorAll(`#btn_like${bucket_id}`);
             
             for (let i = 0; i < like_cnts.length; ++i) {
                 like_cnts[i].textContent = res.like_cnt;
@@ -100,7 +100,7 @@ function click_like(btn, nickname) {
 
 function click_fix(bucket_id, nickname) {
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", window.origin + "/bucket-list/" + nickname + "/top_fixed/" + bucket_id, true);
+    xhr.open("POST", `${window.origin}/bucket-list/${nickname}/top_fixed/${bucket_id}`, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.setRequestHeader("X-CSRFToken", csrftoken);
     xhr.send()
@@ -131,20 +131,20 @@ function createBtnDetail(bucketObj, nickname) {
     btnDetail.setAttribute("value", bucketObj.pk);
     btnDetail.setAttribute("data-bs-toggle", "modal");
     btnDetail.setAttribute("data-bs-target", "#exampleModal");
-    btnDetail.innerHTML = ' \
+    btnDetail.innerHTML = ` \
         <div class="img-container"> \
-        <img class="thumbnail" src="/static/image/sample.jpg" alt="sample"/> \
+        <img class="thumbnail" src="/static/image/bucket.png" alt="thumbnail"/> \
         </div> \
         <div class="description"> \
-        <h3 id="bucket-title" class="description-title">' + bucketObj.fields.title + '</h3> \
-        <p id="bucket-user" class="description-username">' + nickname + '</p> \
-        <p id="bucket-category" class="description-username">' + bucketObj.fields.category + '</p> \
+        <h3 id="bucket-title" class="description-title">${bucketObj.fields.title}</h3> \
+        <p id="bucket-user" class="description-username">${nickname}</p> \
+        <p id="bucket-category" class="description-username">${bucketObj.fields.category}</p> \
         </div> \
-    ';
+    `;
     btnDetail.addEventListener("click", function() {
-        $('#exampleModal .modal-body').load(window.origin + "/bucketprocess/" + bucketObj.pk, function(){
+        $('#exampleModal .modal-body').load(`${window.origin}/bucketprocess/${bucketObj.pk}`, function(){
             $('#exampleModal').modal('show');
-            $('#exampleModal .modal-body #btn_like' + bucketObj.pk).on("click", function() {
+            $(`#exampleModal .modal-body #btn_like${bucketObj.pk}`).on("click", function() {
                 click_like(this, nickname);
             });
         });
@@ -154,7 +154,7 @@ function createBtnDetail(bucketObj, nickname) {
 
 function createBtnLike(bucketObj, nickname) {
     const btnLike = document.createElement("button");
-    btnLike.setAttribute("id", "btn_like" + bucketObj.pk);
+    btnLike.setAttribute("id", `btn_like${bucketObj.pk}`);
     btnLike.setAttribute("class", "btn_like");
     btnLike.setAttribute("value", bucketObj.pk);
     btnLike.textContent = "♡";
@@ -171,11 +171,11 @@ function createInteractions(bucketObj, nickname) {
     const spanScrap = document.createElement("span");
     const labelScrap = document.createElement("label");
 
-    labelLike.setAttribute("for", "btn_like" + bucketObj.pk);
+    labelLike.setAttribute("for", `btn_like${bucketObj.pk}`);
     labelLike.textContent = "0";
-    spanScrap.setAttribute("id", "btn_scrap" + bucketObj.pk);
+    spanScrap.setAttribute("id", `btn_scrap${bucketObj.pk}`);
     spanScrap.textContent = "퍼가기";
-    labelScrap.setAttribute("for", "btn_scrap" + bucketObj.pk);
+    labelScrap.setAttribute("for", `btn_scrap${bucketObj.pk}`);
     labelScrap.textContent = "0";
 
     interactions.appendChild(btnLike);
@@ -218,7 +218,7 @@ function createAlertBox(type, msg, url) {
 
 function click_scrap(btn, nickname) {
     if (nickname == "" || nickname == null)
-        window.location.assign(window.origin + "/account/login/");
+        window.location.assign(`${window.origin}/account/login/`);
     let xhr = new XMLHttpRequest();
     let bucket_id = btn.getAttribute("value");
     let bucketElem = document.querySelector("#bucket" + bucket_id);

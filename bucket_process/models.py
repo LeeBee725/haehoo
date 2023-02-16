@@ -5,7 +5,7 @@ from account.models import HaehooUser
 
 # Create your models here.
 class Process(models.Model):
-    bucket = models.ForeignKey(Bucket, on_delete= models.CASCADE, related_name = 'bucket-has-process+')
+    bucket = models.ForeignKey(Bucket, on_delete= models.CASCADE, related_name = 'processes')
     title = models.CharField(max_length= 100)
     text = models.TextField()
     createdAt = models.DateTimeField(auto_now = True)

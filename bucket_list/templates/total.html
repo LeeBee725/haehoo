@@ -49,7 +49,7 @@
           <div>
             <button id="bucket{{bucket.id}}" type = "button" class="bucket" value="{{bucket.id}}" data-bs-toggle="modal" data-bs-target="#exampleModal">
               <div class="img-container">
-                <img class="thumbnail" src="{% static 'image/sample.jpg' %}" alt="sample"/>
+                <img class="thumbnail" src="{{bucket.thumbnail_url}}" alt="thumbnail"/>
               </div>
               <div class="description">
                 <h3 id="bucket-title" class="description-title">{{ bucket.title }}</h3>
