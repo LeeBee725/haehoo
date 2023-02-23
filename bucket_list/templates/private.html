@@ -80,9 +80,9 @@
             <h4>{{bucket.createdAt}}</h4>
 
             {% if user in bucket.liked_users.all %}
-                <button id="btn_like{{bucket.id}}" onclick="click_like('{{bucket.id}}', '{{user.nickname}}')">♥</button>
+                <button id="btn-like{{bucket.id}}" onclick="click_like('{{bucket.id}}', '{{user.nickname}}')">♥</button>
             {% else %}
-                <button id="btn_like{{bucket.id}}" onclick="click_like('{{bucket.id}}', '{{user.nickname}}')">♡</button>
+                <button id="btn-like{{bucket.id}}" onclick="click_like('{{bucket.id}}', '{{user.nickname}}')">♡</button>
             {% endif %}
             <p id="like_cnt{{bucket.id}}" class="description-username">{{ bucket.liked_users.count }}</p>
             <button>퍼가기</button>

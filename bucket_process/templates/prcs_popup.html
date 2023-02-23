@@ -23,11 +23,11 @@
                     <h4 class="card-title">{{bucket.title}}'s process</h4>
                     <div class="card-body">
                         {% if user in bucket.liked_users.all %}
-                            <button id="btn_like{{bucket.id}}" class="btn_like" value="{{bucket.id}}">♥</button>
+                            <button id="btn-like{{bucket.id}}" class="btn-like" value="{{bucket.id}}">♥</button>
                         {% else %}
-                            <button id="btn_like{{bucket.id}}" class="btn_like" value="{{bucket.id}}">♡</button>
+                            <button id="btn-like{{bucket.id}}" class="btn-like" value="{{bucket.id}}">♡</button>
                         {% endif %}
-                        <label for="btn_like{{bucket.id}}">{{ bucket.liked_users.count }}</label>
+                        <label for="btn-like{{bucket.id}}">{{ bucket.liked_users.count }}</label>
                         <button>퍼가기</button>
                         <div class="description-username">{{ bucket.referenced_users.count }}</div>
                     </div>

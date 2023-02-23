@@ -66,45 +66,11 @@
 }
 
 .contents {
-    margin: 0 16.15vw;
+    padding: 0 0;
 }
 
 #title-container {
     justify-content: space-between;
-}
-
-.filter-btn-container {
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-}
-
-.filter-btn {
-    border: none;
-    border-radius: 5vw;
-    color: white;
-    font-size: 0.83vw;
-    padding: 0.5vw 1vw;
-    margin: 0.5vw;
-}
-
-.filter-btn.red-btn {
-    background-color: red;
-}
-.filter-btn.orange-btn {
-    background-color: orange;
-}
-.filter-btn.yellow-btn {
-    background-color: yellow;
-}
-.filter-btn.green-btn {
-    background-color: green;
-}
-.filter-btn.blue-btn {
-    background-color: blue;
-}
-.filter-btn.navy-btn {
-    background-color: navy;
 }
 
 #content-title {
@@ -119,62 +85,65 @@
     flex-direction: column;
 }
 
-.bucket-container {
+.hh-bucket {
+    margin-bottom: 40px;
+    padding: 0;
+    border: 1px solid #dddddd;
+    box-shadow: 4px 10px 1px #eeeeee;
+}
+
+.hh-bucket-btn {
+    width: 100%;
+    border: none;
+}
+
+.hh-bucket-img-container {
+    width: 100%;
+    height: 15.37vw;
+}
+
+.hh-bucket-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hh-bucket-description {
+    display: flex;
+    padding: 1rem;
+    border-top: none;
+    height: auto;
     flex-wrap: wrap;
     justify-content: space-between;
 }
 
-.bucket {
-    display: inline-block;
-    position: relative;
-    width: 15.37vw;
-    height: 15.37vw;
-    margin-top: 3.02vw;
-    overflow: hidden;
-}
-
-.description {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    padding: 1.04vw;
-    background: linear-gradient(transparent, black);
-    color: #fff;
-    opacity: 0.5;
-    transform: translateY(2.47vw);
-    transition: transform .25s;
+.hh-bucket-description>p, .hh-bucket-description>span>p {
+    margin-bottom: 0;
 }
 
 .description-title {
-    font-size: 1.25vw;
+    font-size: 1.5rem;
+    flex-basis: 100%;
+    flex-shrink: 0;
+    border-bottom: 1px solid #dddddd;
 }
 
 .description-username {
-    font-size: 0.83vw;
+    font-size: 1rem;
 }
 
-.description::before {
-    content: '';
-    position: absolute;
-    top: -2.47vw;
-    right: -2.34vw;
+.description-category {
+    font-size: 0.8rem;
 }
 
-.bucket:hover .description {
-    transform: translateY(0);
-    opacity: 1;
+.hh-btn-space {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.img-container {
-    width: 100%;
-    height: 100%;
-}
-
-.thumbnail {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.hh-btn-space>label {
+    font-size: 0.5rem;
 }
 
 #alert-space {
@@ -185,4 +154,9 @@
 
 .hh-alert-box {
     width: 68vw;
+}
+
+.hh-btn-like, .hh-btn-scrap {
+    background-color: transparent;
+    border: none;
 }
