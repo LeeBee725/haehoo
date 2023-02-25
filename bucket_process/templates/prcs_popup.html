@@ -60,12 +60,13 @@
             <h4>Comments</h4>
             {% for comment in total_comment %}
                 <div class="card" id="cmnt{{comment.id}}">
-                    {{comment.user.nickname}} : {{comment.comment}}
+                    <div class="user-nickname">{{comment.user.nickname}}</div>
+                    <div class="cmnttext">{{comment.comment}}</div>
+                    {% if user.id == comment.user.id %}
+                        <button type="button" class="updatecmnt" onclick="showUpdateForm('cmnt{{comment.id}}', '{{comment.comment}}')">update</button>                    
+                        <a href = "{% url 'deletecomment' bucketid=bucket.id commentid=comment.id %}">delete</a>
+                    {% endif %}
                 </div>
-                {% if user.id == comment.user.id %}
-                    <button type="button" class="updatecmnt" onclick="showUpdateForm('cmnt{{comment.id}}', '{{comment.comment}}')">update</button>                    
-                    <a href = "{% url 'deletecomment' bucketid=bucket.id commentid=comment.id %}">delete</a>
-                {% endif %}
             {%endfor%}
         </div>
         {% if user.is_authenticated %}
