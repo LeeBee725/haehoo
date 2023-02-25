@@ -22,13 +22,38 @@
                 <div class="col">
                     <h4 class="card-title">{{bucket.title}}'s process</h4>
                     <div class="card-body">
-                        {% if user in bucket.liked_users.all %}
-                            <button id="btn-like{{bucket.id}}" class="btn-like" value="{{bucket.id}}">♥</button>
-                        {% else %}
-                            <button id="btn-like{{bucket.id}}" class="btn-like" value="{{bucket.id}}">♡</button>
-                        {% endif %}
-                        <label for="btn-like{{bucket.id}}">{{ bucket.liked_users.count }}</label>
-                        <button>퍼가기</button>
+                        <div>
+                            <div class="hh-btn-space">
+                            {% if user in bucket.liked_users.all %}
+                            <button id="btn-like{{bucket.id}}" class="hh-btn-like" value="{{bucket.id}}">
+                                <img src="{% static 'image/like_fill.svg' %}" alt="♥">
+                            </button>
+                            {% else %}
+                            <button id="btn-like{{bucket.id}}" class="hh-btn-like" value="{{bucket.id}}">
+                                <img src="{% static 'image/like.svg' %}" alt="♡">
+                            </button>
+                            {% endif %}
+                            <label for="btn-like{{bucket.id}}">{{ bucket.liked_users.count }}</label>
+                            </div>
+                            <div class="hh-btn-space">
+                            {% if user != bucket.user %}
+                            {% if bucket.id in user_scraps.all %}
+                            <button id="btn-scrap{{bucket.id}}" class="hh-btn-scrap" value="{{bucket.id}}">
+                                <img src="{% static 'image/bookmark_fill.svg' %}" alt="퍼가기 취소">
+                            </button>
+                            {% else %}
+                            <button id="btn-scrap{{bucket.id}}" class="hh-btn-scrap" value="{{bucket.id}}">
+                                <img src="{% static 'image/bookmark.svg' %}" alt="퍼가기">
+                            </button>
+                            {% endif %}
+                            {% else %}
+                            <span id="btn-scrap{{bucket.id}}">
+                                <img src="{% static 'image/bookmark_me.svg' %}" alt="나의버킷퍼간수">
+                            </span>
+                            {% endif %}
+                            <label for="btn-scrap{{bucket.id}}">{{ bucket.deriving_bucket.all.count }}</label>
+                            </div>
+                        </div>
                         <div class="description-username">{{ bucket.referenced_users.count }}</div>
                     </div>
                 </div>

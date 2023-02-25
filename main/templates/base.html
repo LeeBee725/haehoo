@@ -64,7 +64,9 @@
         <div class="footer-left">
           <p class="footer-left-item1">해후</p>
           &nbsp; &nbsp;
-          <p class="footer-left-item2">Ⓒ</p>
+          <p class="footer-left-item2">
+            <img src="{% static 'image/copyright.svg' %}" alt="copyright">
+          </p>
           &nbsp;
           <p class="footer-left-item3">2022 Haehoo, KAU likelion</p>
         </div>
@@ -86,7 +88,8 @@
         </div>
       </div>
     </footer>
-
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="{% static 'js/csrf.js' %}" crossorigin="anonymous"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
       integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
