@@ -3,7 +3,6 @@
 {% block links %}
 <script src="https://kit.fontawesome.com/f26e9103bc.js" crossorigin="anonymous"></script>
 <script src="{% static 'js/total.js' %}" crossorigin="anonymous"></script>
-
 <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 {% endblock links %}
 {% block content %}
@@ -29,15 +28,15 @@
     <div id="contents-container" class="hh-container">
       <div id="title-container" class="hh-container">
         <p id="content-title">Our bucket, 소망목록</p>
-        <div class="category-container hh-container">
+        <div class="hh-category-container hh-container">
           <form action="" method="get">
             <div class="hh-container">
-              <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-do" value="1">하고 싶은 것</button>
-              <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-eat" value="2">먹고 싶은 것</button>
-              <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-have" value="3">갖고 싶은 것</button>
-              <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-go" value="4">가고 싶은 곳</button>
-              <button class="btn btn-primary m-2" type="submit" name="category" id="travel" value="5">여행</button>
-              <button class="btn btn-primary m-2" type="submit" name="category" id="hobby" value="6">취미</button>
+              <button class="hh-filter-btn" type="submit" name="category" id="want-to-do" value="1">하고 싶은 것</button>
+              <button class="hh-filter-btn" type="submit" name="category" id="want-to-eat" value="2">먹고 싶은 것</button>
+              <button class="hh-filter-btn" type="submit" name="category" id="want-to-have" value="3">갖고 싶은 것</button>
+              <button class="hh-filter-btn" type="submit" name="category" id="want-to-go" value="4">가고 싶은 곳</button>
+              <button class="hh-filter-btn" type="submit" name="category" id="travel" value="5">여행</button>
+              <button class="hh-filter-btn" type="submit" name="category" id="hobby" value="6">취미</button>
             </div>
           </form>
         </div>
