@@ -1,23 +1,4 @@
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-const csrftoken = getCookie('csrftoken');
-
-let showUpdateForm = (id, comment)=>{
-    let cmnt_card = document.getElementById(id)
-
+var showUpdateForm = (id, comment)=>{
     let updateform = document.createElement("form")
     updateform.setAttribute("method", "POST")
     updateform.setAttribute("action", '#')
@@ -47,7 +28,7 @@ let showUpdateForm = (id, comment)=>{
             fetch(`${window.location.origin}/bucketprocess/updatecomment/${id.slice(4)}`, {
                 method: updateform.getAttribute('method'),
                 headers: {
-                    'X-CSRFToken': csrftoken
+                    'X-CSRFToken': getCsrfToken()
                   },
                 body: formdata
             })
@@ -72,7 +53,7 @@ let showUpdateForm = (id, comment)=>{
     cmnt_card.replaceWith(updateform)
 }
 
-let deleteComment = (id)=>{
+var deleteComment = (id)=>{
     let cmnt_card = document.getElementById(id)
 
     try{
@@ -94,7 +75,7 @@ let deleteComment = (id)=>{
 bucketid = document.getElementById("bucket-id").innerHTML
 userid = document.getElementById("user-id").innerHTML
 
-let form = document.getElementById("createcmnt")
+var form = document.getElementById("createcmnt")
 form.onsubmit = (event) =>{
 formdata = new FormData(event.target)
     try{

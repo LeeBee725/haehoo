@@ -1,10 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 {% block links %}
-<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 <script src="https://kit.fontawesome.com/f26e9103bc.js" crossorigin="anonymous"></script>
 <script src="{% static 'js/total.js' %}" crossorigin="anonymous"></script>
-
 <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 {% endblock links %}
 {% block content %}
@@ -12,9 +10,9 @@
 <div id="alert-space"></div>
 <section id="top-space">
   <div class="top-container hh-container">
-    <div class="search-container hh-container">
-      <img id="bucket-image" src="{% static 'image/bucket.png' %}" alt="bucket.png">
-      <div class="search-group">
+    <div class="search-container hh-container container">
+      <img id="bucket-image" src="{% static 'image/bucket.svg' %}" alt="bucket.png">
+      <div class="search-group" style="visibility: hidden;">
         <form class="hh-search-bar" method="GET" onsubmit="return false;">
           <button class="search-btn">
             <i class="fa-solid fa-magnifying-glass first-icon fa-s"></i>
@@ -26,60 +24,77 @@
   </div>
 </section>
 <section id="main-space">
-  <div class="contents">
+  <div class="container contents">
     <div id="contents-container" class="hh-container">
       <div id="title-container" class="hh-container">
-        <p id="content-title">Our bucket</p>
-        <div class="category-container hh-container">
+        <p id="content-title">Our bucket, 소망목록</p>
+        <div class="hh-category-container hh-container">
           <form action="" method="get">
-            <div class="filter-btn-container hh-container">
-              <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-do" value="1">하고 싶은 것</button>
-              <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-eat" value="2">먹고 싶은 것</button>
-              <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-have" value="3">갖고 싶은 것</button>
-              <button class="btn btn-primary m-2" type="submit" name="category" id="want-to-go" value="4">가고 싶은 곳</button>
-              <button class="btn btn-primary m-2" type="submit" name="category" id="travel" value="5">여행</button>
-              <button class="btn btn-primary m-2" type="submit" name="category" id="hobby" value="6">취미</button>
+            <div class="hh-container">
+              <button class="hh-filter-btn" type="submit" name="category" id="want-to-do" value="1">하고 싶은 것</button>
+              <button class="hh-filter-btn" type="submit" name="category" id="want-to-eat" value="2">먹고 싶은 것</button>
+              <button class="hh-filter-btn" type="submit" name="category" id="want-to-have" value="3">갖고 싶은 것</button>
+              <button class="hh-filter-btn" type="submit" name="category" id="want-to-go" value="4">가고 싶은 곳</button>
+              <button class="hh-filter-btn" type="submit" name="category" id="travel" value="5">여행</button>
+              <button class="hh-filter-btn" type="submit" name="category" id="hobby" value="6">취미</button>
             </div>
           </form>
         </div>
-        
       </div>
 
-      <div class="hh-container bucket-container">
+      <div class="container">
+        <div id="bucket-container" class="row row-cols-lg-4 row-cols-md-3 row-cols-1">
         {% for bucket in total_bucket.all %}
-          <div>
-            <button id="bucket{{bucket.id}}" type = "button" class="bucket" value="{{bucket.id}}" data-bs-toggle="modal" data-bs-target="#exampleModal">
-              <div class="img-container">
-                <img class="thumbnail" src="{{bucket.thumbnail_url}}" alt="thumbnail"/>
+          <div id="bucket{{bucket.id}}" class="col">
+            <div class="hh-bucket" value="{{bucket.id}}">
+              <button type="button" class="hh-bucket-btn" value="{{bucket.id}}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <div class="hh-bucket-img-container">
+                  <img class="hh-bucket-thumbnail" src="{{bucket.thumbnail_url}}" alt="thumbnail">
+                </div>
+              </button>
+              <div class="hh-bucket-description">
+                <p id="bucket-title" class="description-title">{{ bucket.title }}</p>
+                <span>
+                  <p id="bucket-user" class="description-username">{{ bucket.user.nickname }}</p>
+                  <p id="bucket-category" class="description-category">{{ bucket.category }}</p>
+                </span>
+                <div>
+                  <div class="hh-btn-space">
+                  {% if user in bucket.liked_users.all %}
+                    <button id="btn-like{{bucket.id}}" class="hh-btn-like" value="{{bucket.id}}">
+                      <img src="{% static 'image/like_fill.svg' %}" alt="♥">
+                    </button>
+                  {% else %}
+                    <button id="btn-like{{bucket.id}}" class="hh-btn-like" value="{{bucket.id}}">
+                      <img src="{% static 'image/like.svg' %}" alt="♡">
+                    </button>
+                  {% endif %}
+                    <label for="btn-like{{bucket.id}}">{{ bucket.liked_users.count }}</label>
+                  </div>
+                  <div class="hh-btn-space">
+                  {% if user != bucket.user %}
+                  {% if bucket.id in user_scraps.all %}
+                    <button id="btn-scrap{{bucket.id}}" class="hh-btn-scrap" value="{{bucket.id}}">
+                      <img src="{% static 'image/bookmark_fill.svg' %}" alt="퍼가기 취소">
+                    </button>
+                  {% else %}
+                    <button id="btn-scrap{{bucket.id}}" class="hh-btn-scrap" value="{{bucket.id}}">
+                      <img src="{% static 'image/bookmark.svg' %}" alt="퍼가기">
+                    </button>
+                  {% endif %}
+                  {% else %}
+                    <span id="btn-scrap{{bucket.id}}">
+                      <img src="{% static 'image/bookmark_me.svg' %}" alt="나의버킷퍼간수">
+                    </span>
+                  {% endif %}
+                    <label for="btn-scrap{{bucket.id}}">{{ bucket.deriving_bucket.all.count }}</label>
+                  </div>
+                </div>
               </div>
-              <div class="description">
-                <h3 id="bucket-title" class="description-title">{{ bucket.title }}</h3>
-                <p id="bucket-user" class="description-username">{{ bucket.user.nickname }}</p>
-                <p id="bucket-category" class="description-username">{{ bucket.category }}</p>
-              </div>
-            </button>
-            <div>
-
-              {% if user in bucket.liked_users.all %}
-                <button id="btn_like{{bucket.id}}" class="btn_like" value="{{bucket.id}}">♥</button>
-              {% else %}
-                <button id="btn_like{{bucket.id}}" class="btn_like" value="{{bucket.id}}">♡</button>
-              {% endif %}
-              <label for="btn_like{{bucket.id}}">{{ bucket.liked_users.count }}</label>
-              {% if user != bucket.user %}
-                {% if bucket.id in user_scraps.all %}
-                  <button id="btn_scrap{{bucket.id}}" class="btn_scrap" value="{{bucket.id}}">퍼가기 취소</button>
-                {% else %}
-                  <button id="btn_scrap{{bucket.id}}" class="btn_scrap" value="{{bucket.id}}">퍼가기</button>
-                {% endif %}
-              {% else %}
-                  <span id="btn_scrap{{bucket.id}}">퍼가기</span>
-              {% endif %}
-              <label for="btn_scrap{{bucket.id}}">{{ bucket.deriving_bucket.all.count }}</label>
-
             </div>
           </div>
-        {% endfor %}  
+        {% endfor %}
+        </div>
       </div>
       <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
