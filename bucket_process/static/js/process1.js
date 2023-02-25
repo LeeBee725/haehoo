@@ -91,11 +91,31 @@ let deleteComment = (id)=>{
     }
 }
 
+bucketid = document.getElementById("bucket-id").innerHTML
+userid = document.getElementById("user-id").innerHTML
 
-let updateCmntBtns = document.getElementsByClassName("button.updatecmnt")
-let deleteCmntBtns = document.getElementsByClassName("button.deletecmnt")
-for(let i = 0; i<updateCmntBtns.length; i++){
-    updateCmntBtns[i].addEventListener('click', showUpdateForm)
-    updateCmntBtns[i].addEventListener('click', deleteComment)
+let form = document.getElementById("createcmnt")
+form.onsubmit = (event) =>{
+formdata = new FormData(event.target)
+    try{
+        fetch(`${window.location.origin}/bucketprocess/${bucketid}/createcomment/${userid}`, {
+            method: form.getAttribute('method'),
+            headers: {
+                'X-CSRFToken': csrftoken
+                },
+            body: formdata
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success){
+                throw new Error("get success:False data from django view...")
+            }
+            else{
+                console.log(data.success)
+            }
+        })
+    }catch(error){
+        console.error(error)
+    }
+    return false
 }
-
