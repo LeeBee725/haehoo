@@ -1,4 +1,6 @@
 var showUpdateForm = (id, comment)=>{
+    let cmnt_card = document.getElementById(id)
+    
     let updateform = document.createElement("form")
     updateform.setAttribute("method", "POST")
     updateform.setAttribute("action", '#')
@@ -82,7 +84,7 @@ formdata = new FormData(event.target)
         fetch(`${window.location.origin}/bucketprocess/${bucketid}/createcomment/${userid}`, {
             method: form.getAttribute('method'),
             headers: {
-                'X-CSRFToken': csrftoken
+                'X-CSRFToken': getCsrfToken()
                 },
             body: formdata
         })
