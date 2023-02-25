@@ -3,9 +3,18 @@ function event_update(userNickname) {
         let bucketId = this.getAttribute("value");
         $('#exampleModal .modal-body').load(`${window.origin}/bucketprocess/${bucketId}`, function(){
             $('#exampleModal').modal('show');
-            $(`#exampleModal .modal-body #btn-like${bucketId}`).on("click", function() {
+            $(`#exampleModal .modal-body #btn-like${bucketId}`).on("click", function(event) {
                 click_like(this, userNickname);
+                event.stopPropagation();
             });
+            $(`#exampleModal .modal-body #btn-scrap${bucketId}`).on("click", function(event) {
+                click_scrap(this, userNickname);
+                event.stopPropagation();
+            });
+            let updateCmntBtns = document.getElementsByClassName("button.updatecmnt")
+            for(let i = 0; i<updateCmntBtns.length; i++){
+                updateCmntBtns[i].addEventListener('click', showUpdateForm)
+            }
         });
     });
 
@@ -58,7 +67,7 @@ function click_like(btn, nickname) {
     let url = `${window.origin}/bucket-list/${nickname}/like/${bucketId}`;
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-type", "application/json");
-    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    xhr.setRequestHeader("X-CSRFToken", getCsrfToken());
     xhr.send()
 
     xhr.onload = function() {
@@ -235,7 +244,8 @@ function createAlertBox(type, msg, url) {
         alertBox.querySelector("div").appendChild(anchor);
     }
     setTimeout(function() {
-        $(`#alert-box-${type}`).alert('close');
+        if ($(`#alert-box-${type}`))
+            $(`#alert-box-${type}`).alert('close');
     }, 3000);
     return alertBox
 }
@@ -254,7 +264,7 @@ function click_scrap(btn, nickname) {
     let url = `${window.origin}/bucket-list/${nickname}/scrap/${bucket_id}`;
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-type", "application/json");
-    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    xhr.setRequestHeader("X-CSRFToken", getCsrfToken());
     xhr.send(JSON.stringify(bucket));
 
     xhr.onload = function() {

@@ -1,22 +1,25 @@
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+function getCsrfToken() {
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
             }
         }
+        return cookieValue;
     }
-    return cookieValue;
+    const csrftoken = getCookie('csrftoken');
+    return csrftoken;
 }
-const csrftoken = getCookie('csrftoken');
 
-let showUpdateForm = (id, comment)=>{
-    
+// let showUpdateForm = (id, comment)=>{
+function showUpdateForm(id, comment) {
     let updateform = document.createElement("form")
     updateform.setAttribute("method", "POST")
     updateform.setAttribute("action", `${window.location.origin}/bucketprocess/updatecomment/${id.slice(4)}`)
@@ -52,7 +55,7 @@ let showUpdateForm = (id, comment)=>{
             response = fetch(updateform.getAttribute('action'), {
                 method: updateform.getAttribute('method'),
                 headers: {
-                    'X-CSRFToken': csrftoken
+                    'X-CSRFToken': getCsrfToken()
                   },
                 body: formdata
             })
@@ -73,10 +76,10 @@ let showUpdateForm = (id, comment)=>{
     comment.replaceWith(updateform)
 }
 
-let updateCmntBtns = document.getElementsByClassName("button.updatecmnt")
-for(let i = 0; i<updateCmntBtns.length; i++){
-    updateCmntBtns[i].addEventListener('click', showUpdateForm)
-}
+// function showUpdateForm(id, comment) {
+//     console.log(id);
+//     console.log(comment);
+// }
 
 // var request = new XMLHttpRequest();
 // request.setRequestHeader('X-CSRFToken', cookies['csrftoken']);                                           
