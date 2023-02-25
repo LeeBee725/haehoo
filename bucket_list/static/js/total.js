@@ -11,10 +11,6 @@ function event_update(userNickname) {
                 click_scrap(this, userNickname);
                 event.stopPropagation();
             });
-            let updateCmntBtns = document.getElementsByClassName("button.updatecmnt")
-            for(let i = 0; i<updateCmntBtns.length; i++){
-                updateCmntBtns[i].addEventListener('click', showUpdateForm)
-            }
         });
     });
 

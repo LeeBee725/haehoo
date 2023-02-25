@@ -10,9 +10,9 @@
 <div id="alert-space"></div>
 <section id="top-space">
   <div class="top-container hh-container">
-    <div class="search-container hh-container">
-      <img id="bucket-image" src="{% static 'image/bucket.png' %}" alt="bucket.png">
-      <div class="search-group">
+    <div class="search-container hh-container container">
+      <img id="bucket-image" src="{% static 'image/bucket.svg' %}" alt="bucket.png">
+      <div class="search-group" style="visibility: hidden;">
         <form class="hh-search-bar" method="GET" onsubmit="return false;">
           <button class="search-btn">
             <i class="fa-solid fa-magnifying-glass first-icon fa-s"></i>
@@ -43,7 +43,7 @@
       </div>
 
       <div class="container">
-        <div id="bucket-container" class="row row-cols-4">
+        <div id="bucket-container" class="row row-cols-lg-4 row-cols-md-3 row-cols-1">
         {% for bucket in total_bucket.all %}
           <div id="bucket{{bucket.id}}" class="col">
             <div class="hh-bucket" value="{{bucket.id}}">

@@ -9,7 +9,7 @@ class Bucket(models.Model):
     category_checkbox = models.BooleanField(default=False)
     createdAt = models.DateTimeField(auto_now = True)
     top_fixed = models.BooleanField(default=False)
-    thumbnail_url = models.URLField(max_length=200, default=staticfiles_storage.url("image/bucket.png"))
+    thumbnail_url = models.URLField(max_length=200, default=staticfiles_storage.url("image/no_image.svg"))
     liked_users = models.ManyToManyField(HaehooUser, blank = True, related_name="user-like-bucket+")
     derived_bucket = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, related_name="deriving_bucket")
 
