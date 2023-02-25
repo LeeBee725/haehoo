@@ -72,22 +72,30 @@ let showUpdateForm = (id, comment)=>{
     cmnt_card.replaceWith(updateform)
 }
 
+let deleteComment = (id)=>{
+    let cmnt_card = document.getElementById(id)
+
+    try{
+        fetch(`${window.location.origin}/bucketprocess/deletecomment/${id.slice(4)}`)
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success){
+                throw new Error("get success:False data from django view...")
+            }
+            else{
+                cmnt_card.remove()
+            }
+        })
+    }catch(error){
+        console.error(error)
+    }
+}
+
+
 let updateCmntBtns = document.getElementsByClassName("button.updatecmnt")
+let deleteCmntBtns = document.getElementsByClassName("button.deletecmnt")
 for(let i = 0; i<updateCmntBtns.length; i++){
     updateCmntBtns[i].addEventListener('click', showUpdateForm)
+    updateCmntBtns[i].addEventListener('click', deleteComment)
 }
 
-function newCmntElemnt(text, cmntid){
-    cmnt_card = document.createElement("div")
-    cmnt_card.className ="card"
-}
-
-{/* 
-<div class="card" id="cmnt{{comment.id}}">
-{{comment.user.nickname}} : {{comment.comment}}
-{% if user.id == comment.user.id %}
-    <button type="button" class="updatecmnt" onclick="showUpdateForm('cmnt{{comment.id}}', '{{comment.comment}}')">update</button>                    
-    <a href = "{% url 'deletecomment' bucketid=bucket.id commentid=comment.id %}">delete</a>
-{% endif %}
-</div> 
-*/}

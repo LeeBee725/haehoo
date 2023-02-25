@@ -72,11 +72,11 @@ def create_comment(request, bucketid, userid):
         form.save()
     return redirect('bucketprocess', bucketid = bucketid)
           
-def delete_comment(request, bucketid, commentid):
+def delete_comment(request, commentid):
     comment = get_object_or_404(Comment, pk = commentid)
     comment.delete()
     
-    return redirect('bucketprocess', bucketid = bucketid)
+    return JsonResponse({"success":True})
 
 def update_comment(request, commentid):
     comment = Comment.objects.get(pk = commentid)

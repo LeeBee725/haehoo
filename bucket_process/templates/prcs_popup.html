@@ -64,7 +64,9 @@
                     <div class="cmnttext">{{comment.comment}}</div>
                     {% if user.id == comment.user.id %}
                         <button type="button" class="updatecmnt" onclick="showUpdateForm('cmnt{{comment.id}}', '{{comment.comment}}')">update</button>                    
-                        <a href = "{% url 'deletecomment' bucketid=bucket.id commentid=comment.id %}">delete</a>
+                        <button type="button" class="deletecmnt" onclick="deleteComment('cmnt{{comment.id}}')">delete</button>                    
+
+                        {% comment %} <a href = "{% url 'deletecomment' bucketid=bucket.id commentid=comment.id %}">delete</a> {% endcomment %}
                     {% endif %}
                 </div>
             {%endfor%}
