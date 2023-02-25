@@ -16,16 +16,12 @@ function getCookie(name) {
 const csrftoken = getCookie('csrftoken');
 
 let showUpdateForm = (id, comment)=>{
-    
+    let cmnt_card = document.getElementById(id)
+
     let updateform = document.createElement("form")
     updateform.setAttribute("method", "POST")
-    updateform.setAttribute("action", `${window.location.origin}/bucketprocess/updatecomment/${id.slice(4)}`)
+    updateform.setAttribute("action", '#')
     updateform.setAttribute("id", "form"+id)
-
-    // let csrfInput = document.createElement('input');
-    // csrfInput.type = 'hidden';
-    // csrfInput.name = '_csrf';
-    // csrfInput.value = csrftoken;
 
     let inputsection = document.createElement("input")
     inputsection.setAttribute("type", "text")
@@ -40,7 +36,6 @@ let showUpdateForm = (id, comment)=>{
     cancel.setAttribute("type", "none")
     cancel.innerHTML = "cancel"
 
-    // updateform.appendChild(csrfInput)
     updateform.appendChild(inputsection)
     updateform.appendChild(submit)
     updateform.appendChild(cancel)
@@ -49,76 +44,78 @@ let showUpdateForm = (id, comment)=>{
         formdata = new FormData(event.target)
 
         try{
-            response = fetch(updateform.getAttribute('action'), {
+            fetch(`${window.location.origin}/bucketprocess/updatecomment/${id.slice(4)}`, {
                 method: updateform.getAttribute('method'),
                 headers: {
                     'X-CSRFToken': csrftoken
                   },
                 body: formdata
             })
-        
-            if (response.ok) {
-                const data = response.json()
-                console.log(data)
-            } else{
-                console.log("response is not ok")
-            }
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success){
+                    throw new Error("get success:False data from django view...")
+                }
+                else{
+                    updateform.replaceWith(cmnt_card)
+                    let cmmnt_text = cmnt_card.querySelector('.cmnttext')
+                    cmmnt_text.innerHTML = data.newcomment
+                }
+            })
         }catch(error){
-            console.error("network error",error)
+            console.error(error)
         }
 
         return false
     }
-    comment = document.getElementById(id)
-    comment.replaceWith(updateform)
+
+    cmnt_card.replaceWith(updateform)
 }
 
-let updateCmntBtns = document.getElementsByClassName("button.updatecmnt")
-for(let i = 0; i<updateCmntBtns.length; i++){
-    updateCmntBtns[i].addEventListener('click', showUpdateForm)
+let deleteComment = (id)=>{
+    let cmnt_card = document.getElementById(id)
+
+    try{
+        fetch(`${window.location.origin}/bucketprocess/deletecomment/${id.slice(4)}`)
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success){
+                throw new Error("get success:False data from django view...")
+            }
+            else{
+                cmnt_card.remove()
+            }
+        })
+    }catch(error){
+        console.error(error)
+    }
 }
 
-// var request = new XMLHttpRequest();
-// request.setRequestHeader('X-CSRFToken', cookies['csrftoken']);                                           
-// request.open("POST", window.location.origin + "");
-// var formElement = document.querySelector("#myform");
-// request.send(new FormData(formElement));
+bucketid = document.getElementById("bucket-id").innerHTML
+userid = document.getElementById("user-id").innerHTML
 
-
-    // updateform.onsubmit = function(){
-    //     console.log("hi")
-    //     var xhr = new XMLHttpRequest();
-    //     xhr.setRequestHeader("Content-type", "application/json");
-    //     xhr.setRequestHeader("X-CSRFToken", csrftoken);
-    //     xhr.open("POST", `${window.location.origin}/bucketprocess/updatecomment/${id.slice(4)}`, true);
-    //     xhr.send(new FormData(this))
-    //     console.log("after send")
-
-    //     xhr.onload = function() {
-    //         if (xhr.status == 200) {
-    //             console.log("yes 200")
-
-    //             var res = JSON.parse(xhr.response);
-    //             updateform.replaceWith(res.comment)
-    //         } else {
-    //             console.log("not 200")
-    //         }
-    //     }
-
-            // var xhr = new XMLHttpRequest();
-        // xhr.open("POST", `${window.location.origin}/bucketprocess/updatecomment/${id.slice(4)}`, true);
-        // xhr.setRequestHeader("Content-type", "application/json");
-        // xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        // xhr.send()
-        
-        // xhr.onload = function() {
-        //     if (xhr.status == 200) {
-        //         console.log("yes 200")
-
-        //         var res = JSON.parse(xhr.response);
-        //         updateform.replaceWith(res.comment)
-        //     } else {
-        //         console.log("not 200")
-        //     }
-        // }
-    
+let form = document.getElementById("createcmnt")
+form.onsubmit = (event) =>{
+formdata = new FormData(event.target)
+    try{
+        fetch(`${window.location.origin}/bucketprocess/${bucketid}/createcomment/${userid}`, {
+            method: form.getAttribute('method'),
+            headers: {
+                'X-CSRFToken': csrftoken
+                },
+            body: formdata
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success){
+                throw new Error("get success:False data from django view...")
+            }
+            else{
+                console.log(data.success)
+            }
+        })
+    }catch(error){
+        console.error(error)
+    }
+    return false
+}

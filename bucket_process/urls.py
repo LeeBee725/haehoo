@@ -7,7 +7,7 @@ urlpatterns = [
     path("<int:processid>/edit", views.edit_bucketprcs, name = 'processedit'),
     path("<int:processid>/delete", views.delete_bucketprcs, name = 'processdelete'),
     path("<int:bucketid>/createcomment/<int:userid>", views.create_comment, name = 'createcomment'),
-    path("<int:bucketid>/deletecomment/<int:commentid>", views.delete_comment, name = 'deletecomment'),
+    path("deletecomment/<int:commentid>", views.delete_comment, name = 'deletecomment'),
     path("updatecomment/<int:commentid>", views.update_comment, name = 'updatecomment'),
 
 ]

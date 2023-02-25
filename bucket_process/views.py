@@ -64,19 +64,20 @@ def delete_bucketprcs(request, processid):
     return redirect('bucketprocess', bucketid = bucket.id)
 
 def create_comment(request, bucketid, userid):
+    print('here')
     form = CommentForm(request.POST)
     if form.is_valid():
         form = form.save(commit = False)
         form.bucket = get_object_or_404(Bucket, pk = bucketid)
         form.user = get_object_or_404(HaehooUser, pk = userid)
         form.save()
-    return redirect('bucketprocess', bucketid = bucketid)
+        return JsonResponse({"success":True})
           
-def delete_comment(request, bucketid, commentid):
+def delete_comment(request, commentid):
     comment = get_object_or_404(Comment, pk = commentid)
     comment.delete()
     
-    return redirect('bucketprocess', bucketid = bucketid)
+    return JsonResponse({"success":True})
 
 def update_comment(request, commentid):
     comment = Comment.objects.get(pk = commentid)
