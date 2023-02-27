@@ -73,18 +73,25 @@
 
 #title-container {
     justify-content: space-between;
+    flex-wrap: wrap;
+    margin: 10px 0;
 }
 
 #content-title {
     display: block;
-    height: 4.17vw;
-    line-height: 4.17vw;
-    font-size: 1.875vw;
+    font-size: 2rem;
     font-weight: bold;
+    padding: 0 0 0 10px;
+    margin: 0;
+    margin-bottom: 10px;
 }
 
 .hh-category-container {
     align-items: center;
+}
+
+.hh-filter-btn-container {
+    flex-wrap: wrap;
 }
 
 .hh-filter-btn {
@@ -92,7 +99,7 @@
     border: 1px solid #dddddd;
     border-radius: 10px;
     padding: 0.5em 1em;
-    margin: 0 0.5em;
+    margin: 0.1em 0.5em;
 }
 
 .hh-filter-btn:hover {

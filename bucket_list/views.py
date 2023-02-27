@@ -11,7 +11,6 @@ def total(request):
         user_scraps = request.user.buckets.filter(derived_bucket__isnull=False) \
                         .values_list("derived_bucket_id", flat=True)
     category_num = request.GET.get("category")
-    print(category_num)
     if (category_num is None or category_num == "0"):
         total_bucket = Bucket.objects
     else:
