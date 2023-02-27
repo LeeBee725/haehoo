@@ -15,6 +15,10 @@ class Bucket(models.Model):
 
     # ordered_records = models.objects.all().order_by('top_fixed')
 
+    def category_to_str(self):
+        str_list = ["", "하고 싶은 것", "먹고 싶은 것", "갖고 싶은 것", "가고 싶은 곳", "여행", "취미"]
+        return str_list[self.category]
+
     def __str__(self):
         return f"{self.user}'s {self.title}"
 
