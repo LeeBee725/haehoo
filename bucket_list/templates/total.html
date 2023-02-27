@@ -45,6 +45,9 @@
 
       <div class="container">
         <div id="bucket-container" class="row row-cols-lg-4 row-cols-md-3 row-cols-1">
+        {% if total_bucket.all.count == 0 %}
+          <div id="hh-empty-content">검색된 버킷이 없습니다.</div>
+        {% endif %}
         {% for bucket in total_bucket.all %}
           <div id="bucket{{bucket.id}}" class="col">
             <div class="hh-bucket" value="{{bucket.id}}">

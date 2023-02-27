@@ -91,7 +91,6 @@ html, body {
 /*main*/
 
 main {
-    flex: 1;
     position: relative;
     top: 40px;
     min-height: calc(100% - 40px - 25px);
