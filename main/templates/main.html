@@ -1,34 +1,44 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block links %}
-<link rel="stylesheet" href="{% static 'css/main.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/main.css' %}" type="text/css" />
 {% endblock links %}
-
 {% block content %}
-<div class="hh-container">
-<div class="intro">
-    <p class="intro-contents">편지를 통해 어쩌구 해보세요.
-    <br>편지를 통해 어쩌구 하면 저쩌구 됩니다.
-    <br>가나다라마바사 아자차카타파하 아야어여오요우유으이
-    </p>
-</div>
-<div class="intro-page">
-    <a href="{% url 'guide' %}" class="intro-link">Read More</a>
-</div>
-<br><br><br><br>
-<div class="wrap">
-    <div class="wrapimage">
-        <img id="image" src="{% static 'image/mainimage.png' %}" >
+<div class="hh-main-container">
+  <div id="hh-intro-container">
+    <div class="hh-intro">
+      <p class="hh-intro-contents">
+        편지를 통해 어쩌구 해보세요. <br />편지를 통해 어쩌구 하면 저쩌구 됩니다.
+        <br />가나다라마바사 아자차카타파하 아야어여오요우유으이
+      </p>
     </div>
-    <div class="imagetext">
-        <p class="letter">Letter</p>
-        <p class="letter2">편지쓰러가기</p>
-        <p class="bucketlist">Bucket<br>List</p>
-        <p class="bucketlist2">버킷리스트<br>작성하기</p>
-        <a href="" class="letter-link"></a>
-        <a href="{% url 'total' %}" class="bucket-link"></a>
-
+    <div class="hh-intro-page">
+      <a href="{% url 'guide' %}" class="hh-intro-link">Read More</a>
     </div>
-</div>
+    <br /><br /><br /><br />
+  </div>
+  <div class="hh-book">
+    <div id="hh-book-image-container">
+      <div id="hh-milestone" class="hh-position-abs">
+        <section id="hh-letter-section" class="hh-book-section hh-position-rel">
+          <a id="letter-link" class="hh-book-anchor hh-position-abs" href=""></a>
+          <a id="hh-letter-title" class="hh-book-title" href="">Letter</a>
+          <br />
+          <a id="hh-letter-write" class="hh-book-write" href="">편지쓰러가기</a>
+        </section>
+        <section id="hh-bucketlist-section" class="hh-book-section hh-position-rel">
+          <a id="bucket-link" class="hh-book-anchor hh-position-abs" href="{% url 'total' %}"></a>
+          <a id="hh-bucketlist-title" class="hh-book-title" href="{% url 'total' %}">Bucket<br />List</a>
+          <br />
+          {% if user.is_authenticated %}
+          <a id="hh-bucketlist-write" class="hh-book-write" href="{% url 'create' user.nickname %}">버킷리스트<br />작성하기</a>
+          {% else %}
+          <a id="hh-bucketlist-write" class="hh-book-write" href="{% url 'login' %}">버킷리스트<br />작성하기</a>
+          {% endif %}
+        </section>
+      </div>
+      <img id="hh-book-image" src="{% static 'image/mainimage.png' %}" />
+    </div>
+  </div>
 </div>
 {% endblock %}

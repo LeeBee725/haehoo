@@ -17,6 +17,10 @@ a {
     color: black;
 }
 
+a:hover {
+    color: black;
+}
+
 ul {
     list-style: none;
     margin: 0;
