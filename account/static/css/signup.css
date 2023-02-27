@@ -1,37 +1,39 @@
-@font-face{
-	src: url("../fonts/MapoFlowerIsland.ttf");
-    font-family: "MapoFlowerIsland"; 
- }
-
- *{
+*{
     box-sizing: border-box;
     font-family: "MapoFlowerIsland";
 }
 
 input:focus {outline: none;}
 
+.title {
+    font-size: 2.5rem;
+}
+
 .signup-form {
-    padding: 100px;
+    width: 46.875%;
+    min-width: 320px;
+    max-width: 600px;
+    padding: 100px 0;
     margin: 0 auto;
+    border: 0;
+    border-radius: 5px;
     text-align: center;
 } 
-
-
 
 .already {
     margin-top: 10px;
     margin-bottom: 30px;
 }
 
-
-
 .text-container {
     margin-top: 30px;
 }
+
 .text {
-    width: 400px;
+    width: 66%;
+    min-width: 300px;
     height: 30px;
-    font-size: 14px;
+    font-size: 0.875rem;
     margin-bottom: 25px;
     padding: 10px;
     border-style: none;
@@ -41,35 +43,11 @@ input:focus {outline: none;}
     text-align: center;
 }
 
-
-.signup-end {
-    margin: 0 200px;
-}
-
-
-.end {
-    width: 100px;
-    height: 30px;
-    font-size: 14px;
-    border-radius: 20px;
-    border-style: solid;
-    border-color: black;
-    border-width: 1px;
-    background-color: white;
-}
-
 .signup.confirm.btn {
-    width: 400px;
-    font-size: 14px;
+    width: 66%;
+    font-size: 0.875rem;
     margin-bottom: 30px;
     padding: 10px;
     border: none;
     border-radius: 5px;
 }
-
-.gender.btn:hover{
-    background-color: silver;
-}
-
-
-

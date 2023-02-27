@@ -10,7 +10,8 @@
     이미 해후 회원이신가요? <a href="{% url 'login' %}">로그인</a>
   </div>
   <form action="{% url 'signup' %}" method="POST">
-    {% csrf_token %} {% if error %}
+    {% csrf_token %}
+    {% if error %}
     <p>{{error}}</p>
     <br />
     <br />
