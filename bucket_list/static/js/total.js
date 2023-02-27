@@ -114,7 +114,7 @@ function click_fix(bucketId, nickname) {
 }
 
 
-function createBtnDetail(bucketObj, nickname) {
+function createBtnDetail(bucketObj) {
     const btnDetail = document.createElement("button");
     btnDetail.setAttribute("type", "button");
     btnDetail.setAttribute("class", "hh-bucket-btn");
@@ -157,7 +157,7 @@ function createBtnLikeSpace(bucketObj, nickname) {
     return btnSpace;
 }
 
-function createBtnScrapSpace(bucketObj, nickname) {
+function createBtnScrapSpace(bucketObj) {
     const btnSpace = document.createElement("div");
     btnSpace.setAttribute("class", "hh-btn-space");
 
@@ -190,7 +190,7 @@ function createBucketDescription(bucketObj, nickname) {
     `;
     const btns = document.createElement("div");
     const btnLikeSpace = createBtnLikeSpace(bucketObj, nickname);
-    const btnScrapSpace = createBtnScrapSpace(bucketObj, nickname);
+    const btnScrapSpace = createBtnScrapSpace(bucketObj);
     btns.appendChild(btnLikeSpace);
     btns.appendChild(btnScrapSpace);
 
@@ -215,7 +215,7 @@ function createBucketElem(bucketObj, nickname) {
         });
     });
 
-    const btnDetail = createBtnDetail(bucketObj, nickname);
+    const btnDetail = createBtnDetail(bucketObj);
     const description = createBucketDescription(bucketObj, nickname);
     
     bucket.appendChild(btnDetail);
