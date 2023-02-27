@@ -62,7 +62,7 @@ def delete_bucketprcs(request, processid):
     if (deleted_url == bucket.thumbnail_url):
         img_of_processes = bucket.processes.filter(image__isnull=False)
         if (not img_of_processes):
-            bucket.thumbnail_url = staticfiles_storage.url("image/bucket.png")
+            bucket.thumbnail_url = staticfiles_storage.url("image/bucket.svg")
         else :
             bucket.thumbnail_url = img_of_processes.latest("createdAt").image.url
         bucket.save()
