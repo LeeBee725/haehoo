@@ -22,13 +22,17 @@
       <div id="hh-milestone" class="hh-position-abs">
         <section id="hh-letter-section" class="hh-book-section hh-position-rel">
           <a id="letter-link" class="hh-book-anchor hh-position-abs" href=""></a>
-          <a id="hh-letter-title" class="hh-book-title" href="">Letter</a>
+          <a id="hh-letter-title" class="hh-book-title" href="">
+            <img src="{% static 'image/letter_text.svg' %}" alt="letter">
+          </a>
           <br />
           <a id="hh-letter-write" class="hh-book-write" href="">편지쓰러가기</a>
         </section>
         <section id="hh-bucketlist-section" class="hh-book-section hh-position-rel">
           <a id="bucket-link" class="hh-book-anchor hh-position-abs" href="{% url 'total' %}"></a>
-          <a id="hh-bucketlist-title" class="hh-book-title" href="{% url 'total' %}">Bucket<br />List</a>
+          <a id="hh-bucketlist-title" class="hh-book-title" href="{% url 'total' %}">
+            <img src="{% static 'image/bucket_list_text.svg' %}" alt="bucket-list">
+          </a>
           <br />
           {% if user.is_authenticated %}
           <a id="hh-bucketlist-write" class="hh-book-write" href="{% url 'create' user.nickname %}">버킷리스트<br />작성하기</a>

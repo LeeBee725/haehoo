@@ -109,6 +109,16 @@ main {
     margin: 0;
 }
 
+#hh-bucketlist-title > img {
+    width: 80%;
+    margin: 0 0 0 auto;
+}
+
+#hh-letter-title > img {
+    width: 80%;
+    margin: 0 auto 0 0;
+}
+
 .hh-book-write {
     font-size: 1rem;
     line-height: 1em;
