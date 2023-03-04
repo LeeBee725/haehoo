@@ -81,7 +81,8 @@
     </div>
     <div class = "col">
         <div>
-            <h4>Comments</h4>
+            <h4 >Comments</h4>
+            <div id="cmntsection">
             {% for comment in total_comment %}
                 <div class="card" id="cmnt{{comment.id}}">
                     <div class="user-nickname">{{comment.user.nickname}}</div>
@@ -89,11 +90,10 @@
                     {% if user.id == comment.user.id %}
                         <button type="button" class="updatecmnt" onclick="showUpdateForm('cmnt{{comment.id}}', '{{comment.comment}}')">update</button>                    
                         <button type="button" class="deletecmnt" onclick="deleteComment('cmnt{{comment.id}}')">delete</button>                    
-
-                        {% comment %} <a href = "{% url 'deletecomment' bucketid=bucket.id commentid=comment.id %}">delete</a> {% endcomment %}
                     {% endif %}
                 </div>
             {%endfor%}
+            </div>
         </div>
         <div>
             {{ user.id|json_script:"user-id" }}
@@ -103,7 +103,6 @@
             {% else %}
                 <form method = 'GET' action = "{% url 'login' %}">
             {% endif %}
-                    {% comment %} {% csrf_token %}  {% endcomment %}
                     <table>
                         {{comment_form.as_table}}
                     </table>
