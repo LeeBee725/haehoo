@@ -13,9 +13,9 @@
     <script src="{% static 'js/csrf.js' %}" crossorigin="anonymous"></script>
 </head>
 
-<body class = "hh-container">
+<body class = "hh-container container-fluid">
 <div class = "row">
-    <div class = "col">
+    <div class = "col m-4 p-0">
         <div id="title" class="card">
             <div class="row">
                 <div class="col">
@@ -64,7 +64,7 @@
             </div>
         </div>  
         {% for process in total_process %}
-        <div class="card">
+        <div class="card mt-4 p">
             <h4>{{process.title}}</h4>
             {% if process.image %}
                 <image src="{{process.image.url}}" height = 100>
@@ -79,9 +79,8 @@
         </div>
         {% endfor %}
     </div>
-    <div class = "col">
+    <div class = "col p-4">
         <div>
-            <h4 >Comments</h4>
             <div id="cmntsection">
             {% for comment in total_comment %}
                 <div class="card" id="cmnt{{comment.id}}">
