@@ -94,7 +94,38 @@ formdata = new FormData(event.target)
                 throw new Error("get success:False data from django view...")
             }
             else{
-                console.log(data.success)
+                let card = document.createElement("div")
+                card.className = "card"
+                card.id = `cmnt${data.id}`
+
+                let nickname = document.createElement("div")
+                nickname.className = "user-nickname"
+                nickname.innerHTML = data.nickname
+
+                let newcmnt = document.createElement("div")
+                newcmnt.className = "cmnttext"
+                newcmnt.innerHTML = data.newcomment
+
+                let updatebutton = document.createElement("button")
+                updatebutton.className = "updatecmnt"
+                updatebutton.setAttribute("type", "button")
+                updatebutton.setAttribute("onclick", `showUpdateForm('cmnt${data.id}', ${data.newcomment})`)
+                updatebutton.innerHTML = "update"
+
+                let deletebutton = document.createElement("button")
+                deletebutton.className = "deletecmnt"
+                deletebutton.setAttribute("type", "button")
+                deletebutton.setAttribute("onclick", `deleteComment('cmnt${data.id}')`)
+                deletebutton.innerHTML = "delete"
+
+                card.appendChild(nickname)
+                card.appendChild(newcmnt)
+                card.appendChild(updatebutton)
+                card.appendChild(deletebutton)
+
+                let comentsection = document.getElementById("cmntsection")
+                comentsection.appendChild(card)
+                console.log("finish")
             }
         })
     }catch(error){
