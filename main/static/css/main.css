@@ -1,119 +1,156 @@
 /*배경*/
 
+* {
+    box-sizing: border-box;
+}
+
 main {
+    display: flex;
     background: linear-gradient(#FFFFFF, #e8e8e8);
 }
 
-.hh-container {
+.hh-main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 	width: 100%;
-	padding: 0 30px;
+	padding: 0 10px;
 	padding-top: 40px;
 	margin: 0 auto;
 	background: transparent;
 }
 
-/*메인 멘트*/
-
-.intro {
-    text-align: center;
-    margin-top: 80px;
+/*메인 멘트 컨테이너*/
+#hh-intro-container {
+    min-height: 100px;
 }
 
-.intro-contents {
-    font-size: 26px;
+/*메인 멘트*/
+
+.hh-intro {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.hh-intro-contents {
+    font-size: 1.125rem;
     font-family: 'MapoFlowerIsland';
 }
 
 /*read more*/
 
-.intro-page {
+.hh-intro-page {
     text-align: center;
     margin-top: 30px;
 }
 
-.intro-link {
+.hh-intro-link {
     font-family: 'MapoFlowerIsland';
-    font-size: 14px;
+    font-size: 0.875rem;
     color: #867D7D;
 }
 
-.intro-page > a:hover{
-
+.hh-intro-page > a:hover{
     border-bottom:1px solid #867D7D; 
     padding-bottom:1px;
 }
 
 /*메인 이미지*/
-
-.wrap img {
-    width: 87%;
+.hh-book img {
+    width: 100%;
     display: block;
     margin: auto;
 }
 
-.wrap {
+.hh-book {
+    --hh-book-max-width: 1000px;
     width: 100%;
-    position: relative;
+    max-width: var(--hh-book-max-width);
     margin: 0 auto;
 }
 
+#hh-book-image-container {
+    position: relative;
+    display: flex;
+    width: 100%;
+}
 
-.letter {
+.hh-position-abs {
+    position: absolute;
+}
+
+.hh-position-rel {
+    position: relative;
+}
+
+#hh-milestone {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.hh-book-section {
+    position: relative;
+    width: 50%;
+}
+
+.hh-book-anchor {
+    display: block;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.hh-book-title {
+    font-size: 2rem;
+    font-family: 'Sansita One';
+    line-height: 0.8em;
+    margin: 0;
+}
+
+#hh-bucketlist-title > img {
+    width: 80%;
+    margin: 0 0 0 auto;
+}
+
+#hh-letter-title > img {
+    width: 80%;
+    margin: 0 auto 0 0;
+}
+
+.hh-book-write {
+    font-size: 1rem;
+    line-height: 1em;
+    font-family: 'MapoFlowerIsland';
+    z-index: 2;
+}
+
+#hh-letter-title {
     position: absolute;
     top:20%;
     left:15%;
-    width: 30%;
-    font-size: 72px;
-    font-family: 'Sansita One';
     text-align: left;
 }
 
-.letter2 {
+#hh-letter-write {
     position: absolute;
     top: 70%;
     left: 15%;
-    width: 30%;
-    font-size: 20px;
-    font-family: 'MapoFlowerIsland';
     text-align: left;
 }
 
 
-.bucketlist {
+#hh-bucketlist-title {
     position: absolute;
     top: 20%;
     right:15%;
-    width: 70%;
-    font-size: 72px;
-    font-family: 'Sansita One';
     text-align: right;
 }
 
-.bucketlist2 {
+#hh-bucketlist-write {
     position: absolute;
     top: 70%;
     right: 15%;
-    width: 70%;
-    font-size: 20px;
-    font-family: 'MapoFlowerIsland';
     text-align: right;
 }
-
-.letter-link {
-    background: transparent;
-    width: 470px;
-    height: 490px;
-    position: absolute;
-    top:0%;
-    left:10%; 
-}
-
-.bucket-link {
-    background: transparent;
-    width: 470px;
-    height: 490px;
-    position: absolute;
-    top: 0%;
-    right:10%;
-}
-

@@ -114,7 +114,7 @@ function click_fix(bucketId, nickname) {
 }
 
 
-function createBtnDetail(bucketObj, nickname) {
+function createBtnDetail(bucketObj) {
     const btnDetail = document.createElement("button");
     btnDetail.setAttribute("type", "button");
     btnDetail.setAttribute("class", "hh-bucket-btn");
@@ -157,7 +157,7 @@ function createBtnLikeSpace(bucketObj, nickname) {
     return btnSpace;
 }
 
-function createBtnScrapSpace(bucketObj, nickname) {
+function createBtnScrapSpace(bucketObj) {
     const btnSpace = document.createElement("div");
     btnSpace.setAttribute("class", "hh-btn-space");
 
@@ -179,18 +179,19 @@ function createBtnScrapSpace(bucketObj, nickname) {
 }
 
 function createBucketDescription(bucketObj, nickname) {
+    const categories = ["", "하고 싶은 것", "먹고 싶은 것", "갖고 싶은 것", "가고 싶은 곳", "여행", "취미"];
     const description = document.createElement("div");
     description.setAttribute("class", "hh-bucket-description");
     description.innerHTML = ` \
         <p id="bucket-title" class="description-title">${bucketObj.fields.title}</p> \
         <span> \
             <p id="bucket-user" class="description-username">${nickname}</p> \
-            <p id="bucket-category" class="description-category">${bucketObj.fields.category}</p> \
+            <p id="bucket-category" class="description-category" value="${bucketObj.fields.category}">${categories[bucketObj.fields.category]}</p> \
         </span> \
     `;
     const btns = document.createElement("div");
     const btnLikeSpace = createBtnLikeSpace(bucketObj, nickname);
-    const btnScrapSpace = createBtnScrapSpace(bucketObj, nickname);
+    const btnScrapSpace = createBtnScrapSpace(bucketObj);
     btns.appendChild(btnLikeSpace);
     btns.appendChild(btnScrapSpace);
 
@@ -215,7 +216,7 @@ function createBucketElem(bucketObj, nickname) {
         });
     });
 
-    const btnDetail = createBtnDetail(bucketObj, nickname);
+    const btnDetail = createBtnDetail(bucketObj);
     const description = createBucketDescription(bucketObj, nickname);
     
     bucket.appendChild(btnDetail);
@@ -255,7 +256,7 @@ function click_scrap(btn, nickname) {
     let bucket = {
         "title": bucketElem.querySelector("#bucket-title").textContent,
         "user": nickname,
-        "category": bucketElem.querySelector("#bucket-category").textContent
+        "category": bucketElem.querySelector("#bucket-category").getAttribute("value")
     };
     let url = `${window.origin}/bucket-list/${nickname}/scrap/${bucket_id}`;
     xhr.open("POST", url, true);

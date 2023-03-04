@@ -1,53 +1,47 @@
-@font-face{
-	src: url("../fonts/MapoFlowerIsland.ttf");
-    font-family: "MapoFlowerIsland"; 
- }
+*{
+    box-sizing: border-box;
+    font-family: "MapoFlowerIsland";
+}
 
- *{
-     box-sizing: border-box;
-     font-family: "MapoFlowerIsland";
- }
-
- body {
-     margin: 0;
- }
-
- 
 input:focus {
     outline: none;
     background-color: white;
 }
 
 input:-webkit-autofill {
-	-webkit-box-shadow: 0 0 0 1000px white inset;
-	box-shadow: 0 0 0 1000px white inset;
+    -webkit-box-shadow: 0 0 0 1000px white inset;
+    box-shadow: var(-webkit-box-shadow);
 }
 
- .login-form {
-     width: 600px;
-     border: 0;
-     border-radius: 5px;
-     padding-top: 100px;
-     margin: 0 auto;
-     padding-bottom: 100px;
-     text-align: center;
+h1 {
+    font-size: 2.5rem;
+}
 
- }
+.login-form {
+    width: 46.875%;
+    min-width: 320px;
+    max-width: 600px;
+    border: 0;
+    border-radius: 5px;
+    padding: 100px 0;
+    margin: 0 auto;
+    text-align: center;
+}
 
- .title {
-     color: #444444;
-     margin-bottom: 60px;
+.title {
+    color: #444444;
+    margin-bottom: 60px;
+}
 
- }
-
- .h1 {
+.h1 {
     font-weight: lighter;
- }
+}
  
 .text-field {
-    width: 400px;
+    width: 66%;
+    min-width: 300px;
     height: 30px;
-    font-size: 14px;
+    font-size: 0.875rem;
     margin-bottom: 25px;
     padding: 10px;
     border-style: none;
@@ -57,12 +51,10 @@ input:-webkit-autofill {
     text-align: center;
 }
 
-
-
-
 .submit-btn {
-    width: 400px;
-    font-size: 14px;
+    width: 66%;
+    min-width: 300px;
+    font-size: 0.875rem;
     margin-bottom: 30px;
     padding: 10px;
     border: none;

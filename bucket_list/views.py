@@ -10,7 +10,11 @@ def total(request):
     if request.user.is_authenticated:
         user_scraps = request.user.buckets.filter(derived_bucket__isnull=False) \
                         .values_list("derived_bucket_id", flat=True)
-    total_bucket = Bucket.objects
+    category_num = request.GET.get("category")
+    if (category_num is None or category_num == "0"):
+        total_bucket = Bucket.objects
+    else:
+        total_bucket = Bucket.objects.filter(category=category_num)
     return render(request, "total.html", {"total_bucket" : total_bucket, "user_scraps": user_scraps})
 
 def private(request, nickname):

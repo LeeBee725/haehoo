@@ -15,8 +15,13 @@ def show_bucketprcs(request, bucketid):
     total_comment = Comment.objects.filter(bucket = bucketid)
     
     comment_form = CommentForm()
+
+    user_scraps = None
+    if request.user.is_authenticated:
+        user_scraps = request.user.buckets.filter(derived_bucket__isnull=False) \
+                        .values_list("derived_bucket_id", flat=True)
     
-    return render(request, "prcs_popup.html",{'total_process' : total_process, 'bucket' : bucket, 'total_comment' : total_comment,"comment_form" : comment_form})
+    return render(request, "prcs_popup.html",{'total_process' : total_process, 'bucket' : bucket, 'total_comment' : total_comment,"comment_form" : comment_form, "user_scraps":user_scraps})
 
 def create_bucketprcs(request, bucketid):
     if request.method == 'GET':
@@ -57,7 +62,7 @@ def delete_bucketprcs(request, processid):
     if (deleted_url == bucket.thumbnail_url):
         img_of_processes = bucket.processes.filter(image__isnull=False)
         if (not img_of_processes):
-            bucket.thumbnail_url = staticfiles_storage.url("image/bucket.png")
+            bucket.thumbnail_url = staticfiles_storage.url("image/bucket.svg")
         else :
             bucket.thumbnail_url = img_of_processes.latest("createdAt").image.url
         bucket.save()
