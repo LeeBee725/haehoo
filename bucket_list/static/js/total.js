@@ -208,7 +208,7 @@ function createBucketElem(bucketObj, nickname) {
     bucket.setAttribute("class", "hh-bucket");
     bucket.setAttribute("value", bucketObj.pk);
     bucket.addEventListener("click", function() {
-        $('#exampleModal .modal-body').load(`${window.origin}/bucketprocess/${bucketObj.pk}`, function(){
+        $('#exampleModal .modal-body').load(`${window.origin}/bucketprocess/${bucketObj.pk}/?cmnt_pg=1`, function(){
             $('#exampleModal').modal('show');
             $(`#exampleModal .modal-body #btn-like${bucketObj.pk}`).on("click", function() {
                 click_like(this, nickname);

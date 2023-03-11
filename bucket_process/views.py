@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.staticfiles.storage import staticfiles_storage
-
+from django.core.paginator import Paginator
 
 from bucket_list.models import Bucket
 from account.models import HaehooUser
@@ -12,7 +12,7 @@ def show_bucketprcs(request, bucketid):
     total_process = Process.objects.filter(bucket = bucketid)
     bucket = Bucket.objects.get(pk = bucketid)
     
-    total_comment = Comment.objects.filter(bucket = bucketid)
+    total_comment = Comment.objects.filter(bucket = bucketid).order_by('-createdAt')
     
     comment_form = CommentForm()
 
@@ -21,7 +21,15 @@ def show_bucketprcs(request, bucketid):
         user_scraps = request.user.buckets.filter(derived_bucket__isnull=False) \
                         .values_list("derived_bucket_id", flat=True)
     
-    return render(request, "prcs_popup.html",{'total_process' : total_process, 'bucket' : bucket, 'total_comment' : total_comment,"comment_form" : comment_form, "user_scraps":user_scraps})
+    cmnt_page = request.GET.get('cmnt_pg')
+    if cmnt_page == None:
+        print("cmnt_pg is None")
+        return render(request, "prcs_popup.html",{'total_process' : total_process, 'bucket' : bucket, 'total_comment' : total_comment,"comment_form" : comment_form, "user_scraps":user_scraps})
+    else:
+        print(cmnt_page)
+        paginator = Paginator(total_comment, 3)
+        cmnt_per_page = paginator.page(cmnt_page)
+        return render(request, "prcs_popup.html",{'total_process' : total_process, 'bucket' : bucket, 'total_comment' :cmnt_per_page,"comment_form" : comment_form, "user_scraps":user_scraps})
 
 def create_bucketprcs(request, bucketid):
     if request.method == 'POST' or request.method == 'FILES':
