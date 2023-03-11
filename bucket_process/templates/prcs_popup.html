@@ -23,34 +23,34 @@
                     <div class="card-body">
                         <div>
                             <div class="hh-btn-space">
-                            {% if user in bucket.liked_users.all %}
-                            <button id="btn-like{{bucket.id}}" class="hh-btn-like" value="{{bucket.id}}">
-                                <img src="{% static 'image/like_fill.svg' %}" alt="♥">
-                            </button>
-                            {% else %}
-                            <button id="btn-like{{bucket.id}}" class="hh-btn-like" value="{{bucket.id}}">
-                                <img src="{% static 'image/like.svg' %}" alt="♡">
-                            </button>
-                            {% endif %}
-                            <label for="btn-like{{bucket.id}}">{{ bucket.liked_users.count }}</label>
+                                {% if user in bucket.liked_users.all %}
+                                <button id="btn-like{{bucket.id}}" class="hh-btn-like" value="{{bucket.id}}">
+                                    <img src="{% static 'image/like_fill.svg' %}" alt="♥">
+                                </button>
+                                {% else %}
+                                <button id="btn-like{{bucket.id}}" class="hh-btn-like" value="{{bucket.id}}">
+                                    <img src="{% static 'image/like.svg' %}" alt="♡">
+                                </button>
+                                {% endif %}
+                                <label for="btn-like{{bucket.id}}">{{ bucket.liked_users.count }}</label>
                             </div>
                             <div class="hh-btn-space">
-                            {% if user != bucket.user %}
-                            {% if bucket.id in user_scraps.all %}
-                            <button id="btn-scrap{{bucket.id}}" class="hh-btn-scrap" value="{{bucket.id}}">
-                                <img src="{% static 'image/bookmark_fill.svg' %}" alt="퍼가기 취소">
-                            </button>
-                            {% else %}
-                            <button id="btn-scrap{{bucket.id}}" class="hh-btn-scrap" value="{{bucket.id}}">
-                                <img src="{% static 'image/bookmark.svg' %}" alt="퍼가기">
-                            </button>
-                            {% endif %}
-                            {% else %}
-                            <span id="btn-scrap{{bucket.id}}">
-                                <img src="{% static 'image/bookmark_me.svg' %}" alt="나의버킷퍼간수">
-                            </span>
-                            {% endif %}
-                            <label for="btn-scrap{{bucket.id}}">{{ bucket.deriving_bucket.all.count }}</label>
+                                {% if user != bucket.user %}
+                                {% if bucket.id in user_scraps.all %}
+                                <button id="btn-scrap{{bucket.id}}" class="hh-btn-scrap" value="{{bucket.id}}">
+                                    <img src="{% static 'image/bookmark_fill.svg' %}" alt="퍼가기 취소">
+                                </button>
+                                {% else %}
+                                <button id="btn-scrap{{bucket.id}}" class="hh-btn-scrap" value="{{bucket.id}}">
+                                    <img src="{% static 'image/bookmark.svg' %}" alt="퍼가기">
+                                </button>
+                                {% endif %}
+                                {% else %}
+                                <span id="btn-scrap{{bucket.id}}">
+                                    <img src="{% static 'image/bookmark_me.svg' %}" alt="나의버킷퍼간수">
+                                </span>
+                                {% endif %}
+                                <label for="btn-scrap{{bucket.id}}">{{ bucket.deriving_bucket.all.count }}</label>
                             </div>
                         </div>
                         <div class="description-username">{{ bucket.referenced_users.count }}</div>
@@ -65,34 +65,49 @@
         </div>  
         {% for process in total_process %}
         <div class="card mt-4 p">
-            <h4>{{process.title}}</h4>
-            {% if process.image %}
-                <image src="{{process.image.url}}" height = 100>
-            {%endif%}
-            <p>{{process.text}}</p>
-            <p>{{process.createdAt}}</p>
-            {% if user.id == process.bucket.user.id %}
-                <a href = "{% url 'processedit' process.id %}">edit process</a>
-                <a href = "{% url 'processdelete' process.id %}">delete process</a>
-            {% endif %}
-            <br>
+            <div class='card-body'>
+                <h4 class="card-title">{{process.title}}</h4>
+                {% if process.image %}
+                    <image src="{{process.image.url}}" height = 100>
+                {%endif%}
+                <p class='card-text'>{{process.text}}</p>
+                <p>{{process.createdAt}}</p>
+                {% if user.id == process.bucket.user.id %}
+                    <a href = "{% url 'processedit' process.id %}">edit process</a>
+                    <a href = "{% url 'processdelete' process.id %}">delete process</a>
+                {% endif %}
+            </div>
         </div>
         {% endfor %}
+        {% if user.id == bucket.user.id %}
+        <div class="card mt-4 p">
+            <div class='card-body'>
+                <form id="createprcs" method="POST" enctype = "multipart/form-data">
+                    <div class='card-title'>
+                        <input class="form-control" type="text" id="process_title" placeholder="성과제목">
+                    </div>
+                    <div class='card-text'>
+                        <textarea class="form-control" id="process_text" placeholder="성과내용을 입력하세요" rows="3"></textarea>                    
+                        <input class="form-control form-control-sm" id="process_image" type="file">
+                        <button type="submit" class="btn btn-primary mb-3">성과 추가하기</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% endif %}
     </div>
     <div class = "col p-4">
-        <div>
-            <div id="cmntsection">
-            {% for comment in total_comment %}
-                <div class="card" id="cmnt{{comment.id}}">
-                    <div class="user-nickname">{{comment.user.nickname}}</div>
-                    <div class="cmnttext">{{comment.comment}}</div>
-                    {% if user.id == comment.user.id %}
-                        <button type="button" class="updatecmnt" onclick="showUpdateForm('cmnt{{comment.id}}', '{{comment.comment}}')">update</button>                    
-                        <button type="button" class="deletecmnt" onclick="deleteComment('cmnt{{comment.id}}')">delete</button>                    
-                    {% endif %}
-                </div>
-            {%endfor%}
+        <div id="cmntsection">
+        {% for comment in total_comment %}
+            <div class="card" id="cmnt{{comment.id}}">
+                <div class="user-nickname">{{comment.user.nickname}}</div>
+                <div class="cmnttext">{{comment.comment}}</div>
+                {% if user.id == comment.user.id %}
+                    <button type="button" class="updatecmnt" onclick="showUpdateForm('cmnt{{comment.id}}', '{{comment.comment}}')">update</button>                    
+                    <button type="button" class="deletecmnt" onclick="deleteComment('cmnt{{comment.id}}')">delete</button>                    
+                {% endif %}
             </div>
+        {%endfor%}
         </div>
         <div>
             {{ user.id|json_script:"user-id" }}

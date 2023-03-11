@@ -24,20 +24,37 @@ def show_bucketprcs(request, bucketid):
     return render(request, "prcs_popup.html",{'total_process' : total_process, 'bucket' : bucket, 'total_comment' : total_comment,"comment_form" : comment_form, "user_scraps":user_scraps})
 
 def create_bucketprcs(request, bucketid):
-    if request.method == 'GET':
-        form = ProcessForm()    
-        return render(request, "prcs_create.html", {'process_form': form})
+    if request.method == 'POST' or request.method == 'FILES':
+        print(request)
+        print(request.POST)
+        # print("title",request.POST['process_title'])
+        # print("text",request.POST['process_text'])
+        # print("image",request.POST['process_image'])
+
+        
+        # bucket = Bucket.objects.get(pk = bucketid)
+        # newprcs = Process(bucket = bucket)
+        # newprcs.title = request
+        # newprcs.save()
+        return JsonResponse({"success":True})
+    else:
+        print("save fail")
+        return JsonResponse({"success":False})
+  
+    # comment = Comment.objects.get(pk = commentid)
+    # if request.method != "POST":
+    #     return JsonResponse({"message":"Permission denied."})
     
-    elif request.method == 'POST' or request.method == 'FILES':
-        form = ProcessForm(request.POST, request.FILES)
-        if form.is_valid():
-            bucket = Bucket.objects.get(pk = bucketid)
-            prcs_instance = Process(bucket = bucket)
-            form = ProcessForm(request.POST, request.FILES, instance= prcs_instance)
-            form.save()
-            bucket.thumbnail_url = prcs_instance.image.url
-            bucket.save()
-            return redirect('bucketprocess', bucketid = bucketid)
+    # if request.method == 'POST':                
+    #     newcomment = request.POST['comment']        
+    #     comment.comment = newcomment
+    #     comment.save()
+        
+    #     print("save success")
+    #     return JsonResponse({"success":True, "newcomment":newcomment})
+    # else:
+    #     print("save fail")
+    #     return JsonResponse({"success":False})
 
 def edit_bucketprcs(request, processid):
     process = Process.objects.get(pk = processid)
@@ -86,16 +103,14 @@ def delete_comment(request, commentid):
 def update_comment(request, commentid):
     comment = Comment.objects.get(pk = commentid)
     if request.method != "POST":
-        return JsonResponse({"message":"Permission denied."})
+        print("save fail")
+        return JsonResponse({"success":False})
     
-    if request.method == 'POST':                
+    elif request.method == 'POST':                
         newcomment = request.POST['comment']        
         comment.comment = newcomment
         comment.save()
         
         print("save success")
         return JsonResponse({"success":True, "newcomment":newcomment})
-    else:
-        print("save fail")
-        return JsonResponse({"success":False})
         

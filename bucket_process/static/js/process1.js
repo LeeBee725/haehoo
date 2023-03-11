@@ -79,7 +79,7 @@ userid = document.getElementById("user-id").innerHTML
 
 var form = document.getElementById("createcmnt")
 form.onsubmit = (event) =>{
-formdata = new FormData(event.target)
+    formdata = new FormData(event.target)
     try{
         fetch(`${window.location.origin}/bucketprocess/${bucketid}/createcomment/${userid}`, {
             method: form.getAttribute('method'),
@@ -109,7 +109,7 @@ formdata = new FormData(event.target)
                 let updatebutton = document.createElement("button")
                 updatebutton.className = "updatecmnt"
                 updatebutton.setAttribute("type", "button")
-                updatebutton.setAttribute("onclick", `showUpdateForm('cmnt${data.id}', ${data.newcomment})`)
+                updatebutton.setAttribute("onclick", `showUpdateForm('cmnt${data.id}', '${data.newcomment}')`)
                 updatebutton.innerHTML = "update"
 
                 let deletebutton = document.createElement("button")
@@ -126,6 +126,33 @@ formdata = new FormData(event.target)
                 let comentsection = document.getElementById("cmntsection")
                 comentsection.appendChild(card)
                 console.log("finish")
+            }
+        })
+    }catch(error){
+        console.error(error)
+    }
+    return false
+}
+
+var processform = document.getElementById("createprcs")
+processform.onsubmit = (event) =>{
+    formdata = new FormData(event.target)
+    console.log(fomdata.getAll())
+    try{
+        fetch(`${window.location.origin}/bucketprocess/${bucketid}/create`, {
+            method: form.getAttribute('method'),
+            headers: {
+                'X-CSRFToken': getCsrfToken()
+                },
+            body: formdata
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success){
+                throw new Error("get success:False data from django view...")
+            }
+            else{
+                
             }
         })
     }catch(error){
