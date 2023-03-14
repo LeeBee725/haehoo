@@ -8,7 +8,11 @@ function event_update(userNickname) {
                 event.stopPropagation();
             });
             $(`#exampleModal .modal-body #btn-scrap${bucketId}`).on("click", function(event) {
-                click_scrap(this, userNickname);
+                let bucket_id = this.getAttribute("value");
+                let bucketElem = document.querySelector(`#bucket${bucket_id}`);
+                let title = bucketElem.querySelector("#bucket-title").textContent;
+                let category = bucketElem.querySelector("#bucket-category").getAttribute("value");
+                click_scrap(bucket_id, title, category, userNickname, scrapBtnChange);
                 event.stopPropagation();
             });
         });
@@ -24,8 +28,12 @@ function event_update(userNickname) {
     
     let btnScraps = document.getElementsByClassName("hh-btn-scrap");
     for (let i = 0; i < btnScraps.length; ++i) {
+        let bucket_id = btnScraps[i].getAttribute("value");
+        let bucketElem = document.querySelector(`#bucket${bucket_id}`);
+        let title = bucketElem.querySelector("#bucket-title").textContent;
+        let category = bucketElem.querySelector("#bucket-category").getAttribute("value");
         btnScraps[i].addEventListener("click", (event) => {
-            click_scrap(btnScraps[i], userNickname);
+            click_scrap(bucket_id, title, category, userNickname, scrapBtnChange);
             event.stopPropagation();
         });
     }
@@ -47,12 +55,6 @@ window.onload = function() {
     }
 
     event_update(userNickname);
-    
-    // let newElement = document.createElement("h4");
-    // newPara.innerHTML = "This is a new paragraph.";
-    // let parentDiv = document.getElementById("myDiv");
-    // parentDiv.appendChild(newPara);
-    // hide & show div에 보내주고
 }
 
 function click_like(btn, nickname) {
@@ -247,50 +249,45 @@ function createAlertBox(type, msg, url) {
     return alertBox
 }
 
-function click_scrap(btn, nickname) {
+const scrapBtnChange = (id, data) => {
+    let scrapCnts = document.querySelectorAll(`#btn-scrap${id} + label`);
+    let btnScraps = document.querySelectorAll(`#btn-scrap${id}`);
+    
+    for (let i = 0; i < scrapCnts.length; ++i)
+        scrapCnts[i].textContent = data.scrap_cnt;
+    if (data.type == "create") {
+        for (let i = 0; i < btnScraps.length; ++i) {
+            btnScraps[i].querySelector("img").setAttribute("src", "/static/image/bookmark_fill.svg");
+        }
+    } else {
+        for (let i = 0; i < btnScraps.length; ++i) {
+            btnScraps[i].querySelector("img").setAttribute("src", "/static/image/bookmark.svg");
+        }
+    }
+}
+
+function click_scrap(id, title, category, nickname, btn_change) {
     if (nickname == "" || nickname == null)
         window.location.assign(`${window.origin}/account/login/`);
-    let xhr = new XMLHttpRequest();
-    let bucket_id = btn.getAttribute("value");
-    let bucketElem = document.querySelector(`#bucket${bucket_id}`);
-    let bucket = {
-        "title": bucketElem.querySelector("#bucket-title").textContent,
-        "user": nickname,
-        "category": bucketElem.querySelector("#bucket-category").getAttribute("value")
-    };
-    let url = `${window.origin}/bucket-list/${nickname}/scrap/${bucket_id}`;
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-type", "application/json");
-    xhr.setRequestHeader("X-CSRFToken", getCsrfToken());
-    xhr.send(JSON.stringify(bucket));
-
-    xhr.onload = function() {
-        if (xhr.status == 200) {
-            let res = JSON.parse(xhr.response);
-            let scrapCnts = document.querySelectorAll(`#btn-scrap${bucket_id} + label`);
-            let btnScraps = document.querySelectorAll(`#btn-scrap${bucket_id}`);
-
-            for (let i = 0; i < scrapCnts.length; ++i)
-                scrapCnts[i].textContent = res.scrap_cnt;
-            if (res.type == "create") {
-                for (let i = 0; i < btnScraps.length; ++i) {
-                    btnScraps[i].querySelector("img").setAttribute("src", "/static/image/bookmark_fill.svg");
-                }
-                let newBucketElem = createBucketElem(JSON.parse(res.new_bucket)[0], nickname);
-                let alertBox = createAlertBox("success", "새 버킷이 생성되었습니다.", `${window.origin}/bucket-list/${nickname}`);
-                document.querySelector("#bucket-container").appendChild(newBucketElem);
-                document.querySelector("#alert-space").appendChild(alertBox);
-            } else {
-                for (let i = 0; i < btnScraps.length; ++i) {
-                    btnScraps[i].querySelector("img").setAttribute("src", "/static/image/bookmark.svg");
-                }
-                let deletedElem = document.querySelector(`#bucket${res.deleted_bucket_id}`);
-                let alertBox = createAlertBox("success", "버킷을 삭제했습니다.", null);
-                document.querySelector("#bucket-container").removeChild(deletedElem);
-                document.querySelector("#alert-space").appendChild(alertBox);
+    const form_data = new FormData();
+    form_data.append("title", title);
+    form_data.append("category", category);
+    try {
+        fetch(`${window.origin}/bucket-list/${nickname}/scrap/${id}`, {
+            method: "POST",
+            headers: {
+                'X-CSRFToken': getCsrfToken()
+            },
+            body: form_data
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message != 'OK') {
+                throw new Error("Click Scrap Fail.");
             }
-        } else {
-            // fail
-        }
+            btn_change(id, data);
+        })
+    } catch (error) {
+        console.error(error);
     }
 }

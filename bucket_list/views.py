@@ -106,11 +106,13 @@ def click_scrap(request, nickname, bucket_id):
             "scrap_cnt": bucket.deriving_bucket.all().count(), \
             "deleted_bucket_id": deleted_id
         })
-    data = json.loads(request.body)
+    # data = json.loads(request.body)
     derived = Bucket(
         user = user,
-        title = data["title"],
-        category = data["category"],
+        title = request.POST["title"],
+        category = request.POST["category"],
+        # title = data["title"],
+        # category = data["category"],
         derived_bucket = bucket
     )
     derived.save()
