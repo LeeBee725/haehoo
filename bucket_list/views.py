@@ -18,10 +18,14 @@ def total(request):
     return render(request, "total.html", {"total_bucket" : total_bucket, "user_scraps": user_scraps})
 
 def private(request, nickname):
+    user_scraps = None
+    if request.user.is_authenticated:
+        user_scraps = request.user.buckets.filter(derived_bucket__isnull=False) \
+                        .values_list("derived_bucket_id", flat=True)
     user = HaehooUser.objects.filter(nickname = nickname)
     buckets = Bucket.objects.filter(user = user.get())
     ordered_records = Bucket.objects.filter(user = user.get()).order_by('-createdAt')
-    return render(request, "private.html", {"nickname" : nickname, "buckets" : buckets, "ordered_records" : ordered_records})
+    return render(request, "private.html", {"nickname" : nickname, "buckets" : buckets, "ordered_records" : ordered_records, "user_scraps": user_scraps})
 
 def create(request, nickname):
     if request.method == "POST":

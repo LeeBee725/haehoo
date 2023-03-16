@@ -1,10 +1,10 @@
 function eventUpdate(userNickname) {
     $('.hh-bucket').on('click', function() {
         let bucketId = this.getAttribute("value");
-        $('#exampleModal .modal-body').load(`${window.origin}/bucketprocess/${bucketId}`, function(){
+        $('#exampleModal .modal-body').load(`${window.origin}/bucketprocess/${bucketId} #hh-popup`, function(){
             $('#exampleModal').modal('show');
             $(`#exampleModal .modal-body #btn-like${bucketId}`).on("click", function(event) {
-                clickLike(this, userNickname);
+                clickLike(this.getAttribute("value"), userNickname, likeBtnChange);
                 event.stopPropagation();
             });
             $(`#exampleModal .modal-body #btn-scrap${bucketId}`).on("click", function(event) {
@@ -21,7 +21,7 @@ function eventUpdate(userNickname) {
     let btnLikes = document.getElementsByClassName("hh-btn-like");
     for (let i = 0; i < btnLikes.length; ++i) {
         btnLikes[i].addEventListener("click", (event) => {
-            clickLike(btnLikes[i], userNickname);
+            clickLike(btnLikes[i].getAttribute("value"), userNickname, likeBtnChange);
             event.stopPropagation();
         });
     }
@@ -37,6 +37,10 @@ function eventUpdate(userNickname) {
             event.stopPropagation();
         });
     }
+    let anchorUserName = document.getElementsByClassName("description-username");
+    for (let i = 0; i < anchorUserName.length; ++i) {
+        anchorUserName[i].addEventListener("click", (event) => event.stopPropagation());
+    }
 }
 
 window.onload = function() {
@@ -51,40 +55,6 @@ window.onload = function() {
 
     eventUpdate(userNickname);
 }
-
-function clickLike(btn, nickname) {
-    if (nickname == "" || nickname == null)
-        window.location.assign(`${window.origin}/account/login/`);
-    let xhr = new XMLHttpRequest();
-    let bucketId = btn.getAttribute("value");
-    let url = `${window.origin}/bucket-list/${nickname}/like/${bucketId}`;
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-type", "application/json");
-    xhr.setRequestHeader("X-CSRFToken", getCsrfToken());
-    xhr.send()
-
-    xhr.onload = function() {
-        if (xhr.status == 200) {
-            let res = JSON.parse(xhr.response);
-            let likeCnts = document.querySelectorAll(`#btn-like${bucketId} + label`);
-            let btnLikes = document.querySelectorAll(`#btn-like${bucketId}`);
-            
-            for (let i = 0; i < likeCnts.length; ++i) {
-                likeCnts[i].textContent = res.like_cnt;
-            }
-            if (res.is_contains) {
-                for (let i = 0; i < btnLikes.length; ++i)
-                    btnLikes[i].querySelector("img").setAttribute("src", "/static/image/like_fill.svg");
-            } else {
-                for (let i = 0; i < btnLikes.length; ++i)
-                    btnLikes[i].querySelector("img").setAttribute("src", "/static/image/like.svg");
-            }
-        } else {
-            // fail 처리
-        }
-    }
-}
-
 
 function click_fix(bucketId, nickname) {
     var xhr = new XMLHttpRequest();
@@ -222,25 +192,4 @@ function createBucketElem(bucketObj, nickname) {
     return elem;
 }
 
-const scrapBtnChange = (id, data) => {
-    let scrapCnts = document.querySelectorAll(`#btn-scrap${id} + label`);
-    let btnScraps = document.querySelectorAll(`#btn-scrap${id}`);
-    
-    for (let i = 0; i < scrapCnts.length; ++i)
-        scrapCnts[i].textContent = data.scrap_cnt;
-    if (data.type == "create") {
-        for (let i = 0; i < btnScraps.length; ++i) {
-            btnScraps[i].querySelector("img").setAttribute("src", "/static/image/bookmark_fill.svg");
-        }
-        const newBucketPath = document.createElement("a");
-        newBucketPath.setAttribute("style", "margin:0 5px;")
-        newBucketPath.setAttribute("href", `${window.origin}/bucketprocess/${JSON.parse(data.new_bucket)[0].pk}`);
-        newBucketPath.innerHTML = "<small>바로가기</small>";
-        alertHaehooAlert("success", "새 버킷이 생성되었습니다.", newBucketPath);
-    } else {
-        for (let i = 0; i < btnScraps.length; ++i) {
-            btnScraps[i].querySelector("img").setAttribute("src", "/static/image/bookmark.svg");
-        }
-        alertHaehooAlert("success", "버킷을 삭제하였습니다.");
-    }
-}
+

@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block links %}
-<script src="{% static 'js/total.js' %}" crossorigin="anonymous"></script>
+<script src="{% static 'js/private.js' %}" crossorigin="anonymous"></script>
 {% endblock links %}
 {% block content %}
+    {{user.nickname|json_script:"user-nickname"}}
     <div class="hh-container">
         <br><br><br>
         <h1>
@@ -74,18 +75,44 @@
         <br><br>
         {% for bucket in buckets %}
         <!-- hide & show / div 감싸고-->
-            <h4><a href="{% url 'bucketprocess' bucket.id %}">{{bucket.title}}</a></h4>
-            <h4>{{bucket.category}}</h4> 
+        <div id="bucket{{bucket.id}}">
+            <h4><a id="bucket-title" href="{% url 'bucketprocess' bucket.id %}">{{bucket.title}}</a></h4>
+            <h4 id="bucket-category" value="{{bucket.category}}">{{bucket.category_to_str}}</h4> 
             <!-- id주고 -->
             <h4>{{bucket.createdAt}}</h4>
 
-            {% if user in bucket.liked_users.all %}
-                <button id="btn-like{{bucket.id}}" onclick="click_like('{{bucket.id}}', '{{user.nickname}}')">♥</button>
-            {% else %}
-                <button id="btn-like{{bucket.id}}" onclick="click_like('{{bucket.id}}', '{{user.nickname}}')">♡</button>
-            {% endif %}
-            <p id="like_cnt{{bucket.id}}" class="description-username">{{ bucket.liked_users.count }}</p>
-            <button>퍼가기</button>
+            <div>
+                <div class="hh-btn-space">
+                {% if user in bucket.liked_users.all %}
+                    <button id="btn-like{{bucket.id}}" class="hh-btn-like" value="{{bucket.id}}">
+                        <img src="{% static 'image/like_fill.svg' %}" alt="♥">
+                    </button>
+                {% else %}
+                    <button id="btn-like{{bucket.id}}" class="hh-btn-like" value="{{bucket.id}}">
+                        <img src="{% static 'image/like.svg' %}" alt="♡">
+                    </button>
+                {% endif %}
+                    <label for="btn-like{{bucket.id}}">{{ bucket.liked_users.count }}</label>
+                </div>
+                <div class="hh-btn-space">
+                {% if user != bucket.user %}
+                {% if bucket.id in user_scraps.all %}
+                    <button id="btn-scrap{{bucket.id}}" class="hh-btn-scrap" value="{{bucket.id}}">
+                        <img src="{% static 'image/bookmark_fill.svg' %}" alt="퍼가기 취소">
+                    </button>
+                {% else %}
+                    <button id="btn-scrap{{bucket.id}}" class="hh-btn-scrap" value="{{bucket.id}}">
+                        <img src="{% static 'image/bookmark.svg' %}" alt="퍼가기">
+                    </button>
+                {% endif %}
+                {% else %}
+                    <span id="btn-scrap{{bucket.id}}">
+                        <img src="{% static 'image/bookmark_me.svg' %}" alt="나의버킷퍼간수">
+                    </span>
+                {% endif %}
+                    <label for="btn-scrap{{bucket.id}}">{{ bucket.deriving_bucket.all.count }}</label>
+                </div>
+            </div>
             <p class="description-username">{{ bucket.referenced_users.count }}</p>
 
             <h4><a href="{% url 'delete' user.nickname bucket.id %}">DELETE</a></h4>
@@ -97,7 +124,7 @@
                 <button id="btn_fix{{bucket.id}}" onclick="click_fix('{{bucket.id}}', '{{user.nickname}}')">☆</button>
             {% endif %}
             <br><br><br>
-        
+        </div>
         {% endfor %}
     </div>
     <a href="{% url 'create' user.nickname %}">go to create bucket</a>
