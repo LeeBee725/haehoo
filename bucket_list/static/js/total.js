@@ -12,7 +12,7 @@ function event_update(userNickname) {
                 let bucketElem = document.querySelector(`#bucket${bucket_id}`);
                 let title = bucketElem.querySelector("#bucket-title").textContent;
                 let category = bucketElem.querySelector("#bucket-category").getAttribute("value");
-                click_scrap(bucket_id, title, category, userNickname, scrapBtnChange);
+                clickScrap(bucket_id, title, category, userNickname, scrapBtnChange);
                 event.stopPropagation();
             });
         });
@@ -33,7 +33,7 @@ function event_update(userNickname) {
         let title = bucketElem.querySelector("#bucket-title").textContent;
         let category = bucketElem.querySelector("#bucket-category").getAttribute("value");
         btnScraps[i].addEventListener("click", (event) => {
-            click_scrap(bucket_id, title, category, userNickname, scrapBtnChange);
+            clickScrap(bucket_id, title, category, userNickname, scrapBtnChange);
             event.stopPropagation();
         });
     }
@@ -259,35 +259,15 @@ const scrapBtnChange = (id, data) => {
         for (let i = 0; i < btnScraps.length; ++i) {
             btnScraps[i].querySelector("img").setAttribute("src", "/static/image/bookmark_fill.svg");
         }
+        const newBucketPath = document.createElement("a");
+        newBucketPath.setAttribute("style", "margin:0 5px;")
+        newBucketPath.setAttribute("href", `${window.origin}/bucketprocess/${JSON.parse(data.new_bucket)[0].pk}`);
+        newBucketPath.innerHTML = "<small>바로가기</small>";
+        alertHaehooAlert("success", "새 버킷이 생성되었습니다.", newBucketPath);
     } else {
         for (let i = 0; i < btnScraps.length; ++i) {
             btnScraps[i].querySelector("img").setAttribute("src", "/static/image/bookmark.svg");
         }
-    }
-}
-
-function click_scrap(id, title, category, nickname, btn_change) {
-    if (nickname == "" || nickname == null)
-        window.location.assign(`${window.origin}/account/login/`);
-    const form_data = new FormData();
-    form_data.append("title", title);
-    form_data.append("category", category);
-    try {
-        fetch(`${window.origin}/bucket-list/${nickname}/scrap/${id}`, {
-            method: "POST",
-            headers: {
-                'X-CSRFToken': getCsrfToken()
-            },
-            body: form_data
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message != 'OK') {
-                throw new Error("Click Scrap Fail.");
-            }
-            btn_change(id, data);
-        })
-    } catch (error) {
-        console.error(error);
+        alertHaehooAlert("success", "버킷을 삭제하였습니다.");
     }
 }

@@ -92,6 +92,20 @@ html, body {
     font-family: 'MapoFlowerIsland';
 }
 
+/*alert*/
+
+#hh-alert-space {
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+}
+
+.hh-alert-box {
+    margin: 10px auto 0 auto;
+    width: 68%;
+    min-width: 310px;
+}
+
 /*main*/
 
 main {

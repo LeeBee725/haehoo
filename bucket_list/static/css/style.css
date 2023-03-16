@@ -185,16 +185,6 @@
     font-size: 0.5rem;
 }
 
-#alert-space {
-    position: fixed;
-    margin: 10px 16vw;
-    z-index: 100;
-}
-
-.hh-alert-box {
-    width: 68vw;
-}
-
 .hh-btn-like, .hh-btn-scrap {
     background-color: transparent;
     border: none;
