@@ -156,7 +156,7 @@
     justify-content: space-between;
 }
 
-.hh-bucket-description>p, .hh-bucket-description>span>p {
+.hh-bucket-description>*, .hh-bucket-description>span>* {
     margin-bottom: 0;
 }
 
@@ -169,6 +169,10 @@
 
 .description-username {
     font-size: 1rem;
+}
+
+.description-username:hover {
+    border-bottom: 1px solid #000000;
 }
 
 .description-category {

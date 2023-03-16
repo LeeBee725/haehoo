@@ -58,7 +58,7 @@
               <div class="hh-bucket-description">
                 <p id="bucket-title" class="description-title">{{ bucket.title }}</p>
                 <span>
-                  <p id="bucket-user" class="description-username">{{ bucket.user.nickname }}</p>
+                  <a id="bucket-user" class="description-username" href="{% url 'private' bucket.user.nickname %}">{{ bucket.user.nickname }}</a>
                   <p id="bucket-category" class="description-category" value="{{ bucket.category }}">{{ bucket.category_to_str }}</p>
                 </span>
                 <div>
