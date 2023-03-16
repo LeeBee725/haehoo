@@ -1,18 +1,18 @@
-function event_update(userNickname) {
+function eventUpdate(userNickname) {
     $('.hh-bucket').on('click', function() {
         let bucketId = this.getAttribute("value");
         $('#exampleModal .modal-body').load(`${window.origin}/bucketprocess/${bucketId}`, function(){
             $('#exampleModal').modal('show');
             $(`#exampleModal .modal-body #btn-like${bucketId}`).on("click", function(event) {
-                click_like(this, userNickname);
+                clickLike(this, userNickname);
                 event.stopPropagation();
             });
             $(`#exampleModal .modal-body #btn-scrap${bucketId}`).on("click", function(event) {
-                let bucket_id = this.getAttribute("value");
-                let bucketElem = document.querySelector(`#bucket${bucket_id}`);
+                let bucketId = this.getAttribute("value");
+                let bucketElem = document.querySelector(`#bucket${bucketId}`);
                 let title = bucketElem.querySelector("#bucket-title").textContent;
                 let category = bucketElem.querySelector("#bucket-category").getAttribute("value");
-                clickScrap(bucket_id, title, category, userNickname, scrapBtnChange);
+                clickScrap(bucketId, title, category, userNickname, scrapBtnChange);
                 event.stopPropagation();
             });
         });
@@ -21,19 +21,19 @@ function event_update(userNickname) {
     let btnLikes = document.getElementsByClassName("hh-btn-like");
     for (let i = 0; i < btnLikes.length; ++i) {
         btnLikes[i].addEventListener("click", (event) => {
-            click_like(btnLikes[i], userNickname);
+            clickLike(btnLikes[i], userNickname);
             event.stopPropagation();
         });
     }
     
     let btnScraps = document.getElementsByClassName("hh-btn-scrap");
     for (let i = 0; i < btnScraps.length; ++i) {
-        let bucket_id = btnScraps[i].getAttribute("value");
-        let bucketElem = document.querySelector(`#bucket${bucket_id}`);
+        let bucketId = btnScraps[i].getAttribute("value");
+        let bucketElem = document.querySelector(`#bucket${bucketId}`);
         let title = bucketElem.querySelector("#bucket-title").textContent;
         let category = bucketElem.querySelector("#bucket-category").getAttribute("value");
         btnScraps[i].addEventListener("click", (event) => {
-            clickScrap(bucket_id, title, category, userNickname, scrapBtnChange);
+            clickScrap(bucketId, title, category, userNickname, scrapBtnChange);
             event.stopPropagation();
         });
     }
@@ -49,10 +49,10 @@ window.onload = function() {
         alertHaehooAlert("danger", "자신의 버킷은 스크랩 할 수 없습니다.");
     }
 
-    event_update(userNickname);
+    eventUpdate(userNickname);
 }
 
-function click_like(btn, nickname) {
+function clickLike(btn, nickname) {
     if (nickname == "" || nickname == null)
         window.location.assign(`${window.origin}/account/login/`);
     let xhr = new XMLHttpRequest();
@@ -136,7 +136,7 @@ function createBtnLikeSpace(bucketObj, nickname) {
     btnLike.setAttribute("class", "hh-btn-like");
     btnLike.setAttribute("value", bucketObj.pk);
     btnLike.addEventListener("click", function(event) {
-        click_like(this, nickname);
+        clickLike(this, nickname);
         event.stopPropagation();
     });
     
@@ -208,7 +208,7 @@ function createBucketElem(bucketObj, nickname) {
         $('#exampleModal .modal-body').load(`${window.origin}/bucketprocess/${bucketObj.pk}`, function(){
             $('#exampleModal').modal('show');
             $(`#exampleModal .modal-body #btn-like${bucketObj.pk}`).on("click", function() {
-                click_like(this, nickname);
+                clickLike(this, nickname);
             });
         });
     });

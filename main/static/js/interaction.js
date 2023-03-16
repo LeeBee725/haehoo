@@ -1,23 +1,23 @@
-const clickScrap = (id, title, category, nickname, btn_change) => {
+const clickScrap = (id, title, category, nickname, btnChange) => {
     if (nickname == "" || nickname == null)
         window.location.assign(`${window.origin}/account/login/`);
-    const form_data = new FormData();
-    form_data.append("title", title);
-    form_data.append("category", category);
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("category", category);
     try {
         fetch(`${window.origin}/bucket-list/${nickname}/scrap/${id}`, {
             method: "POST",
             headers: {
                 'X-CSRFToken': getCsrfToken()
             },
-            body: form_data
+            body: formData
         })
         .then(response => response.json())
         .then(data => {
             if (data.message != 'OK') {
                 throw new Error("Click Scrap Fail.");
             }
-            btn_change(id, data);
+            btnChange(id, data);
         })
     } catch (error) {
         console.error(error);
