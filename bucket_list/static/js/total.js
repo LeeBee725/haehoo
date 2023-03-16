@@ -46,12 +46,7 @@ window.onload = function() {
     const urlParam = new URLSearchParams(queryString);
     var fail = urlParam.get('fail')
     if (fail) {
-        let alertBox
-        const alertSpace = document.getElementById("alert-space");
-        if (fail == "same_user_scrap") {
-            alertBox = createAlertBox(danger, "자신의 버킷을 스크랩 할 수 없습니다.", null);
-        }
-        alertSpace.appendChild(alertBox);
+        alertHaehooAlert("danger", "자신의 버킷은 스크랩 할 수 없습니다.");
     }
 
     event_update(userNickname);
@@ -225,28 +220,6 @@ function createBucketElem(bucketObj, nickname) {
     bucket.appendChild(description);
     elem.appendChild(bucket);
     return elem;
-}
-
-function createAlertBox(type, msg, url) {
-    const alertBox = document.createElement("div");
-    alertBox.setAttribute("id", `alert-box-${type}`);
-    alertBox.setAttribute("class", `hh-alert-box alert alert-${type} alert-dismissible fade show`);
-    alertBox.setAttribute("role", "alert");
-    alertBox.innerHTML = [
-        `<div>${msg}</div>`,
-        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
-    ].join("");
-    if (url) {
-        let anchor = document.createElement("a");
-        anchor.setAttribute("href", url);
-        anchor.innerHTML = "<small>바로가기</small>";
-        alertBox.querySelector("div").appendChild(anchor);
-    }
-    setTimeout(function() {
-        if ($(`#alert-box-${type}`))
-            $(`#alert-box-${type}`).alert('close');
-    }, 3000);
-    return alertBox
 }
 
 const scrapBtnChange = (id, data) => {
