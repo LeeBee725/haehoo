@@ -35,7 +35,8 @@ def create_bucketprcs(request, bucketid):
             prcs_instance = Process(bucket = bucket)
             form = ProcessForm(request.POST, request.FILES, instance= prcs_instance)
             form.save()
-            bucket.thumbnail_url = prcs_instance.image.url
+            if prcs_instance.image != '':
+                bucket.thumbnail_url = prcs_instance.image.url
             bucket.save()
             return redirect('bucketprocess', bucketid = bucketid)
 
@@ -56,10 +57,14 @@ def edit_bucketprcs(request, processid):
           
 def delete_bucketprcs(request, processid):
     process = get_object_or_404(Process, pk = processid)
-    deleted_url = process.image.url
+    
+    deleted_url = None
+    if process.image != '':
+        deleted_url = process.image.url
+    
     bucket = Bucket.objects.get(pk=process.bucket.id)
     process.delete()
-    if (deleted_url == bucket.thumbnail_url):
+    if (deleted_url == bucket.thumbnail_url ):
         img_of_processes = bucket.processes.filter(image__isnull=False)
         if (not img_of_processes):
             bucket.thumbnail_url = staticfiles_storage.url("image/bucket.svg")
