@@ -1,4 +1,4 @@
-function eventUpdate(userNickname) {
+function eventUpdate(userNickname, pageNum) {
     $('.hh-bucket').on('click', function() {
         let bucketId = this.getAttribute("value");
         $('#exampleModal .modal-body').load(`${window.origin}/bucketprocess/${bucketId} #hh-popup`, function(){
@@ -41,10 +41,33 @@ function eventUpdate(userNickname) {
     for (let i = 0; i < anchorUserName.length; ++i) {
         anchorUserName[i].addEventListener("click", (event) => event.stopPropagation());
     }
+
+    // let lastKnownScrollPosition = 0;
+    // let threshold = (document.documentElement.scrollHeight - document.documentElement.clientHeight) * 0.9
+    // let tickling = false;
+    // let start = null;
+    // document.addEventListener("scroll", (event) => {
+    //     lastKnownScrollPosition = window.scrollY;
+    //     let step = (timestamp) => {
+    //         if (!start) start = timestamp;
+    //         var progress = timestamp - start;
+    //         if (progress < 2000) {
+    //             window.requestAnimationFrame(step);
+    //         }
+    //     }
+    //     window.requestAnimationFrame(step);
+    //     getNextPage(++pageNum);
+    // });
+    let moreBtn = document.getElementById("hh-more-btn");
+    moreBtn.addEventListener("click", (event) => {
+        getNextPage(++pageNum);
+        event.stopPropagation();
+    })
 }
 
 window.onload = function() {
     const userNickname = JSON.parse(document.getElementById("user-nickname").textContent);
+    let pageNum = 1;
 
     const queryString = window.location.search;
     const urlParam = new URLSearchParams(queryString);
@@ -53,7 +76,7 @@ window.onload = function() {
         alertHaehooAlert("danger", "자신의 버킷은 스크랩 할 수 없습니다.");
     }
 
-    eventUpdate(userNickname);
+    eventUpdate(userNickname, pageNum);
 }
 
 function click_fix(bucketId, nickname) {
@@ -88,7 +111,7 @@ function createBtnDetail(bucketObj) {
     btnDetail.setAttribute("value", bucketObj.pk);
     btnDetail.setAttribute("data-bs-toggle", "modal");
     btnDetail.setAttribute("data-bs-target", "#exampleModal");
-    
+
     btnDetail.innerHTML += ` \
         <div class="hh-bucket-img-container">
             <img class="hh-bucket-thumbnail" src="${bucketObj.fields.thumbnail_url}" alt="thumbnail">
@@ -192,4 +215,29 @@ function createBucketElem(bucketObj, nickname) {
     return elem;
 }
 
-
+const getNextPage = (pageNum) => {
+    try {
+        fetch(`${window.origin}/bucket-list/?page=${pageNum}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': "application/json",
+                'X-CSRFToken': getCsrfToken()
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message != 'OK') {
+                throw new Error("Next bucket Fail");
+            }
+            let buckets = JSON.parse(data.data)
+            for (let i = 0; i < buckets.length; ++i) {
+                console.log(i);
+                let bucket = createBucketElem(buckets[i]);
+                document.getElementById("bucket-container").appendChild(bucket);
+            }
+        })
+    } catch(error) {
+        console.error(error);
+    }
+    return pageNum + 1;
+};
