@@ -1,11 +1,13 @@
-const clickScrap = (id, title, category, nickname, btnChange) => {
-    if (nickname == "" || nickname == null)
+const clickScrap = (id, title, category, loginUser, btnChange) => {
+    if (loginUser == "" || loginUser === undefined) {
         window.location.assign(`${window.origin}/account/login/`);
+        return ;
+    }
     const formData = new FormData();
     formData.append("title", title);
     formData.append("category", category);
     try {
-        fetch(`${window.origin}/bucket-list/${nickname}/scrap/${id}`, {
+        fetch(`${window.origin}/bucket-list/${loginUser.nickname}/scrap/${id}`, {
             method: "POST",
             headers: {
                 'X-CSRFToken': getCsrfToken()
@@ -78,11 +80,13 @@ const scrapBtnChange = (id, data) => {
     }
 }
 
-const clickLike = (id, nickname, btnChange) => {
-    if (nickname == "" || nickname == null)
+const clickLike = (id, loginUser, btnChange) => {
+    if (loginUser == "" || loginUser === undefined) {
         window.location.assign(`${window.origin}/account/login/`);
+        return ;
+    }
     try {
-        fetch(`${window.origin}/bucket-list/${nickname}/like/${id}`, {
+        fetch(`${window.origin}/bucket-list/${loginUser.nickname}/like/${id}`, {
             method: "POST",
             headers: {
                 'X-CSRFToken': getCsrfToken()

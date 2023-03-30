@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 {% endblock links %}
 {% block content %}
-{{ user.nickname|json_script:"user-nickname" }}
+{{ user.get_json|json_script:"user-nickname" }}
 <section id="top-space">
   <div class="top-container hh-container">
     <div class="search-container hh-container container">
@@ -76,7 +76,7 @@
                   </div>
                   <div class="hh-btn-space">
                   {% if user != bucket.user %}
-                  {% if bucket.id in user_scraps.all %}
+                  {% if bucket.id in user_scraps %}
                     <button id="btn-scrap{{bucket.id}}" class="hh-btn-scrap" value="{{bucket.id}}">
                       <img src="{% static 'image/bookmark_fill.svg' %}" alt="퍼가기 취소">
                     </button>

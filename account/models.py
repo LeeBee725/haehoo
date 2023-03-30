@@ -8,6 +8,16 @@ class HaehooUser(AbstractUser):
     #비밀번호 : AbstractUSer의 내장 property(password)
     nickname = models.CharField(max_length = 10, unique = True, null = False)
 
+    def get_scrap_buckets(self):
+        return list(self.buckets.filter(derived_bucket__isnull=False).values_list("derived_bucket_id", flat=True))
+
+    def get_json(self):
+        return {
+            "id": self.id,
+            "nickname": self.nickname,
+            "user_scraps": self.get_scrap_buckets()
+        }
+
 # class HaehooUserManager(BaseUserManager):
 
 #     def _create_user(self, username, email, password, **extra_fields):
