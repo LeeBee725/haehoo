@@ -95,8 +95,11 @@ formdata = new FormData(event.target)
             }
             else{
                 let card = document.createElement("div")
-                card.className = "card"
+                card.className = "card mb-2"
                 card.id = `cmnt${data.id}`
+
+                let cardbody = document.createElement("div")
+                card.className = "card-body row"
 
                 let nickname = document.createElement("div")
                 nickname.className = "user-nickname"
@@ -109,7 +112,7 @@ formdata = new FormData(event.target)
                 let updatebutton = document.createElement("button")
                 updatebutton.className = "updatecmnt"
                 updatebutton.setAttribute("type", "button")
-                updatebutton.setAttribute("onclick", `showUpdateForm('cmnt${data.id}', ${data.newcomment})`)
+                updatebutton.setAttribute("onclick", `showUpdateForm('cmnt${data.id}', '${data.newcomment}')`)
                 updatebutton.innerHTML = "update"
 
                 let deletebutton = document.createElement("button")
@@ -126,6 +129,51 @@ formdata = new FormData(event.target)
                 let comentsection = document.getElementById("cmntsection")
                 comentsection.appendChild(card)
                 console.log("finish")
+            }
+        })
+    }catch(error){
+        console.error(error)
+    }
+    return false
+}
+
+var processform = document.getElementById("createprcs")
+processform.onsubmit = (event) =>{
+    console.log(event.target)
+    formdata = new FormData(event.target)
+    for (var key of formdata.keys()) {
+        console.log(key);
+    }
+    try{
+        fetch(`${window.location.origin}/bucketprocess/${bucketid}/create`, {
+            method: form.getAttribute('method'),
+            headers: {
+                'X-CSRFToken': getCsrfToken()
+                },
+            body: formdata
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success){
+                throw new Error("get success:False data from django view...")
+            }
+            else{
+               card = document.createElement("div") 
+               card.className('card mt-4 p')
+
+               cardbody = document.createElement('div')
+               cardbody.className('card-body row')
+
+               update_a = document.createElement('a')
+               update_a.className('card-text col')
+               update_a.innerHTML = '수정하기'
+               
+               delete_a = document.createElement('a')
+               delete_a.className('card-text col')
+               delete_a.innerHTML = '삭제하기'
+               
+               
+
             }
         })
     }catch(error){
