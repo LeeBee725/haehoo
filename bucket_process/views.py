@@ -23,22 +23,20 @@ def show_bucketprcs(request, bucketid):
     
     return render(request, "prcs_popup.html",{'total_process' : total_process, 'bucket' : bucket, 'total_comment' : total_comment,"comment_form" : comment_form, "user_scraps":user_scraps})
 
-def create_bucketprcs(request, bucketid):
-    if request.method == 'GET':
-        form = ProcessForm()    
-        return render(request, "prcs_create.html", {'process_form': form})
-    
-    elif request.method == 'POST' or request.method == 'FILES':
-        form = ProcessForm(request.POST, request.FILES)
+def create_bucketprcs(request, bucketid): 
+    print(request.method)   
+    if request.method == 'POST' or request.method == 'FILES':
+        form = ProcessForm(request.POST)
         if form.is_valid():
-            bucket = Bucket.objects.get(pk = bucketid)
-            prcs_instance = Process(bucket = bucket)
-            form = ProcessForm(request.POST, request.FILES, instance= prcs_instance)
+            form = form.save(commit = False)
+            form.bucket = get_object_or_404(Bucket, pk = bucketid)
+            form.image = request.FILES['image']
             form.save()
-            if prcs_instance.image != '':
-                bucket.thumbnail_url = prcs_instance.image.url
-            bucket.save()
-            return redirect('bucketprocess', bucketid = bucketid)
+            
+            return JsonResponse({"success":True, "title":request.POST['title'], 'text':request.POST['text'], 'image':request.FILES['image']})
+    else: 
+        print("save fail")
+        return JsonResponse({"success":False})
 
 def edit_bucketprcs(request, processid):
     process = Process.objects.get(pk = processid)
