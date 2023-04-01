@@ -16,6 +16,7 @@ function eventUpdate(loginUser, pageNum) {
     $('.hh-bucket').on('click', function() {
         let bucketId = this.getAttribute("value");
         $('#exampleModal .modal-body').load(`${window.origin}/bucketprocess/${bucketId} #hh-popup`, function(){
+            $.getScript("/static/js/process1.js"); 
             $('#exampleModal').modal('show');
             $(`#exampleModal .modal-body #btn-like${bucketId}`).on("click", function(event) {
                 clickLike(this.getAttribute("value"), loginUser, likeBtnChange);
