@@ -157,12 +157,13 @@ processform.onsubmit = (event) =>{
                 console.log(data.image)
                 card = document.createElement("div") 
                 card.className = 'card mt-4 p'
+                card.setAttribute('id', "prcs{{process.id}")
                 if (data.image != ''){
                     card.innerHTML = `
                         <div class='card-body row'>
                             <h4 class='card-title col'>${data.title}</h4>
                             <a class='card-text col' href = "{% url 'processedit' process.id %}">수정하기</a>
-                            <a class='card-text col' href = "{% url 'processdelete' process.id %}">삭제하기</a>
+                            <button type="button" class="card-text col btn btn-link text-dark" onclick = "deleteProcess('prcs{{process.id}}')">삭제하기</button>
                             <image src="${data.image}">
                             <p class='card-text'>${data.text}</p>
                             <p class='card-text'>{{process.createdAt}}</p>
