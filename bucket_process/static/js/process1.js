@@ -95,8 +95,11 @@ form.onsubmit = (event) =>{
             }
             else{
                 let card = document.createElement("div")
-                card.className = "card"
+                card.className = "card mb-2"
                 card.id = `cmnt${data.id}`
+
+                let cardbody = document.createElement("div")
+                card.className = "card-body row"
 
                 let nickname = document.createElement("div")
                 nickname.className = "user-nickname"
@@ -136,8 +139,11 @@ form.onsubmit = (event) =>{
 
 var processform = document.getElementById("createprcs")
 processform.onsubmit = (event) =>{
+    console.log(event.target)
     formdata = new FormData(event.target)
-    console.log(fomdata.getAll())
+    for (var key of formdata.keys()) {
+        console.log(key);
+    }
     try{
         fetch(`${window.location.origin}/bucketprocess/${bucketid}/create`, {
             method: form.getAttribute('method'),
@@ -152,7 +158,22 @@ processform.onsubmit = (event) =>{
                 throw new Error("get success:False data from django view...")
             }
             else{
-                
+               card = document.createElement("div") 
+               card.className('card mt-4 p')
+
+               cardbody = document.createElement('div')
+               cardbody.className('card-body row')
+
+               update_a = document.createElement('a')
+               update_a.className('card-text col')
+               update_a.innerHTML = '수정하기'
+               
+               delete_a = document.createElement('a')
+               delete_a.className('card-text col')
+               delete_a.innerHTML = '삭제하기'
+               
+               
+
             }
         })
     }catch(error){
