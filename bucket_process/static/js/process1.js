@@ -139,11 +139,7 @@ form.onsubmit = (event) =>{
 
 var processform = document.getElementById("createprcs")
 processform.onsubmit = (event) =>{
-    console.log(event.target)
     formdata = new FormData(event.target)
-    for (var key of formdata.keys()) {
-        console.log(key);
-    }
     try{
         fetch(`${window.location.origin}/bucketprocess/${bucketid}/create`, {
             method: form.getAttribute('method'),
@@ -155,29 +151,58 @@ processform.onsubmit = (event) =>{
         .then(response => response.json())
         .then(data => {
             if (!data.success){
-                throw new Error("get success:False data from django view...")
+                throw new Error("get success:False data from django view... \nrequest method may not be POST")
             }
             else{
-               card = document.createElement("div") 
-               card.className('card mt-4 p')
-
-               cardbody = document.createElement('div')
-               cardbody.className('card-body row')
-
-               update_a = document.createElement('a')
-               update_a.className('card-text col')
-               update_a.innerHTML = '수정하기'
-               
-               delete_a = document.createElement('a')
-               delete_a.className('card-text col')
-               delete_a.innerHTML = '삭제하기'
-               
-               
-
+                console.log(data.image)
+                card = document.createElement("div") 
+                card.className = 'card mt-4 p'
+                if (data.image != ''){
+                    card.innerHTML = `
+                        <div class='card-body row'>
+                            <h4 class='card-title col'>${data.title}</h4>
+                            <a class='card-text col' href = "{% url 'processedit' process.id %}">수정하기</a>
+                            <a class='card-text col' href = "{% url 'processdelete' process.id %}">삭제하기</a>
+                            <image src="${data.image}">
+                            <p class='card-text'>${data.text}</p>
+                            <p class='card-text'>{{process.createdAt}}</p>
+                        </div>`
+                }
+                else{
+                    console.log('here')
+                    card.innerHTML = `
+                    <div class='card-body row'>
+                        <h4 class='card-title col'>${data.title}</h4>
+                        <a class='card-text col' href = "{% url 'processedit' process.id %}">수정하기</a>
+                        <a class='card-text col' href = "{% url 'processdelete' process.id %}">삭제하기</a>
+                        <p class='card-text'>${data.text}</p>
+                        <p class='card-text'>{{process.createdAt}}</p>
+                    </div>`
+                }
+               document.getElementById('prcs_list').appendChild(card)
             }
         })
     }catch(error){
         console.error(error)
     }
     return false
+}
+
+var deleteProcess = (id)=>{
+    let prcs_card = document.getElementById(id)
+
+    try{
+        fetch(`${window.location.origin}/bucketprocess/${id.slice(4)}/delete`)
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success){
+                throw new Error("get success:False data from django view...")
+            }
+            else{
+                prcs_card.remove()
+            }
+        })
+    }catch(error){
+        console.error(error)
+    }
 }

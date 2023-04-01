@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.paginator import Paginator
+from django.core import serializers
 
 from bucket_list.models import Bucket
 from account.models import HaehooUser
@@ -32,18 +33,28 @@ def show_bucketprcs(request, bucketid):
         return render(request, "prcs_popup.html",{'total_process' : total_process, 'bucket' : bucket, 'total_comment' :cmnt_per_page,"comment_form" : comment_form, "user_scraps":user_scraps})
 
 def create_bucketprcs(request, bucketid): 
-    print(request.method)   
-    if request.method == 'POST' or request.method == 'FILES':
+    print("method:",request.method)   
+    print("post:",request.POST)   
+    print("FILES:",request.FILES)   
+    
+    if request.method == 'POST':
         form = ProcessForm(request.POST)
         if form.is_valid():
             form = form.save(commit = False)
+            prcs_id = form.id
             form.bucket = get_object_or_404(Bucket, pk = bucketid)
-            form.image = request.FILES['image']
-            form.save()
-            
-            return JsonResponse({"success":True, "title":request.POST['title'], 'text':request.POST['text'], 'image':request.FILES['image']})
+            if request.FILES:
+                form.image = request.FILES['image']
+                form.save()
+                print('newid:', prcs_id)
+                print("image :",type(form.image.url))
+                return JsonResponse({"success":True, "title":request.POST['title'], 'text':request.POST['text'], 'image':form.image.url})
+            else:
+                new_prcs = form.save()
+                return JsonResponse({"success":True, "title":request.POST['title'], 'text':request.POST['text'], 'image':''})
+
     else: 
-        print("save fail")
+        print("request method is not POST")
         return JsonResponse({"success":False})
 
 def edit_bucketprcs(request, processid):
@@ -77,7 +88,7 @@ def delete_bucketprcs(request, processid):
         else :
             bucket.thumbnail_url = img_of_processes.latest("createdAt").image.url
         bucket.save()
-    return redirect('bucketprocess', bucketid = bucket.id)
+    return JsonResponse({"success":True})
 
 def create_comment(request, bucketid, userid):
     form = CommentForm(request.POST)

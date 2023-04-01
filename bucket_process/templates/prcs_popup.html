@@ -19,7 +19,7 @@
         <div id="title" class="card">
             <div class="row">
                 <div class="col">
-                    <h4 class="card-title">{{bucket.title}}'s process</h4>
+                    <h4 class="card-title">{{bucket.title}}</h4>
                     <div class="card-body">
                         <div>
                             <div class="hh-btn-space">
@@ -58,22 +58,24 @@
                 </div>
             </div>
         </div>  
-        {% for process in total_process %}
-        <div class="card mt-4 p">
-            <div class='card-body row'>
-                <h4 class='card-title col'>{{process.title}}</h4>
-                {% if user.id == process.bucket.user.id %}
-                <a class='card-text col' href = "{% url 'processedit' process.id %}">수정하기</a>
-                <a class='card-text col' href = "{% url 'processdelete' process.id %}">삭제하기</a>
-                {% endif %}
-                {% if process.image %}
-                    <image src="{{process.image.url}}">
-                {%endif%}
-                <p class='card-text'>{{process.text}}</p>
-                <p class='card-text'>{{process.createdAt}}</p>
+        <div id='prcs_list'>
+            {% for process in total_process %}
+            <div class="card mt-4 p" id="prcs{{process.id}}">
+                <div class='card-body row'>
+                    <h4 class='card-title col'>{{process.title}}</h4>
+                    {% if user.id == process.bucket.user.id %}
+                    <a class='card-text col' href = "{% url 'processedit' process.id %}">수정하기</a>
+                    <button type="button" class="card-text col btn btn-link text-dark" onclick = "deleteProcess('prcs{{process.id}}')">삭제하기</button>
+                    {% endif %}
+                    {% if process.image %}
+                        <image src="{{process.image.url}}">
+                    {%endif%}
+                    <p class='card-text'>{{process.text}}</p>
+                    <p class='card-text'>{{process.createdAt}}</p>
+                </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
         {% if user.id == bucket.user.id %}
         <div class="card mt-5 p">
             <div class='card-body row'>
@@ -84,17 +86,9 @@
                     <div class='card-text'>
                         <textarea class="form-control" name="text" placeholder="성과내용을 입력하세요" rows="3"></textarea>                    
                         <input class="form-control form-control-sm" name="image" type="file">
-                        <input type="submit" class="btn btn-primary mb-3">
+                        <input type="submit" class="btn text-dark" value="성과 추가하기">
                     </div>
                 </form>
-
-                {% comment %} 
-                <form id='prcsform' action='' method="POST" enctype="multipart/form-data">
-                    <input type='text' class='form-control border-0 mb-1' id='title' placeholder="제목">
-                    <textarea type='text' class='form-control border-0' id='title' placeholder="성과"></textarea>
-                    <button type='submit' class='btn btn-link text-dark'>추가하기</button> 
-                </form> 
-                {% endcomment %}
             </div>
         </div>
         {% endif %}
