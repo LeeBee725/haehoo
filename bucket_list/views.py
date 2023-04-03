@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.http import JsonResponse
 from django.core.serializers import serialize
-from account.models import HaehooUser
-from bucket_list.models import Bucket
 from django.core.paginator import Paginator
 from django.core.paginator import InvalidPage
 
+from account.models import HaehooUser
+from bucket_list.models import Bucket
 from bucket_list.models import BucketJSONEncoder
+
 import json
 
 def total(request):
@@ -17,22 +18,26 @@ def total(request):
         login_user = request.user.get_json()
     category_num = request.GET.get("category")
     if (category_num is None or category_num == "0"):
-        total_bucket = Bucket.objects.order_by("createdAt").all()
+        total_bucket = Bucket.objects.order_by("-createdAt").all()
     else:
-        total_bucket = Bucket.objects.order_by("createdAt").filter(category=category_num)
+        total_bucket = Bucket.objects.order_by("-createdAt").filter(category=category_num)
     page = request.GET.get("page")
-    BUCKET_PER_PAGE = 4
+    BUCKET_PER_PAGE = 12
+    paginator = Paginator(total_bucket, BUCKET_PER_PAGE)
+    last = False
     if page and request.accepts("application/json"):
         try :
-            paginator = Paginator(total_bucket, BUCKET_PER_PAGE)
             paginator.validate_number(int(page))
+            if paginator.num_pages == int(page):
+                last = True
             data = paginator.page(page).object_list
-            return JsonResponse({"message": "OK", "data": json.dumps(data, cls=BucketJSONEncoder), "login_user": login_user})
+            return JsonResponse({"message": "OK", "data": json.dumps(data, cls=BucketJSONEncoder), "login_user": login_user, "last": last})
         except InvalidPage:
             return JsonResponse({"message": "FAIL", "reason": "Invalid Page Number"})
-    paginator = Paginator(total_bucket, BUCKET_PER_PAGE)
+    if paginator.num_pages == page:
+        last = True
     buckets = paginator.page(1).object_list.all()
-    return render(request, "total.html", {"total_bucket" : buckets, "user_scraps": user_scraps})
+    return render(request, "total.html", {"total_bucket" : buckets, "user_scraps": user_scraps, "last": last})
 
 def private(request, nickname):
     user_scraps = []
@@ -126,13 +131,10 @@ def click_scrap(request, nickname, bucket_id):
             "scrap_cnt": bucket.deriving_bucket.all().count(), \
             "deleted_bucket_id": deleted_id
         })
-    # data = json.loads(request.body)
     derived = Bucket(
         user = user,
         title = request.POST["title"],
         category = request.POST["category"],
-        # title = data["title"],
-        # category = data["category"],
         derived_bucket = bucket
     )
     derived.save()
@@ -142,7 +144,3 @@ def click_scrap(request, nickname, bucket_id):
         "scrap_cnt": bucket.deriving_bucket.all().count(), \
         "new_bucket": serialize("json", Bucket.objects.filter(pk=derived.id))
     })
-    
-# def show_category(request, category, nickname, bucket_id):
-#     selected_category = Bucket.objects.filter(category='value')
-#     return render(request, 'private.html', {'selected_category': selected_category})
