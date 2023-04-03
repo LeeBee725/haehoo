@@ -1,17 +1,3 @@
-// class Bucket extends HTMLElement {
-//     bucketObj;
-//     constructor(loginUser, bucketObj) { // HTMLElement는 constructor에 parameter 불가능 
-//         super();
-        
-//         const bucket = createBucketElem(bucketObj, loginUser);
-//         this.attachShadow({mode:'closed'}).appendChild(bucket.content.cloneNode(true));
-//     }
-// }
-
-// window.customElements.define(
-//     'hh-bucket', Bucket
-// );
-
 function eventUpdate(loginUser, pageNum) {
     $('.hh-bucket').on('click', function() {
         let bucketId = this.getAttribute("value");
@@ -57,22 +43,6 @@ function eventUpdate(loginUser, pageNum) {
         anchorUserName[i].addEventListener("click", (event) => event.stopPropagation());
     }
 
-    // let lastKnownScrollPosition = 0;
-    // let threshold = (document.documentElement.scrollHeight - document.documentElement.clientHeight) * 0.9
-    // let tickling = false;
-    // let start = null;
-    // document.addEventListener("scroll", (event) => {
-    //     lastKnownScrollPosition = window.scrollY;
-    //     let step = (timestamp) => {
-    //         if (!start) start = timestamp;
-    //         var progress = timestamp - start;
-    //         if (progress < 2000) {
-    //             window.requestAnimationFrame(step);
-    //         }
-    //     }
-    //     window.requestAnimationFrame(step);
-    //     getNextResourcePage(++pageNum);
-    // });
     let moreBtn = document.getElementById("hh-more-btn");
     let requestUrl = `${window.origin}/bucket-list/`;
     moreBtn.addEventListener("click", (event) => {
@@ -262,6 +232,8 @@ const getNextResourcePage = (loginUser, requestUrl, pageNum) => {
                     let bucket = createBucketElem(buckets[i], loginUser);
                     document.getElementById("bucket-container").appendChild(bucket);
                 }
+                if (data.last)
+                    document.getElementById("hh-more-btn").hidden = true;
             } catch (error) {
                 alertHaehooAlert("danger", "다음 버킷이 없습니다.", null);
                 console.error(error);

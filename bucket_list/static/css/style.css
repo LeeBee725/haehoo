@@ -118,6 +118,11 @@
     flex-direction: column;
 }
 
+.hh-contents {
+    display: flex;
+    flex-direction: column;
+}
+
 .hh-bucket {
     margin-bottom: 40px;
     padding: 0;
@@ -211,4 +216,14 @@
     padding: 0 0 0 10px;
     margin: 0;
     margin-bottom: 10px;
+}
+#hh-more-btn {
+    width: fit-content;
+    background-color: transparent;
+    border: none;
+    margin: 0 auto;
+}
+
+#hh-more-btn:hover {
+    text-decoration: underline;
 }
