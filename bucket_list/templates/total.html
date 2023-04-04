@@ -6,8 +6,7 @@
 <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
 {% endblock links %}
 {% block content %}
-{{ user.nickname|json_script:"user-nickname" }}
-<div id="alert-space"></div>
+{{ user.get_json|json_script:"user-nickname" }}
 <section id="top-space">
   <div class="top-container hh-container">
     <div class="search-container hh-container container">
@@ -59,7 +58,7 @@
               <div class="hh-bucket-description">
                 <p id="bucket-title" class="description-title">{{ bucket.title }}</p>
                 <span>
-                  <p id="bucket-user" class="description-username">{{ bucket.user.nickname }}</p>
+                  <a id="bucket-user" class="description-username" href="{% url 'private' bucket.user.nickname %}">{{ bucket.user.nickname }}</a>
                   <p id="bucket-category" class="description-category" value="{{ bucket.category }}">{{ bucket.category_to_str }}</p>
                 </span>
                 <div>
@@ -77,7 +76,7 @@
                   </div>
                   <div class="hh-btn-space">
                   {% if user != bucket.user %}
-                  {% if bucket.id in user_scraps.all %}
+                  {% if bucket.id in user_scraps %}
                     <button id="btn-scrap{{bucket.id}}" class="hh-btn-scrap" value="{{bucket.id}}">
                       <img src="{% static 'image/bookmark_fill.svg' %}" alt="퍼가기 취소">
                     </button>
@@ -111,6 +110,7 @@
       </div>
     </div>
   </div>
+  <button id="hh-more-btn">더보기</button>
 </section>
 {% endblock content %}
 

@@ -156,7 +156,7 @@
     justify-content: space-between;
 }
 
-.hh-bucket-description>p, .hh-bucket-description>span>p {
+.hh-bucket-description>*, .hh-bucket-description>span>* {
     margin-bottom: 0;
 }
 
@@ -171,6 +171,10 @@
     font-size: 1rem;
 }
 
+.description-username:hover {
+    border-bottom: 1px solid #000000;
+}
+
 .description-category {
     font-size: 0.8rem;
 }
@@ -183,16 +187,6 @@
 
 .hh-btn-space>label {
     font-size: 0.5rem;
-}
-
-#alert-space {
-    position: fixed;
-    margin: 10px 16vw;
-    z-index: 100;
-}
-
-.hh-alert-box {
-    width: 68vw;
 }
 
 .hh-btn-like, .hh-btn-scrap {

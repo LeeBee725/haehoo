@@ -2,7 +2,7 @@ from django.urls import path
 from bucket_process import views
 
 urlpatterns = [
-    path("<int:bucketid>", views.show_bucketprcs, name = 'bucketprocess'),
+    path("<int:bucketid>/", views.show_bucketprcs, name = 'bucketprocess'),
     path("<int:bucketid>/create", views.create_bucketprcs, name = 'processcreate'),
     path("<int:processid>/edit", views.edit_bucketprcs, name = 'processedit'),
     path("<int:processid>/delete", views.delete_bucketprcs, name = 'processdelete'),

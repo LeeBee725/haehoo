@@ -1,14 +1,33 @@
-function event_update(userNickname) {
+// class Bucket extends HTMLElement {
+//     bucketObj;
+//     constructor(loginUser, bucketObj) { // HTMLElement는 constructor에 parameter 불가능 
+//         super();
+        
+//         const bucket = createBucketElem(bucketObj, loginUser);
+//         this.attachShadow({mode:'closed'}).appendChild(bucket.content.cloneNode(true));
+//     }
+// }
+
+// window.customElements.define(
+//     'hh-bucket', Bucket
+// );
+
+function eventUpdate(loginUser, pageNum) {
     $('.hh-bucket').on('click', function() {
         let bucketId = this.getAttribute("value");
-        $('#exampleModal .modal-body').load(`${window.origin}/bucketprocess/${bucketId}`, function(){
+        $('#exampleModal .modal-body').load(`${window.origin}/bucketprocess/${bucketId} #hh-popup`, function(){
+            $.getScript("/static/js/process1.js"); 
             $('#exampleModal').modal('show');
             $(`#exampleModal .modal-body #btn-like${bucketId}`).on("click", function(event) {
-                click_like(this, userNickname);
+                clickLike(this.getAttribute("value"), loginUser, likeBtnChange);
                 event.stopPropagation();
             });
             $(`#exampleModal .modal-body #btn-scrap${bucketId}`).on("click", function(event) {
-                click_scrap(this, userNickname);
+                let bucketId = this.getAttribute("value");
+                let bucketElem = document.querySelector(`#bucket${bucketId}`);
+                let title = bucketElem.querySelector("#bucket-title").textContent;
+                let category = bucketElem.querySelector("#bucket-category").getAttribute("value");
+                clickScrap(bucketId, title, category, loginUser, scrapBtnChange);
                 event.stopPropagation();
             });
         });
@@ -17,7 +36,7 @@ function event_update(userNickname) {
     let btnLikes = document.getElementsByClassName("hh-btn-like");
     for (let i = 0; i < btnLikes.length; ++i) {
         btnLikes[i].addEventListener("click", (event) => {
-            click_like(btnLikes[i], userNickname);
+            clickLike(btnLikes[i].getAttribute("value"), loginUser, likeBtnChange);
             event.stopPropagation();
         });
     }
@@ -32,70 +51,57 @@ function event_update(userNickname) {
     
     let btnScraps = document.getElementsByClassName("hh-btn-scrap");
     for (let i = 0; i < btnScraps.length; ++i) {
+        let bucketId = btnScraps[i].getAttribute("value");
+        let bucketElem = document.querySelector(`#bucket${bucketId}`);
+        let title = bucketElem.querySelector("#bucket-title").textContent;
+        let category = bucketElem.querySelector("#bucket-category").getAttribute("value");
         btnScraps[i].addEventListener("click", (event) => {
-            click_scrap(btnScraps[i], userNickname);
+            clickScrap(bucketId, title, category, loginUser, scrapBtnChange);
             event.stopPropagation();
         });
     }
+    let anchorUserName = document.getElementsByClassName("description-username");
+    for (let i = 0; i < anchorUserName.length; ++i) {
+        anchorUserName[i].addEventListener("click", (event) => event.stopPropagation());
+    }
+
+    // let lastKnownScrollPosition = 0;
+    // let threshold = (document.documentElement.scrollHeight - document.documentElement.clientHeight) * 0.9
+    // let tickling = false;
+    // let start = null;
+    // document.addEventListener("scroll", (event) => {
+    //     lastKnownScrollPosition = window.scrollY;
+    //     let step = (timestamp) => {
+    //         if (!start) start = timestamp;
+    //         var progress = timestamp - start;
+    //         if (progress < 2000) {
+    //             window.requestAnimationFrame(step);
+    //         }
+    //     }
+    //     window.requestAnimationFrame(step);
+    //     getNextResourcePage(++pageNum);
+    // });
+    let moreBtn = document.getElementById("hh-more-btn");
+    let requestUrl = `${window.origin}/bucket-list/`;
+    moreBtn.addEventListener("click", (event) => {
+        getNextResourcePage(loginUser, requestUrl, ++pageNum);
+        event.stopPropagation();
+    })
 }
 
 window.onload = function() {
-    const userNickname = JSON.parse(document.getElementById("user-nickname").textContent);
+    const loginUser = JSON.parse(document.getElementById("user-nickname").textContent);
+    let pageNum = 1;
 
     const queryString = window.location.search;
     const urlParam = new URLSearchParams(queryString);
     var fail = urlParam.get('fail')
     if (fail) {
-        let alertBox
-        const alertSpace = document.getElementById("alert-space");
-        if (fail == "same_user_scrap") {
-            alertBox = createAlertBox(danger, "자신의 버킷을 스크랩 할 수 없습니다.", null);
-        }
-        alertSpace.appendChild(alertBox);
+        alertHaehooAlert("danger", "자신의 버킷은 스크랩 할 수 없습니다.");
     }
 
-    event_update(userNickname);
-    
-    // let newElement = document.createElement("h4");
-    // newPara.innerHTML = "This is a new paragraph.";
-    // let parentDiv = document.getElementById("myDiv");
-    // parentDiv.appendChild(newPara);
-    // hide & show div에 보내주고
+    eventUpdate(loginUser, pageNum);
 }
-
-function click_like(btn, nickname) {
-    if (nickname == "" || nickname == null)
-        window.location.assign(`${window.origin}/account/login/`);
-    let xhr = new XMLHttpRequest();
-    let bucketId = btn.getAttribute("value");
-    let url = `${window.origin}/bucket-list/${nickname}/like/${bucketId}`;
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-type", "application/json");
-    xhr.setRequestHeader("X-CSRFToken", getCsrfToken());
-    xhr.send()
-
-    xhr.onload = function() {
-        if (xhr.status == 200) {
-            let res = JSON.parse(xhr.response);
-            let likeCnts = document.querySelectorAll(`#btn-like${bucketId} + label`);
-            let btnLikes = document.querySelectorAll(`#btn-like${bucketId}`);
-            
-            for (let i = 0; i < likeCnts.length; ++i) {
-                likeCnts[i].textContent = res.like_cnt;
-            }
-            if (res.is_contains) {
-                for (let i = 0; i < btnLikes.length; ++i)
-                    btnLikes[i].querySelector("img").setAttribute("src", "/static/image/like_fill.svg");
-            } else {
-                for (let i = 0; i < btnLikes.length; ++i)
-                    btnLikes[i].querySelector("img").setAttribute("src", "/static/image/like.svg");
-            }
-        } else {
-            // fail 처리
-        }
-    }
-}
-
 
 function click_fix(bucketId, nickname) {
     var xhr = new XMLHttpRequest();
@@ -126,80 +132,107 @@ function createBtnDetail(bucketObj) {
     const btnDetail = document.createElement("button");
     btnDetail.setAttribute("type", "button");
     btnDetail.setAttribute("class", "hh-bucket-btn");
-    btnDetail.setAttribute("value", bucketObj.pk);
+    btnDetail.setAttribute("value", bucketObj.id);
     btnDetail.setAttribute("data-bs-toggle", "modal");
     btnDetail.setAttribute("data-bs-target", "#exampleModal");
-    
+
     btnDetail.innerHTML += ` \
         <div class="hh-bucket-img-container">
-            <img class="hh-bucket-thumbnail" src="${bucketObj.fields.thumbnail_url}" alt="thumbnail">
+            <img class="hh-bucket-thumbnail" src="${bucketObj.thumbnail_url}" alt="thumbnail">
         </div>
     `;
     return btnDetail;
 }
 
-function createBtnLikeSpace(bucketObj, nickname) {
+function createBtnLikeSpace(bucketObj, loginUser) {
     const btnSpace = document.createElement("div");
     btnSpace.setAttribute("class", "hh-btn-space");
 
     const btnLike = document.createElement("button");
-    btnLike.setAttribute("id", `btn-like${bucketObj.pk}`);
+    btnLike.setAttribute("id", `btn-like${bucketObj.id}`);
     btnLike.setAttribute("class", "hh-btn-like");
-    btnLike.setAttribute("value", bucketObj.pk);
+    btnLike.setAttribute("value", bucketObj.id);
     btnLike.addEventListener("click", function(event) {
-        click_like(this, nickname);
+        clickLike(this.getAttribute("value"), loginUser, likeBtnChange);
         event.stopPropagation();
     });
-    
+
     const imgLike = document.createElement("img");
-    imgLike.setAttribute("src", "/static/image/like.svg");
-    imgLike.setAttribute("alt", "♡");
+    if (bucketObj.liked_users.find(obj => obj.id == loginUser.id)) {
+        imgLike.setAttribute("src", "/static/image/like_fill.svg");
+        imgLike.setAttribute("alt", "♥");
+    } else {
+        imgLike.setAttribute("src", "/static/image/like.svg");
+        imgLike.setAttribute("alt", "♡");
+    }
     btnLike.appendChild(imgLike);
 
     const labelLike = document.createElement("label");
-    labelLike.setAttribute("for", `btn-like${bucketObj.pk}`);
-    labelLike.textContent = "0";
+    labelLike.setAttribute("for", `btn-like${bucketObj.id}`);
+    labelLike.textContent = `${bucketObj.liked_users.length}`;
 
     btnSpace.appendChild(btnLike);
     btnSpace.appendChild(labelLike);
     return btnSpace;
 }
 
-function createBtnScrapSpace(bucketObj) {
+function createBtnScrapSpace(bucketObj, loginUser) {
     const btnSpace = document.createElement("div");
     btnSpace.setAttribute("class", "hh-btn-space");
 
-    const btnScrap = document.createElement("span");
-    btnScrap.setAttribute("id", `btn-scrap${bucketObj.pk}`);
-    
-    const imgScrap = document.createElement("img");
-    imgScrap.setAttribute("src", "/static/image/bookmark_me.svg");
-    imgScrap.setAttribute("alt", "나의버킷퍼간수");
-    btnScrap.appendChild(imgScrap);
+    if (loginUser.nickname != bucketObj.user.nickname) {
+        const btnScrap = document.createElement("button");
+        btnScrap.setAttribute("id", `btn-scrap${bucketObj.id}`);
+        btnScrap.setAttribute("class", "hh-btn-scrap");
+        btnScrap.setAttribute("value", `${bucketObj.id}`);
+        btnScrap.addEventListener("click", (event) => {
+            clickScrap(bucketObj.id, bucketObj.title, bucketObj.category.key, loginUser, scrapBtnChange);
+            event.stopPropagation();
+        });
+
+        const imgScrap = document.createElement("img");
+        if (loginUser && loginUser.user_scraps.find(id => id == bucketObj.id)) {
+            imgScrap.setAttribute("src", "/static/image/bookmark_fill.svg");
+            imgScrap.setAttribute("alt", "퍼가기 취소");
+        } else {
+            imgScrap.setAttribute("src", "/static/image/bookmark.svg");
+            imgScrap.setAttribute("alt", "퍼가기");
+        }
+        btnScrap.appendChild(imgScrap);
+
+        btnSpace.appendChild(btnScrap);
+    } else {
+        const btnScrap = document.createElement("span");
+        btnScrap.setAttribute("id", `btn-scrap${bucketObj.id}`);
+        const imgScrap = document.createElement("img");
+        imgScrap.setAttribute("src", "/static/image/bookmark_me.svg");
+        imgScrap.setAttribute("alt", "나의버킷퍼간수");
+        btnScrap.appendChild(imgScrap);
+
+        btnSpace.appendChild(btnScrap);
+    }
 
     const labelScrap = document.createElement("label");
-    labelScrap.setAttribute("for", `btn-scrap${bucketObj.pk}`);
-    labelScrap.textContent = "0";
+    labelScrap.setAttribute("for", `btn-scrap${bucketObj.id}`);
+    labelScrap.textContent = `${bucketObj.deriving_bucket.length}`;
 
-    btnSpace.appendChild(btnScrap);
     btnSpace.appendChild(labelScrap);
     return btnSpace;
 }
 
-function createBucketDescription(bucketObj, nickname) {
-    const categories = ["", "하고 싶은 것", "먹고 싶은 것", "갖고 싶은 것", "가고 싶은 곳", "여행", "취미"];
+function createBucketDescription(bucketObj, loginUser) {
     const description = document.createElement("div");
     description.setAttribute("class", "hh-bucket-description");
     description.innerHTML = ` \
-        <p id="bucket-title" class="description-title">${bucketObj.fields.title}</p> \
+        <p id="bucket-title" class="description-title">${bucketObj.title}</p> \
         <span> \
-            <p id="bucket-user" class="description-username">${nickname}</p> \
-            <p id="bucket-category" class="description-category" value="${bucketObj.fields.category}">${categories[bucketObj.fields.category]}</p> \
+            <p id="bucket-user" class="description-username">${bucketObj.user.nickname}</p> \
+            <p id="bucket-category" class="description-category" value="${bucketObj.category.key}">${bucketObj.category.value}</p> \
         </span> \
     `;
     const btns = document.createElement("div");
-    const btnLikeSpace = createBtnLikeSpace(bucketObj, nickname);
-    const btnScrapSpace = createBtnScrapSpace(bucketObj);
+    const btnLikeSpace = createBtnLikeSpace(bucketObj, loginUser);
+    const btnScrapSpace = createBtnScrapSpace(bucketObj, loginUser);
     btns.appendChild(btnLikeSpace);
     btns.appendChild(btnScrapSpace);
 
@@ -207,25 +240,35 @@ function createBucketDescription(bucketObj, nickname) {
     return description;
 }
 
-function createBucketElem(bucketObj, nickname) {
+function createBucketElem(bucketObj, loginUser) {
     const elem = document.createElement("div");
-    elem.setAttribute("id", `bucket${bucketObj.pk}`);
+    elem.setAttribute("id", `bucket${bucketObj.id}`);
     elem.setAttribute("class", "col");
 
     const bucket = document.createElement("div");
     bucket.setAttribute("class", "hh-bucket");
-    bucket.setAttribute("value", bucketObj.pk);
+    bucket.setAttribute("value", bucketObj.id);
     bucket.addEventListener("click", function() {
-        $('#exampleModal .modal-body').load(`${window.origin}/bucketprocess/${bucketObj.pk}`, function(){
+        let bucketId = this.getAttribute("value");
+        $('#exampleModal .modal-body').load(`${window.origin}/bucketprocess/${bucketId}/?cmnt_pg=1 #hh-popup`, function(){
             $('#exampleModal').modal('show');
-            $(`#exampleModal .modal-body #btn-like${bucketObj.pk}`).on("click", function() {
-                click_like(this, nickname);
+            $(`#exampleModal .modal-body #btn-like${bucketId}`).on("click", function(event) {
+                clickLike(this.getAttribute("value"), loginUser, likeBtnChange);
+                event.stopPropagation();
+            });
+            $(`#exampleModal .modal-body #btn-scrap${bucketId}`).on("click", function(event) {
+                let bucketId = this.getAttribute("value");
+                let bucketElem = document.querySelector(`#bucket${bucketId}`);
+                let title = bucketElem.querySelector("#bucket-title").textContent;
+                let category = bucketElem.querySelector("#bucket-category").getAttribute("value");
+                clickScrap(bucketId, title, category, loginUser, scrapBtnChange);
+                event.stopPropagation();
             });
         });
     });
 
     const btnDetail = createBtnDetail(bucketObj);
-    const description = createBucketDescription(bucketObj, nickname);
+    const description = createBucketDescription(bucketObj, loginUser);
     
     bucket.appendChild(btnDetail);
     bucket.appendChild(description);
@@ -233,72 +276,32 @@ function createBucketElem(bucketObj, nickname) {
     return elem;
 }
 
-function createAlertBox(type, msg, url) {
-    const alertBox = document.createElement("div");
-    alertBox.setAttribute("id", `alert-box-${type}`);
-    alertBox.setAttribute("class", `hh-alert-box alert alert-${type} alert-dismissible fade show`);
-    alertBox.setAttribute("role", "alert");
-    alertBox.innerHTML = [
-        `<div>${msg}</div>`,
-        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
-    ].join("");
-    if (url) {
-        let anchor = document.createElement("a");
-        anchor.setAttribute("href", url);
-        anchor.innerHTML = "<small>바로가기</small>";
-        alertBox.querySelector("div").appendChild(anchor);
-    }
-    setTimeout(function() {
-        if ($(`#alert-box-${type}`))
-            $(`#alert-box-${type}`).alert('close');
-    }, 3000);
-    return alertBox
-}
-
-function click_scrap(btn, nickname) {
-    if (nickname == "" || nickname == null)
-        window.location.assign(`${window.origin}/account/login/`);
-    let xhr = new XMLHttpRequest();
-    let bucket_id = btn.getAttribute("value");
-    let bucketElem = document.querySelector(`#bucket${bucket_id}`);
-    let bucket = {
-        "title": bucketElem.querySelector("#bucket-title").textContent,
-        "user": nickname,
-        "category": bucketElem.querySelector("#bucket-category").getAttribute("value")
-    };
-    let url = `${window.origin}/bucket-list/${nickname}/scrap/${bucket_id}`;
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-type", "application/json");
-    xhr.setRequestHeader("X-CSRFToken", getCsrfToken());
-    xhr.send(JSON.stringify(bucket));
-
-    xhr.onload = function() {
-        if (xhr.status == 200) {
-            let res = JSON.parse(xhr.response);
-            let scrapCnts = document.querySelectorAll(`#btn-scrap${bucket_id} + label`);
-            let btnScraps = document.querySelectorAll(`#btn-scrap${bucket_id}`);
-
-            for (let i = 0; i < scrapCnts.length; ++i)
-                scrapCnts[i].textContent = res.scrap_cnt;
-            if (res.type == "create") {
-                for (let i = 0; i < btnScraps.length; ++i) {
-                    btnScraps[i].querySelector("img").setAttribute("src", "/static/image/bookmark_fill.svg");
-                }
-                let newBucketElem = createBucketElem(JSON.parse(res.new_bucket)[0], nickname);
-                let alertBox = createAlertBox("success", "새 버킷이 생성되었습니다.", `${window.origin}/bucket-list/${nickname}`);
-                document.querySelector("#bucket-container").appendChild(newBucketElem);
-                document.querySelector("#alert-space").appendChild(alertBox);
-            } else {
-                for (let i = 0; i < btnScraps.length; ++i) {
-                    btnScraps[i].querySelector("img").setAttribute("src", "/static/image/bookmark.svg");
-                }
-                let deletedElem = document.querySelector(`#bucket${res.deleted_bucket_id}`);
-                let alertBox = createAlertBox("success", "버킷을 삭제했습니다.", null);
-                document.querySelector("#bucket-container").removeChild(deletedElem);
-                document.querySelector("#alert-space").appendChild(alertBox);
+const getNextResourcePage = (loginUser, requestUrl, pageNum) => {
+    try {
+        fetch(`${requestUrl}?page=${pageNum}`, {
+            method: "GET",
+            headers: {
+                'X-CSRFToken': getCsrfToken()
             }
-        } else {
-            // fail
-        }
+        })
+        .then(response => response.json())
+        .then(data => {
+            try {
+                if (data.message != 'OK') {
+                    throw (new Error("Next bucket Fail"));
+                }
+                let buckets = JSON.parse(data.data)
+                for (let i = 0; i < buckets.length; ++i) {
+                    let bucket = createBucketElem(buckets[i], loginUser);
+                    document.getElementById("bucket-container").appendChild(bucket);
+                }
+            } catch (error) {
+                alertHaehooAlert("danger", "다음 버킷이 없습니다.", null);
+                console.error(error);
+            }
+        })
+    } catch(error) {
+        console.error(error);
     }
-}
+    return pageNum + 1;
+};
