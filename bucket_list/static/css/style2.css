@@ -1,9 +1,18 @@
 /* total.html */
 #top-space {
     height: 20%;
+    display: flex;
+    justify-content: center;
 }
 
 .hh-container {
+    width: 80%;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+}
+
+.hh-container2 {
     display: flex;
 }
 
@@ -25,8 +34,20 @@
 }
 
 #bucket-image {
-    height: 50%;
-    flex-grow: 2;
+    height: 250px;
+    width: 250px;
+}
+
+#represent-image {
+    height: 250px;
+    width: 700px;
+    float: right;
+}
+
+
+.represent-bucket{
+    text-align: right;
+    margin-left: 10%;
 }
 
 .search-group {
@@ -60,6 +81,11 @@
 
 .search-btn > i::before {
     font-size: 1.25vw;
+}
+
+#profile_img {
+    display: flex;
+    justify-content: space-between;
 }
 
 #main-space {

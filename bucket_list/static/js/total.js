@@ -21,6 +21,14 @@ function event_update(userNickname) {
             event.stopPropagation();
         });
     }
+
+    let btnFix = document.getElementsByClassName("hh-btn-fix");
+    for (let i = 0; i < btnLikes.length; ++i) {
+        btnLikes[i].addEventListener("click", (event) => {
+            click_fix(btnLikes[i], userNickname);
+            event.stopPropagation();
+        });
+    }
     
     let btnScraps = document.getElementsByClassName("hh-btn-scrap");
     for (let i = 0; i < btnScraps.length; ++i) {
