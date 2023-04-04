@@ -202,8 +202,15 @@
 #hh-more-btn {
     width: fit-content;
     background-color: transparent;
-    border: none;
+    width: 200px;
     margin: 0 auto;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border-color: #dddddd;
+}
+
+#hh-more-btn>div {
+    margin-bottom: -10px;
 }
 
 #hh-more-btn:hover {
