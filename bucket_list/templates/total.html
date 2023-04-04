@@ -3,7 +3,7 @@
 {% block links %}
 <script src="https://kit.fontawesome.com/f26e9103bc.js" crossorigin="anonymous"></script>
 <script src="{% static 'js/total.js' %}" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+<link rel="stylesheet" href="{% static 'css/style.css' %}"/>
 {% endblock links %}
 {% block content %}
 {{ user.get_json|json_script:"user-nickname" }}

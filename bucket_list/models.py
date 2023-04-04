@@ -16,8 +16,6 @@ class Bucket(models.Model):
     liked_users = models.ManyToManyField(HaehooUser, blank = True, related_name="user-like-bucket+")
     derived_bucket = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, related_name="deriving_bucket")
 
-    # ordered_records = models.objects.all().order_by('top_fixed')
-
     def category_to_str(self):
         str_list = ["", "하고 싶은 것", "먹고 싶은 것", "갖고 싶은 것", "가고 싶은 곳", "여행", "취미"]
         return str_list[self.category]
@@ -41,16 +39,6 @@ class Bucket(models.Model):
 
     def __str__(self):
         return f"{self.user}'s {self.title}"
-
-    # def my_view(request):
-    #     if request.method == 'POST':
-    #         models = Bucket.category_checkbox(request.POST)
-    #         if models.is_valid():
-    #             checked_checkboxes = models.cleaned_data['category_checkbox']
-    #         # process the checked checkboxes
-    #     else:
-    #         models = Bucket.category_checkbox()
-    #     return (request, 'private.html', {'checked': models})
 
 class BucketJSONEncoder(DjangoJSONEncoder):
     def default(self, obj):
