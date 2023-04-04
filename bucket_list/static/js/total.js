@@ -2,6 +2,7 @@ function eventUpdate(loginUser, pageNum, category) {
     $('.hh-bucket').on('click', function() {
         let bucketId = this.getAttribute("value");
         $('#exampleModal .modal-body').load(`${window.origin}/bucketprocess/${bucketId} #hh-popup`, function(){
+            $.getScript("/static/js/process1.js"); 
             $('#exampleModal').modal('show');
             $(`#exampleModal .modal-body #btn-like${bucketId}`).on("click", function(event) {
                 clickLike(this.getAttribute("value"), loginUser, likeBtnChange);
@@ -228,7 +229,7 @@ function createBucketElem(bucketObj, loginUser) {
     bucket.setAttribute("value", bucketObj.id);
     bucket.addEventListener("click", function() {
         let bucketId = this.getAttribute("value");
-        $('#exampleModal .modal-body').load(`${window.origin}/bucketprocess/${bucketId} #hh-popup`, function(){
+        $('#exampleModal .modal-body').load(`${window.origin}/bucketprocess/${bucketId}/?cmnt_pg=1 #hh-popup`, function(){
             $('#exampleModal').modal('show');
             $(`#exampleModal .modal-body #btn-like${bucketId}`).on("click", function(event) {
                 clickLike(this.getAttribute("value"), loginUser, likeBtnChange);
