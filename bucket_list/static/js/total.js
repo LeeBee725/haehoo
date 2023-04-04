@@ -1,4 +1,4 @@
-function eventUpdate(loginUser, pageNum) {
+function eventUpdate(loginUser, pageNum, category) {
     $('.hh-bucket').on('click', function() {
         let bucketId = this.getAttribute("value");
         $('#exampleModal .modal-body').load(`${window.origin}/bucketprocess/${bucketId} #hh-popup`, function(){
@@ -18,6 +18,18 @@ function eventUpdate(loginUser, pageNum) {
         });
     });
 
+    let requestUrl = `${window.origin}/bucket-list/`;
+    let btnFilter = document.getElementsByClassName("hh-filter-btn");
+    for (let i = 0; i < btnFilter.length; ++i) {
+        btnFilter[i].addEventListener("click", (event) => {
+            document.getElementById("bucket-container").replaceChildren();
+            pageNum = 1;
+            category = btnFilter[i].getAttribute("value");
+            getNextResourcePage(loginUser, requestUrl, pageNum, category)
+            event.stopPropagation();
+        });
+    }
+
     let btnLikes = document.getElementsByClassName("hh-btn-like");
     for (let i = 0; i < btnLikes.length; ++i) {
         btnLikes[i].addEventListener("click", (event) => {
@@ -30,10 +42,10 @@ function eventUpdate(loginUser, pageNum) {
     for (let i = 0; i < btnScraps.length; ++i) {
         let bucketId = btnScraps[i].getAttribute("value");
         let bucketElem = document.querySelector(`#bucket${bucketId}`);
-        let title = bucketElem.querySelector("#bucket-title").textContent;
-        let category = bucketElem.querySelector("#bucket-category").getAttribute("value");
+        let bucket_title = bucketElem.querySelector("#bucket-title").textContent;
+        let bucket_category = bucketElem.querySelector("#bucket-category").getAttribute("value");
         btnScraps[i].addEventListener("click", (event) => {
-            clickScrap(bucketId, title, category, loginUser, scrapBtnChange);
+            clickScrap(bucketId, bucket_title, bucket_category, loginUser, scrapBtnChange);
             event.stopPropagation();
         });
     }
@@ -43,9 +55,8 @@ function eventUpdate(loginUser, pageNum) {
     }
 
     let moreBtn = document.getElementById("hh-more-btn");
-    let requestUrl = `${window.origin}/bucket-list/`;
     moreBtn.addEventListener("click", (event) => {
-        getNextResourcePage(loginUser, requestUrl, ++pageNum);
+        getNextResourcePage(loginUser, requestUrl, ++pageNum, category);
         event.stopPropagation();
     })
 }
@@ -53,6 +64,7 @@ function eventUpdate(loginUser, pageNum) {
 window.onload = function() {
     const loginUser = JSON.parse(document.getElementById("user-nickname").textContent);
     let pageNum = 1;
+    let category = 0;
 
     const queryString = window.location.search;
     const urlParam = new URLSearchParams(queryString);
@@ -61,7 +73,12 @@ window.onload = function() {
         alertHaehooAlert("danger", "자신의 버킷은 스크랩 할 수 없습니다.");
     }
 
-    eventUpdate(loginUser, pageNum);
+    document.getElementById('category-filter-form').onsubmit = () => {return false;};
+
+    let requestUrl = `${window.origin}/bucket-list/`;
+    getNextResourcePage(loginUser, requestUrl, pageNum, category);
+
+    eventUpdate(loginUser, pageNum, category);
 }
 
 function click_fix(bucketId, nickname) {
@@ -237,9 +254,11 @@ function createBucketElem(bucketObj, loginUser) {
     return elem;
 }
 
-const getNextResourcePage = (loginUser, requestUrl, pageNum) => {
+const getNextResourcePage = (loginUser, requestUrl, pageNum, category) => {
+    const url = new URL(requestUrl);
+    url.search = `?page=${pageNum}&category=${category}`
     try {
-        fetch(`${requestUrl}?page=${pageNum}`, {
+        fetch(url, {
             method: "GET",
             headers: {
                 'X-CSRFToken': getCsrfToken()
@@ -256,8 +275,11 @@ const getNextResourcePage = (loginUser, requestUrl, pageNum) => {
                     let bucket = createBucketElem(buckets[i], loginUser);
                     document.getElementById("bucket-container").appendChild(bucket);
                 }
+                let moreBtn = document.getElementById("hh-more-btn");
                 if (data.last)
-                    document.getElementById("hh-more-btn").hidden = true;
+                    moreBtn.hidden = true;
+                else
+                    moreBtn.hidden = false;
             } catch (error) {
                 alertHaehooAlert("danger", "다음 버킷이 없습니다.", null);
                 console.error(error);

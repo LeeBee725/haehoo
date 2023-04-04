@@ -22,7 +22,7 @@ def total(request):
     else:
         total_bucket = Bucket.objects.order_by("-createdAt").filter(category=category_num)
     page = request.GET.get("page")
-    BUCKET_PER_PAGE = 12
+    BUCKET_PER_PAGE = 4
     paginator = Paginator(total_bucket, BUCKET_PER_PAGE)
     last = False
     if page and request.accepts("application/json"):
