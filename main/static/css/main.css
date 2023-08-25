@@ -154,3 +154,19 @@ main {
     right: 15%;
     text-align: right;
 }
+
+#hh-prepare-container {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#hh-prepare-title {
+    width: fit-content;
+}
+
+#hh-prepare-subtitle {
+    width: fit-content;
+}

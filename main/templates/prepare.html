@@ -1,0 +1,9 @@
+{% extends 'base.html' %} {% load static %} {% block links %}
+<link rel="stylesheet" href="{% static 'css/main.css' %}" type="text/css" />
+{% endblock links %} {% block content %}
+<div id="hh-prepare-container">
+  <img src="{% static 'image/fire.svg'%}" alt="fire" />
+  <h1 id="hh-prepare-title">현재 페이지는 아직 준비중입니다.</h1>
+  <h3 id="hh-prepare-subtitle">조금만 기다려주세요.</h3>
+</div>
+{% endblock content %}

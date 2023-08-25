@@ -19,4 +19,12 @@ window.onload = () => {
             event.stopPropagation();
         });
     }
+
+    let btnFixed = document.getElementsByClassName("hh-btn-fixed");
+    for (let i = 0; i < btnFixed.length; ++i) {
+        btnFixed[i].addEventListener("click", (event) => {
+            clickFixed(btnFixed[i].getAttribute("value"), userNickname, fixedBtnChange);
+            event.stopPropagation();
+        });
+    }
 }

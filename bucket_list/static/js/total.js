@@ -40,14 +40,6 @@ function eventUpdate(loginUser, pageNum) {
             event.stopPropagation();
         });
     }
-
-    let btnFix = document.getElementsByClassName("hh-btn-fix");
-    for (let i = 0; i < btnLikes.length; ++i) {
-        btnLikes[i].addEventListener("click", (event) => {
-            click_fix(btnLikes[i], userNickname);
-            event.stopPropagation();
-        });
-    }
     
     let btnScraps = document.getElementsByClassName("hh-btn-scrap");
     for (let i = 0; i < btnScraps.length; ++i) {
@@ -102,31 +94,6 @@ window.onload = function() {
 
     eventUpdate(loginUser, pageNum);
 }
-
-function click_fix(bucketId, nickname) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", `${window.origin}/bucket-list/${nickname}/top_fixed/${bucketId}`, true);
-    xhr.setRequestHeader("Content-type", "application/json");
-    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-    xhr.send()
-
-    let top_fixed = document.createElement("top_fixed")
-
-    xhr.onload = function() {
-        if (xhr.status == 200) {
-            var res = JSON.parse(xhr.response);
-            var btn_fix = document.getElementById("btn_fix" + bucketId);
-            if (res.top_fixed == true) {
-                btn_fix.textContent = "★";
-            } else {
-                btn_fix.textContent = "☆";
-            }
-        } else {
-            // fail 처리
-        }
-    }
-}
-
 
 function createBtnDetail(bucketObj) {
     const btnDetail = document.createElement("button");

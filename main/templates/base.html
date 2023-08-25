@@ -28,27 +28,17 @@
             <ul class="header-contents-list">
               {% if user.is_authenticated %}
               <li>
-                <a
-                  class="header-contents-item"
-                  href="{% url 'private' user.nickname %}"
-                  >마이버킷</a
-                >
+                <a class="header-contents-item" href="{% url 'private' user.nickname %}">마이버킷</a>
               </li>
               <li>
-                <a class="header-contents-item" href="{% url 'logout' %}"
-                  >로그아웃</a
-                >
+                <a class="header-contents-item" href="{% url 'logout' %}">로그아웃</a>
               </li>
               {% else %}
               <li>
-                <a class="header-contents-item" href="{% url 'signup' %}"
-                  >회원가입</a
-                >
+                <a class="header-contents-item" href="{% url 'signup' %}">회원가입</a>
               </li>
               <li>
-                <a class="header-contents-item" href="{% url 'login' %}"
-                  >로그인</a
-                >
+                <a class="header-contents-item" href="{% url 'login' %}">로그인</a>
               </li>
               {% endif %}
             </ul>
@@ -68,7 +58,7 @@
           <p class="footer-left-item1">해후</p>
           &nbsp; &nbsp;
           <p class="footer-left-item2">
-            <img src="{% static 'image/copyright.svg' %}" alt="copyright">
+            <img src="{% static 'image/copyright.svg' %}" alt="copyright" />
           </p>
           &nbsp;
           <p class="footer-left-item3">2022-2023 Haehoo, KAU likelion</p>
@@ -81,17 +71,20 @@
           <p class="footer-middle-item2">Tel. 010-1234-5678</p>
         </div>
         <div class="footer-right">
-          <a href="">공지사항</a>
+          <a href="{% url 'prepare' %}">공지사항</a>
           &nbsp; &nbsp;
-          <a href="">FAQ</a>
+          <a href="{% url 'prepare' %}">FAQ</a>
           &nbsp; &nbsp;
           <a href="{% url 'feedback' %}">피드백 남기기</a>
           &nbsp; &nbsp;
-          <a href="">기업 광고 문의</a>
         </div>
       </div>
     </footer>
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.3.min.js"
+      integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+      crossorigin="anonymous"
+    ></script>
     <script src="{% static 'js/csrf.js' %}" crossorigin="anonymous"></script>
     <script src="{% static 'js/interaction.js' %}" crossorigin="anonymous"></script>
     <script

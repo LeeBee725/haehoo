@@ -119,3 +119,39 @@ const likeBtnChange = (id, data) => {
             btnLikes[i].querySelector("img").setAttribute("src", "/static/image/like.svg");
     }
 }
+
+const clickFixed = (id, loginUser, btnChange) => {
+    if (loginUser == "" || loginUser === undefined) {
+        window.location.assign(`${window.origin}/account/login/`);
+        return ;
+    }
+    try {
+        fetch(`${window.origin}/bucket-list/${loginUser.nickname}/top_fixed/${id}`, {
+            method: "POST",
+            headers: {
+                'X-CSRFToken': getCsrfToken()
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message != 'OK') {
+                throw new Error("Click Like Fail.");
+            }
+            btnChange(id, data);
+        })
+    } catch(error) {
+        console.error(error);
+    }
+}
+
+const fixedBtnChange = (id, data) => {
+    let btnFixed = document.querySelectorAll(`#btn-fixed${id}`);
+
+    if (data.top_fixed === true) {
+        for (let i = 0; i < btnFixed.length; ++i)
+            btnFixed[i].querySelector("img").setAttribute("src", "/static/image/pin_filled.svg");
+    } else {
+        for (let i = 0; i < btnFixed.length; ++i)
+            btnFixed[i].querySelector("img").setAttribute("src", "/static/image/pin.svg");
+    }
+}

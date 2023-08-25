@@ -1,15 +1,15 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block links %}
+{% extends 'base.html' %} {% load static %} {% block links %}
 <link rel="stylesheet" href="{% static 'css/main.css' %}" type="text/css" />
-{% endblock links %}
-{% block content %}
+{% endblock links %} {% block content %}
 <div class="hh-main-container">
   <div id="hh-intro-container">
     <div class="hh-intro">
       <p class="hh-intro-contents">
-        편지를 통해 어쩌구 해보세요. <br />편지를 통해 어쩌구 하면 저쩌구 됩니다.
-        <br />가나다라마바사 아자차카타파하 아야어여오요우유으이
+        <strong style="font-size: 1.2em">해후</strong><br />
+        약속이나 기약이 없는 우연한 만남<br />
+        버킷리스트를 채우며 진정한 우연히 만나게 되는<strong style="font-size: 1.2em">'그것'</strong>
+        <br />
+        <strong style="font-size: 1.2em">'그것'</strong>이 알고 싶다면 아래 버튼을 눌러주세요.<br />
       </p>
     </div>
     <div class="hh-intro-page">
@@ -21,9 +21,9 @@
     <div id="hh-book-image-container">
       <div id="hh-milestone" class="hh-position-abs">
         <section id="hh-letter-section" class="hh-book-section hh-position-rel">
-          <a id="letter-link" class="hh-book-anchor hh-position-abs" href=""></a>
-          <a id="hh-letter-title" class="hh-book-title" href="">
-            <img src="{% static 'image/letter_text.svg' %}" alt="letter">
+          <a id="letter-link" class="hh-book-anchor hh-position-abs" href="{% url 'prepare' %}"></a>
+          <a id="hh-letter-title" class="hh-book-title" href="{% url 'prepare' %}">
+            <img src="{% static 'image/letter_text.svg' %}" alt="letter" />
           </a>
           <br />
           <a id="hh-letter-write" class="hh-book-write" href="">편지쓰러가기</a>
@@ -31,13 +31,17 @@
         <section id="hh-bucketlist-section" class="hh-book-section hh-position-rel">
           <a id="bucket-link" class="hh-book-anchor hh-position-abs" href="{% url 'total' %}"></a>
           <a id="hh-bucketlist-title" class="hh-book-title" href="{% url 'total' %}">
-            <img src="{% static 'image/bucket_list_text.svg' %}" alt="bucket-list">
+            <img src="{% static 'image/bucket_list_text.svg' %}" alt="bucket-list" />
           </a>
           <br />
           {% if user.is_authenticated %}
-          <a id="hh-bucketlist-write" class="hh-book-write" href="{% url 'create' user.nickname %}">버킷리스트<br />작성하기</a>
+          <a id="hh-bucketlist-write" class="hh-book-write" href="{% url 'create' user.nickname %}"
+            >버킷리스트<br />작성하기</a
+          >
           {% else %}
-          <a id="hh-bucketlist-write" class="hh-book-write" href="{% url 'login' %}">버킷리스트<br />작성하기</a>
+          <a id="hh-bucketlist-write" class="hh-book-write" href="{% url 'login' %}"
+            >버킷리스트<br />작성하기</a
+          >
           {% endif %}
         </section>
       </div>
