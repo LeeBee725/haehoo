@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from customer_support.models import FeedBack
+
+admin.site.register(FeedBack)
