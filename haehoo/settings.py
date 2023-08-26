@@ -33,8 +33,8 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", env("HOSTS")]
-
+ALLOWED_HOSTS = env("HOSTS").split(' ')
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
 # Application definition
 
@@ -92,6 +92,14 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
+    },
+    "mysql": {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': env("DB_NAME"),
+        'USER': env("DB_USER"),
+        'PASSWORD': env("DB_USER_PASSWORD"),
+        'HOST': env("DB_HOST"),
+        'PORT': env("DB_PORT"), 
     }
 }
 
@@ -124,7 +132,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'account', 'static'),
@@ -133,13 +142,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'bucket_process', 'static'),
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-MEDIA_URL = 'media/'
-
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

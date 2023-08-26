@@ -12,12 +12,14 @@ var showUpdateForm = (id, comment)=>{
     inputsection.setAttribute("value", comment)
 
     let submit = document.createElement("button")
+    submit.className = "btn btn-link text-dark"
     submit.setAttribute("type", "submit")
-    submit.innerHTML = "submit"
+    submit.innerHTML = "수정"
 
     let cancel = document.createElement("button")
+    cancel.className = "btn btn-link text-dark"
     cancel.setAttribute("type", "none")
-    cancel.innerHTML = "cancel"
+    cancel.innerHTML = "취소"
 
     updateform.appendChild(inputsection)
     updateform.appendChild(submit)
@@ -99,35 +101,43 @@ form.onsubmit = (event) =>{
                 card.id = `cmnt${data.id}`
 
                 let cardbody = document.createElement("div")
-                card.className = "card-body row"
+                cardbody.className = "card-body row"
 
                 let nickname = document.createElement("div")
-                nickname.className = "user-nickname"
+                nickname.className = "card-text user-nickname col my-auto fw-bold"
                 nickname.innerHTML = data.nickname
+                cardbody.appendChild(nickname)
 
+                if (Number(userid) === data.userid) {
+                    let btnDiv = document.createElement("div")
+                    btnDiv.className = "col"
+
+                    let updatebutton = document.createElement("button")
+                    updatebutton.className = "updatecmnt col btn btn-link text-dark"
+                    updatebutton.setAttribute("type", "button")
+                    updatebutton.setAttribute("onclick", `showUpdateForm('cmnt${data.id}', '${data.newcomment}')`)
+                    updatebutton.innerHTML = "수정"
+        
+                    let deletebutton = document.createElement("button")
+                    deletebutton.className = "deletecmnt col btn btn-link text-dark"
+                    deletebutton.setAttribute("type", "button")
+                    deletebutton.setAttribute("onclick", `deleteComment('cmnt${data.id}')`)
+                    deletebutton.innerHTML = "삭제"
+                    btnDiv.appendChild(updatebutton)
+                    btnDiv.appendChild(deletebutton)
+                    cardbody.appendChild(btnDiv)
+                }
                 let newcmnt = document.createElement("div")
                 newcmnt.className = "cmnttext"
                 newcmnt.innerHTML = data.newcomment
 
-                let updatebutton = document.createElement("button")
-                updatebutton.className = "updatecmnt"
-                updatebutton.setAttribute("type", "button")
-                updatebutton.setAttribute("onclick", `showUpdateForm('cmnt${data.id}', '${data.newcomment}')`)
-                updatebutton.innerHTML = "update"
-
-                let deletebutton = document.createElement("button")
-                deletebutton.className = "deletecmnt"
-                deletebutton.setAttribute("type", "button")
-                deletebutton.setAttribute("onclick", `deleteComment('cmnt${data.id}')`)
-                deletebutton.innerHTML = "delete"
-
-                card.appendChild(nickname)
-                card.appendChild(newcmnt)
-                card.appendChild(updatebutton)
-                card.appendChild(deletebutton)
+                cardbody.appendChild(newcmnt)
+                card.appendChild(cardbody)
 
                 let comentsection = document.getElementById("cmntsection")
                 comentsection.appendChild(card)
+                let inputcomment = document.getElementById("id_comment")
+                inputcomment.value = null
                 console.log("finish")
             }
         })
@@ -166,7 +176,7 @@ processform.onsubmit = (event) =>{
                             <button type="button" class="card-text col btn btn-link text-dark" onclick = "deleteProcess('prcs{{process.id}}')">삭제하기</button>
                             <image src="${data.image}">
                             <p class='card-text'>${data.text}</p>
-                            <p class='card-text'>{{process.createdAt}}</p>
+                            <p class='card-text'>${data.createdat}</p>
                         </div>`
                 }
                 else{
@@ -177,7 +187,7 @@ processform.onsubmit = (event) =>{
                         <a class='card-text col' href = "{% url 'processedit' process.id %}">수정하기</a>
                         <a class='card-text col' href = "{% url 'processdelete' process.id %}">삭제하기</a>
                         <p class='card-text'>${data.text}</p>
-                        <p class='card-text'>{{process.createdAt}}</p>
+                        <p class='card-text'>${data.createdat}</p>
                     </div>`
                 }
                document.getElementById('prcs_list').appendChild(card)

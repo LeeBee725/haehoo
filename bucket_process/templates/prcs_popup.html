@@ -59,7 +59,7 @@
                 <div class='card-body row'>
                     <h4 class='card-title col'>{{process.title}}</h4>
                     {% if user.id == process.bucket.user.id %}
-                    <a class='card-text col' href = "{% url 'processedit' process.id %}">수정하기</a>
+                    <!-- <a class='card-text col' href = "{% url 'processedit' process.id %}">수정하기</a> -->
                     <button type="button" class="card-text col btn btn-link text-dark" onclick = "deleteProcess('prcs{{process.id}}')">삭제하기</button>
                     {% endif %}
                     {% if process.image %}
@@ -75,6 +75,7 @@
         <div class="card mt-5 p">
             <div class='card-body row'>
                 <form id="createprcs" method="POST" enctype = "multipart/form-data">
+                    {% csrf_token %}
                     <div class='card-title'>
                         <input class="form-control" type="text" name="title" placeholder="성과제목">
                     </div>
@@ -113,6 +114,7 @@
             {% else %}
                 <form method = 'GET' action = "{% url 'login' %}">
             {% endif %}
+            {% csrf_token %}
                     <table>
                         {{comment_form.as_table}}
                     </table>

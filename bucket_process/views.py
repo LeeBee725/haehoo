@@ -27,7 +27,6 @@ def show_bucketprcs(request, bucketid):
         print("cmnt_pg is None")
         return render(request, "prcs_popup.html",{'total_process' : total_process, 'bucket' : bucket, 'total_comment' : total_comment,"comment_form" : comment_form, "user_scraps":user_scraps})
     else:
-        print(cmnt_page)
         paginator = Paginator(total_comment, 3)
         cmnt_per_page = paginator.page(cmnt_page)
         return render(request, "prcs_popup.html",{'total_process' : total_process, 'bucket' : bucket, 'total_comment' :cmnt_per_page,"comment_form" : comment_form, "user_scraps":user_scraps})
@@ -46,12 +45,14 @@ def create_bucketprcs(request, bucketid):
             if request.FILES:
                 form.image = request.FILES['image']
                 form.save()
+                form.bucket.thumbnail_url = form.image.url
+                form.bucket.save()
                 print('newid:', prcs_id)
                 print("image :",type(form.image.url))
-                return JsonResponse({"success":True, "title":request.POST['title'], 'text':request.POST['text'], 'image':form.image.url})
+                return JsonResponse({"success":True, "title":request.POST['title'], 'text':request.POST['text'], 'image':form.image.url, 'createdat': form.createdAt})
             else:
                 new_prcs = form.save()
-                return JsonResponse({"success":True, "title":request.POST['title'], 'text':request.POST['text'], 'image':''})
+                return JsonResponse({"success":True, "title":request.POST['title'], 'text':request.POST['text'], 'image':'', 'createdat': form.createdAt})
 
     else: 
         print("request method is not POST")
@@ -97,7 +98,7 @@ def create_comment(request, bucketid, userid):
         form.bucket = get_object_or_404(Bucket, pk = bucketid)
         form.user = get_object_or_404(HaehooUser, pk = userid)
         form.save()
-        return JsonResponse({"success":True, "newcomment":request.POST['comment'], "id":form.id, "nickname":form.user.nickname})
+        return JsonResponse({"success":True, "newcomment":request.POST['comment'], "id":form.id, "userid":form.user.id, "nickname":form.user.nickname})
           
 def delete_comment(request, commentid):
     comment = get_object_or_404(Comment, pk = commentid)
