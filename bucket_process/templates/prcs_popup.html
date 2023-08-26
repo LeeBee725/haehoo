@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load static %}
+{% block links %}
+<link rel="stylesheet" href="{% static 'css/prcs.css' %}" type="text/css">
+<script src="{% static 'js/process1.js' %}" crossorigin="anonymous" defer></script>
+{% endblock links %}
+{% block content %}
+{{user.nickname|json_script:"user-nickname"}}
+<div id="hh-popup" class = "row">
+    <div class = "col m-4 p-0">
+        <div id="title" class="card">
+            <div class="row">
+                <div class="col">
+                    <div class="hh-title-container">
+                        <h4 id="bucket-title" class="card-title">{{bucket.title}}</h4>
+                        <span id="bucket-category" class="card-category" value="{{bucket.category}}">{{bucket.category_to_str}}</span>
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <div class="hh-btn-space">
+                                {% if user in bucket.liked_users.all %}
+                                <button id="btn-like{{bucket.id}}" class="hh-btn-like" value="{{bucket.id}}">
+                                    <img src="{% static 'image/like_fill.svg' %}" alt="♥">
+                                </button>
+                                {% else %}
+                                <button id="btn-like{{bucket.id}}" class="hh-btn-like" value="{{bucket.id}}">
+                                    <img src="{% static 'image/like.svg' %}" alt="♡">
+                                </button>
+                                {% endif %}
+                                <label for="btn-like{{bucket.id}}">{{ bucket.liked_users.count }}</label>
+                            </div>
+                            <div class="hh-btn-space">
+                                {% if user != bucket.user %}
+                                {% if bucket.id in user_scraps.all %}
+                                <button id="btn-scrap{{bucket.id}}" class="hh-btn-scrap" value="{{bucket.id}}">
+                                    <img src="{% static 'image/bookmark_fill.svg' %}" alt="퍼가기 취소">
+                                </button>
+                                {% else %}
+                                <button id="btn-scrap{{bucket.id}}" class="hh-btn-scrap" value="{{bucket.id}}">
+                                    <img src="{% static 'image/bookmark.svg' %}" alt="퍼가기">
+                                </button>
+                                {% endif %}
+                                {% else %}
+                                <span id="btn-scrap{{bucket.id}}">
+                                    <img src="{% static 'image/bookmark_me.svg' %}" alt="나의버킷퍼간수">
+                                </span>
+                                {% endif %}
+                                <label for="btn-scrap{{bucket.id}}">{{ bucket.deriving_bucket.all.count }}</label>
+                            </div>
+                        </div>
+                        <div class="description-username">{{ bucket.referenced_users.count }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>  
+        <div id='prcs_list'>
+            {% for process in total_process %}
+            <div class="card mt-4 p" id="prcs{{process.id}}">
+                <div class='card-body row'>
+                    <h4 class='card-title col'>{{process.title}}</h4>
+                    {% if user.id == process.bucket.user.id %}
+                    <a class='card-text col' href = "{% url 'processedit' process.id %}">수정하기</a>
+                    <button type="button" class="card-text col btn btn-link text-dark" onclick = "deleteProcess('prcs{{process.id}}')">삭제하기</button>
+                    {% endif %}
+                    {% if process.image %}
+                        <image src="{{process.image.url}}">
+                    {%endif%}
+                    <p class='card-text'>{{process.text}}</p>
+                    <p class='card-text'>{{process.createdAt}}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% if user.id == bucket.user.id %}
+        <div class="card mt-5 p">
+            <div class='card-body row'>
+                <form id="createprcs" method="POST" enctype = "multipart/form-data">
+                    <div class='card-title'>
+                        <input class="form-control" type="text" name="title" placeholder="성과제목">
+                    </div>
+                    <div class='card-text'>
+                        <textarea class="form-control" name="text" placeholder="성과내용을 입력하세요" rows="3"></textarea>                    
+                        <input class="form-control form-control-sm" name="image" type="file">
+                        <input type="submit" class="btn text-dark" value="성과 추가하기">
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <div class = "col m-4 p-0">
+        <div id="cmntsection">
+        {% for comment in total_comment %}
+            <div class="card mb-2" id="cmnt{{comment.id}}">
+                <div class='card-body row'>
+                    <div class="card-text user-nickname col my-auto fw-bold">{{comment.user.nickname}}</div>
+                    {% if user.id == comment.user.id %}
+                    <div class='col'>
+                        <button type="button" class="updatecmnt col btn btn-link text-dark" onclick="showUpdateForm('cmnt{{comment.id}}', '{{comment.comment}}')">수정</button>                    
+                        <button type="button" class="deletecmnt col btn btn-link text-dark" onclick="deleteComment('cmnt{{comment.id}}')">삭제</button>                    
+                    </div>
+                    {% endif %}
+                    <div class="cmnttext">{{comment.comment}}</div>
+                </div>
+            </div>
+        {%endfor%}
+        </div>
+        <div>
+            {{ user.id|json_script:"user-id" }}
+            {{ bucket.id|json_script:"bucket-id" }}
+            {% if user.is_authenticated %}
+                <form id="createcmnt" method='POST'>
+            {% else %}
+                <form method = 'GET' action = "{% url 'login' %}">
+            {% endif %}
+                    <table>
+                        {{comment_form.as_table}}
+                    </table>
+                    <input type='submit' class='btn text-dark' name="submitbtn" value="댓글작성">
+                </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block links %}
+<link rel="stylesheet" href="{% static 'css/guide.css' %}" type="text/css" />
+{% endblock links %}
+{% block content %}
+<div class="guide-container">
+    <div class="back-img">
+        <div class="background-wrap" style="background-image: url('/static/image/guideimg.png')">
+            <div class="content">
+              <span>해후</span> 
+              <span>약속이나 기약이 없는 우연한 만남</span>
+            </div>
+          </div>
+    </div>
+    <div class="hh-explain">
+        <p>해후는 오랫동안 헤어졌다 우연히 만난다는 뜻을 갖습니다.</p>
+        <p>잠시 잊고 지냈던 <span style="font-size:larger; font-weight: bold;"> ‘삶의 의미’ </span> 와의 우연한 만남을 발견하세요.</p>
+    </div>
+    <div class="mybk-exp" style="background-image: url('/static/image/guidemybk.png')">
+        <div class="mybk-content">
+            <span>My Buckets</span>
+            <span>나만의 버킷리스트를 하나씩 채워보세요.</span>
+            <span>리스트를 이루기 위한 과정과 결과에 대해 기록하며</span>
+            <span>진정한 삶의 의미를 찾게 될 것입니다.</span>
+        </div>
+    </div>
+    <div class="guide-screen">
+        
+    </div>
+
+</div>
+
+
+
+
+
+{% endblock %}

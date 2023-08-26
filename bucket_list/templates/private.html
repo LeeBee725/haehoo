@@ -1,0 +1,120 @@
+{% extends 'base.html' %} {% load static %} {% block links %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+<script src="{% static 'js/private.js' %}" crossorigin="anonymous"></script>
+{% endblock links %} {% block content %} {{user.get_json|json_script:"user-nickname"}}
+
+<section id="main-space">
+  <div class="container contents">
+    <div id="contents-container" class="hh-container">
+      <div id="title-container">
+        <p id="content-title">{{nickname}}'님의 버킷리스트</p>
+      </div>
+      <div id="title-container">
+        <p class="sub-title">{{nickname}}'님의 고정된 버킷</p>
+      </div>
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <td scope="col">제목</td>
+            <td scope="col">카테고리</td>
+            <td scope="col">생성시간</td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for bucket in buckets %} {% if bucket.top_fixed is True %}
+          <tr>
+            <td><a href="{% url 'bucketprocess' bucket.id %}">{{bucket.title}}</a></td>
+            <td>{{bucket.category_to_str}}</td>
+            <td>{{bucket.createdAt}}</td>
+            <td>
+              <div class="hh-btn-space">
+                {% if user in bucket.liked_users.all %}
+                <button id="btn-like{{bucket.id}}" class="hh-btn-like" value="{{bucket.id}}">
+                  <img src="{% static 'image/like_fill.svg' %}" alt="♥" />
+                </button>
+                {% else %}
+                <button id="btn-like{{bucket.id}}" class="hh-btn-like" value="{{bucket.id}}">
+                  <img src="{% static 'image/like.svg' %}" alt="♡" />
+                </button>
+                {% endif %}
+                <label for="btn-like{{bucket.id}}">{{ bucket.liked_users.count }}</label>
+              </div>
+            </td>
+            <td>
+              <div class="hh-btn-space">
+                {% if bucket.top_fixed is True %}
+                <button id="btn-fixed{{bucket.id}}" class="hh-btn-fixed" value="{{bucket.id}}">
+                  <img src="{% static 'image/pin_filled.svg' %}" alt="★" />
+                </button>
+                {% else %}
+                <button id="btn-fixed{{bucket.id}}" class="hh-btn-fixed" value="{{bucket.id}}">
+                  <img src="{% static 'image/pin.svg' %}" alt="☆" />
+                </button>
+                {% endif %}
+              </div>
+            </td>
+            <td><a href="{% url 'delete' user.nickname bucket.id %}">DELETE</a></td>
+            <td><a href="{% url 'edit' user.nickname bucket.id %}">EDIT</a></td>
+          </tr>
+          {% endif %}{% endfor %}
+        </tbody>
+      </table>
+
+      <div id="title-container">
+        <p class="sub-title">{{nickname}}'님의 전체 버킷</p>
+      </div>
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <td scope="col">제목</td>
+            <td scope="col">카테고리</td>
+            <td scope="col">생성시간</td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for bucket in buckets %}
+          <tr>
+            <td><a href="{% url 'bucketprocess' bucket.id %}">{{bucket.title}}</a></td>
+            <td>{{bucket.category_to_str}}</td>
+            <td>{{bucket.createdAt}}</td>
+            <td>
+              <div class="hh-btn-space">
+                {% if user in bucket.liked_users.all %}
+                <button id="btn-like{{bucket.id}}" class="hh-btn-like" value="{{bucket.id}}">
+                  <img src="{% static 'image/like_fill.svg' %}" alt="♥" />
+                </button>
+                {% else %}
+                <button id="btn-like{{bucket.id}}" class="hh-btn-like" value="{{bucket.id}}">
+                  <img src="{% static 'image/like.svg' %}" alt="♡" />
+                </button>
+                {% endif %}
+                <label for="btn-like{{bucket.id}}">{{ bucket.liked_users.count }}</label>
+              </div>
+            </td>
+            <td>
+              <div class="hh-btn-space">
+                {% if bucket.top_fixed is True %}
+                <button id="btn-fixed{{bucket.id}}" class="hh-btn-fixed" value="{{bucket.id}}">
+                  <img src="{% static 'image/pin_filled.svg' %}" alt="★" />
+                </button>
+                {% else %}
+                <button id="btn-fixed{{bucket.id}}" class="hh-btn-fixed" value="{{bucket.id}}">
+                  <img src="{% static 'image/pin.svg' %}" alt="☆" />
+                </button>
+                {% endif %}
+              </div>
+            </td>
+            <td><a href="{% url 'delete' user.nickname bucket.id %}">DELETE</a></td>
+            <td><a href="{% url 'edit' user.nickname bucket.id %}">EDIT</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <a id="hh-create-btn" class="btn btn-light" href="{% url 'create' nickname %}">
+      새 버킷리스트 작성하기
+    </a>
+  </div>
+</section>
+
+{% endblock %}

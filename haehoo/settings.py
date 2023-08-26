@@ -33,7 +33,7 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", env("HOSTS")]
 
 
 # Application definition
@@ -45,7 +45,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "main.apps.MainConfig",
+    "account.apps.AccountConfig",
+    "bucket_list.apps.BucketListConfig",
+    "customer_support.apps.CustomerSupportConfig",
+    "bucket_process.apps.BucketProcessConfig"
 ]
+
+AUTH_USER_MODEL = 'account.HaehooUser'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -118,6 +125,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'account', 'static'),
+    os.path.join(BASE_DIR, 'main', 'static'),
+    os.path.join(BASE_DIR, 'bucket_list', 'static'),
+    os.path.join(BASE_DIR, 'bucket_process', 'static'),
+]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+MEDIA_URL = 'media/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
