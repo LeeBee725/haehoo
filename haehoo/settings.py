@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     "account.apps.AccountConfig",
     "bucket_list.apps.BucketListConfig",
     "customer_support.apps.CustomerSupportConfig",
-    "bucket_process.apps.BucketProcessConfig"
+    "bucket_process.apps.BucketProcessConfig",
+	"health_check",
 ]
 
 AUTH_USER_MODEL = 'account.HaehooUser'
